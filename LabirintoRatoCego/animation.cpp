@@ -241,7 +241,7 @@ bool loadMedia()
 	bool success = true;
 
 	//Load sprite sheet texture
-	if (!gSpriteSheetTexture.loadFromFile("assets/rat.png"))
+	if (!gSpriteSheetTexture.loadFromFile("assets/rat-charset.png"))
 	{
 		printf("Failed to load walking animation texture!\n");
 		success = false;
@@ -332,7 +332,7 @@ int main(int argc, char* args[])
 				SDL_RenderClear(gRenderer);
 
 				//Render current frame
-				SDL_Rect* currentClip = &gSpriteClips[frame / 4];
+				SDL_Rect* currentClip = &gSpriteClips[frame];
 				gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip->w) / 2, (SCREEN_HEIGHT - currentClip->h) / 2, currentClip);
 
 				//Update screen
@@ -342,7 +342,7 @@ int main(int argc, char* args[])
 				++frame;
 
 				//Cycle animation
-				if (frame / 4 >= WALKING_ANIMATION_FRAMES)
+				if (frame == WALKING_ANIMATION_FRAMES)
 				{
 					frame = 0;
 				}
