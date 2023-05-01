@@ -313,6 +313,8 @@ int main(int argc, char* args[])
 
 			//Current animation frame
 			int frame = 0;
+            int w = 71, h = 58;
+            SDL_Rect currentClip { 0, h, w, h };
 
 			//While application is running
 			while (!quit)
@@ -326,25 +328,29 @@ int main(int argc, char* args[])
 						quit = true;
 					}
 				}
-
+            
 				//Clear screen
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 				SDL_RenderClear(gRenderer);
 
 				//Render current frame
-				SDL_Rect* currentClip = &gSpriteClips[frame];
-				gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip->w) / 2, (SCREEN_HEIGHT - currentClip->h) / 2, currentClip);
+				//SDL_Rect* currentClip = &gSpriteClips[frame];
+
+				gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip.w) / 2, (SCREEN_HEIGHT - currentClip.h) / 2, &currentClip);
 
 				//Update screen
 				SDL_RenderPresent(gRenderer);
+                SDL_Delay(100);
 
 				//Go to next frame
 				++frame;
+                currentClip.x += w;
 
 				//Cycle animation
 				if (frame == WALKING_ANIMATION_FRAMES)
 				{
 					frame = 0;
+                    currentClip.x = 0;
 				}
 			}
 		}
