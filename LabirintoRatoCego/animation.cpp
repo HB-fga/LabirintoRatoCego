@@ -327,6 +327,27 @@ int main(int argc, char* args[])
 					{
 						quit = true;
 					}
+
+                    if (e.type = SDL_KEYDOWN)
+                    {
+                        switch (e.key.keysym.sym) {
+                        case SDLK_UP:
+                            currentClip.y = 3*h;
+                            break;
+
+                         case SDLK_DOWN:
+                            currentClip.y = 0;
+                            break;
+
+                         case SDLK_LEFT:
+                            currentClip.y = h;
+                            break;
+
+                         case SDLK_RIGHT:
+                            currentClip.y = 2*h;
+                            break;
+                        } 
+                    }
 				}
             
 				//Clear screen
