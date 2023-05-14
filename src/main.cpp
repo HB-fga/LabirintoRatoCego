@@ -228,7 +228,7 @@ void close()
 	//Free loaded images
 	gSpriteSheetTexture.free();
 
-	//Destroy window	
+	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
@@ -241,112 +241,112 @@ void close()
 
 */
 
-int main(int , char* [])
+int main(int, char* [])
 {
 	// Start up the engine
 	if (not engine::init(640, 480))
 	{
-	    engine::close();
+		engine::close();
 		return -1;
 	}
 
-    // Inicializa o jogo
-    game::Maze maze(64, 48, 10);
+	// Inicializa o jogo
+	game::Maze maze(64, 48, 10);
 
-    // Main loop
-    while (true)
-    {
- //       1. process_events();
+	// Main loop
+	while (true)
+	{
+		//       1. process_events();
 
 
- //       2. update_objects();
+		//       2. update_objects();
 
-//        3. draw the frame
-        engine::screen::clear();
+	   //        3. draw the frame
+		engine::screen::clear();
 
-        maze.draw();
+		maze.draw();
 
-        engine::screen::show();
+		engine::screen::show();
 
- //       4. wait_until_next_frame();
+		//       4. wait_until_next_frame();
 
-        break;
-    }
+		break;
+	}
 
-/*
-			//Main loop flag
-			bool quit = false;
+	/*
+				//Main loop flag
+				bool quit = false;
 
-			//Event handler
-			SDL_Event e;
+				//Event handler
+				SDL_Event e;
 
-			//Current animation frame
-			int frame = 0;
-            int w = 71, h = 58;
-            SDL_Rect currentClip { 0, h, w, h };
+				//Current animation frame
+				int frame = 0;
+				int w = 71, h = 58;
+				SDL_Rect currentClip { 0, h, w, h };
 
-			//While application is running
-			while (!quit)
-			{
-				//Handle events on queue
-				while (SDL_PollEvent(&e) != 0)
+				//While application is running
+				while (!quit)
 				{
-					//User requests quit
-					if (e.type == SDL_QUIT)
+					//Handle events on queue
+					while (SDL_PollEvent(&e) != 0)
 					{
-						quit = true;
+						//User requests quit
+						if (e.type == SDL_QUIT)
+						{
+							quit = true;
+						}
+
+						if (e.type = SDL_KEYDOWN)
+						{
+							switch (e.key.keysym.sym) {
+							case SDLK_UP:
+								currentClip.y = 3*h;
+								break;
+
+							 case SDLK_DOWN:
+								currentClip.y = 0;
+								break;
+
+							 case SDLK_LEFT:
+								currentClip.y = h;
+								break;
+
+							 case SDLK_RIGHT:
+								currentClip.y = 2*h;
+								break;
+							}
+						}
 					}
 
-                    if (e.type = SDL_KEYDOWN)
-                    {
-                        switch (e.key.keysym.sym) {
-                        case SDLK_UP:
-                            currentClip.y = 3*h;
-                            break;
+					//Clear screen
+					SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+					SDL_RenderClear(gRenderer);
 
-                         case SDLK_DOWN:
-                            currentClip.y = 0;
-                            break;
+					//Render current frame
+					//SDL_Rect* currentClip = &gSpriteClips[frame];
 
-                         case SDLK_LEFT:
-                            currentClip.y = h;
-                            break;
+					gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip.w) / 2, (SCREEN_HEIGHT - currentClip.h) / 2, &currentClip);
 
-                         case SDLK_RIGHT:
-                            currentClip.y = 2*h;
-                            break;
-                        } 
-                    }
-				}
-            
-				//Clear screen
-				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(gRenderer);
+					//Update screen
+					SDL_RenderPresent(gRenderer);
+					SDL_Delay(100);
 
-				//Render current frame
-				//SDL_Rect* currentClip = &gSpriteClips[frame];
+					//Go to next frame
+					++frame;
+					currentClip.x += w;
 
-				gSpriteSheetTexture.render((SCREEN_WIDTH - currentClip.w) / 2, (SCREEN_HEIGHT - currentClip.h) / 2, &currentClip);
-
-				//Update screen
-				SDL_RenderPresent(gRenderer);
-                SDL_Delay(100);
-
-				//Go to next frame
-				++frame;
-                currentClip.x += w;
-
-				//Cycle animation
-				if (frame == WALKING_ANIMATION_FRAMES)
-				{
-					frame = 0;
-                    currentClip.x = 0;
+					//Cycle animation
+					if (frame == WALKING_ANIMATION_FRAMES)
+					{
+						frame = 0;
+						currentClip.x = 0;
+					}
 				}
 			}
 		}
-	}
-*/
-    engine::close();
+	*/
+	engine::close();
 
 	return 0;
 }

@@ -6,7 +6,7 @@ namespace game {
     Maze::Maze(int r, int c, int s, int x, int y)
         : rows(r), cols(c), cell_size(s), xpos(x), ypos(y)
     {
-    } 
+    }
 
     void Maze::draw() const
     {
