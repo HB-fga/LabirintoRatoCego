@@ -1,17 +1,23 @@
 #ifndef RC_MAZE_H
 #define RC_MAZE_H
 
+#include "gameObject.h"
+#include "cell.h"
+#include <vector>
+#include <fstream>
+
 namespace game {
 
-    class Maze {
+    class Maze : public GameObject {
     public:
-        Maze(int rows, int cols, int cell_size, int xpos = 0, int ypos = 0);
-
-        void draw() const;
+        Maze(int rows, int cols);
+        void update(unsigned ticks);
+        void draw(int xpos, int ypos) const;
+        bool loadMazeFromFile(const std::string& filename);
 
     private:
-        int rows, cols, cell_size;
-        int xpos, ypos;
+        int rows, cols;
+        std::vector<std::vector<Cell>> maze; // matriz para representar o labirinto
     };
 }
 

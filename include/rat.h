@@ -5,10 +5,14 @@ namespace game {
 
     class Rat {
     public:
-        Rat() { }
+        Rat(int rows, int cols, int cell_size, int xpos = 1, int ypos = 1);
+        void draw() const;
+        void update();
+
 
     private:
-        int x, y;
+        int rows, cols, cell_size;
+        int xpos, ypos;
     };
 }
 

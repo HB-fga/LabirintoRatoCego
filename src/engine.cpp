@@ -1,7 +1,3 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-
 #include "engine.h"
 
 namespace engine {
@@ -73,9 +69,16 @@ namespace engine {
 
     namespace draw {
 
-        void rect(int x, int y, int w, int h)
+        void rect(int x, int y, int w, int h, SDL_Color color)
         {
-            SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
+            SDL_SetRenderDrawColor(gRenderer, color.r, color.g, color.b, color.a);
+            SDL_Rect rect{ x, y, w, h };
+            SDL_RenderFillRect(gRenderer, &rect);
+        }
+
+        void clearRect(int x, int y, int w, int h)
+        {
+            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_Rect rect{ x, y, w, h };
             SDL_RenderFillRect(gRenderer, &rect);
         }
