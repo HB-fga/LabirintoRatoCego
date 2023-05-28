@@ -8,12 +8,12 @@ namespace game {
         : norte(n), leste(l), sul(s), oeste(o), saida(saida), m_cell_size(cell_size) {}
 
     void Cell::draw(int xpos, int ypos) const {
-        const int wall_thickness = 2;
-        SDL_Color greenColor = { 0, 255, 0, 255 };
-        SDL_Color blackColor = { 0, 0, 0, 255 };
+        const int wall_thickness { 2 };
+        SDL_Color greenColor { 0, 255, 0, 255 };
+        SDL_Color blackColor { 0, 0, 0, 255 };
 
         if (saida) {
-            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, greenColor);      
+            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, greenColor);
         }
         if (norte) {
             engine::draw::rect(xpos, ypos, m_cell_size, wall_thickness, blackColor);

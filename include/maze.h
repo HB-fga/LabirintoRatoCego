@@ -5,15 +5,17 @@
 #include "cell.h"
 #include <vector>
 #include <fstream>
+#include <stdexcept>
 
 namespace game {
 
     class Maze : public GameObject {
     public:
-        Maze(int rows, int cols);
+        Maze(int rows = 1, int cols = 1);
         void update(unsigned ticks);
         void draw(int xpos, int ypos) const;
-        bool loadMazeFromFile(const std::string& filename);
+		void setcell(int xpos, int ypos, Cell cell);
+        static Maze fromFile(const std::string& filename);
 
     private:
         int rows, cols;

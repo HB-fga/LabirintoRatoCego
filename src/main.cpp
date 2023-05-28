@@ -12,8 +12,17 @@ int main(int, char* [])
 	}
 
 	// Inicializa o jogo
-	game::Maze maze(5, 5);
-
+	game::Maze maze;
+	try
+	{
+		maze = game::Maze::fromFile("E:/TCC/LabirintoRatoCego/assets/maps/maze1.txt");
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		return -1;
+	}
+	
 	// Main loop
 	while (true)
 	{
@@ -24,8 +33,6 @@ int main(int, char* [])
 
 	   // 3. draw the frame
 		engine::screen::clear();
-
-		maze.loadMazeFromFile("E:/TCC/LabirintoRatoCego/assets/maps/maze1.txt");
 		maze.draw(10,10);
 		//rat.draw();
 

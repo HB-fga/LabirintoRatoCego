@@ -15,33 +15,37 @@ namespace game {
     {
     }
 
-    bool Maze::loadMazeFromFile(const std::string& filename) {
+    void Maze::setcell(int xpos, int ypos, Cell cell){
+        maze[xpos][ypos] = cell;
+    }
+
+    Maze Maze::fromFile(const std::string& filename) {
         std::ifstream file(filename);
         if (!file.is_open()) {
-            std::cout << "Failed to open file: " << filename << std::endl;
-            return false;
+            throw std::invalid_argument("Failed to open file: " + filename);
         }
+        int rows, cols, cell_size;
+        file >> rows >> cols >> cell_size;
+        Maze maze(rows, cols);
         for (int i = 0; i < rows; i++) {
            for (int j = 0; j < cols; j++) {
                int cellValue;
                if (file >> cellValue) {
-                   std::cout << cellValue << std::endl;
                    bool norte = cellValue & 1;
                    bool leste = cellValue & 2;
                    bool sul = cellValue & 4;
                    bool oeste = cellValue & 8;
                    bool saida = cellValue & 16;
-                   maze[i][j] = Cell(norte, leste, sul, oeste, saida, 50);
+                   maze.setcell(i, j, Cell(norte, leste, sul, oeste, saida, cell_size));
                } else {
-                   std::cout << "Invalid cell value in file: " << filename << std::endl;
                    file.close();
-                   return false;
+                   throw std::invalid_argument("Invalid cell value in file: " + filename);
                }
            }
         }
 
         file.close();
-        return true;
+        return maze;
     }
 
     void Maze::draw(int xpos, int ypos) const
