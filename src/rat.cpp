@@ -1,7 +1,6 @@
 #include "rat.h"
 #include "maze.h"
 #include "engine.h"
-#include <SDL.h>
 
 namespace game {
 
