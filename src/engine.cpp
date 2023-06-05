@@ -133,7 +133,7 @@ namespace engine {
         void show()
         {
             SDL_RenderPresent(gRenderer);
-            SDL_Delay(10000);
+            // SDL_Delay(10000);
         }
 
     }

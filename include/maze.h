@@ -19,7 +19,7 @@ namespace game {
 
     private:
         int rows, cols;
-        std::vector<std::vector<Cell>> maze; // matriz para representar o labirinto
+        std::vector<std::vector<Cell>> maze; // matrix to represent the labyrinth
     };
 }
 
