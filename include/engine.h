@@ -4,11 +4,16 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <unordered_map>
+#include <memory>
 
 namespace engine {
 
     bool init(int w, int h);
     void close();
+    SDL_Renderer* getRenderer();
+    std::shared_ptr<SDL_Texture> loadTexture(const std::string&filename);
+
 
     namespace draw {
 

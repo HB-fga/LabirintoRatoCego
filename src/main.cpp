@@ -22,6 +22,8 @@ int main(int, char* [])
 		std::cerr << e.what() << '\n';
 		return -1;
 	}
+
+	game::Rat rat(0, 0);
 	
 	// Main loop
 	while (true)
@@ -34,7 +36,7 @@ int main(int, char* [])
 	   // 3. draw the frame
 		engine::screen::clear();
 		maze.draw(10,10);
-		//rat.draw();
+		rat.draw(10,10);
 
 		engine::screen::show();
 
