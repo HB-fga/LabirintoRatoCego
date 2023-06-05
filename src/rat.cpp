@@ -47,9 +47,9 @@ namespace game {
         const int ratWidth{ 71 }, ratHeight{ 58 };
 
         // Load the mouse texture using the engine's loadTexture function
-        std::shared_ptr<SDL_Texture> ratTexture = engine::loadTexture("E:/TCC/LabirintoRatoCego/assets/rat/ra.png");
+        std::shared_ptr<SDL_Texture> ratTexture = engine::loadTexture("E:/TCC/LabirintoRatoCego/assets/rat/rat.png");
         if (!ratTexture) {
-            return false;
+            return;
         }
 
         // Define the position where the mouse will be drawn
