@@ -6,15 +6,15 @@ namespace game {
 
     const int Cell::wall_thickness = 5;
 
-    Cell::Cell(bool n, bool l, bool s, bool o, bool mazeExit, int cell_size)
-        : north(n), east(l), south(s), west(o), mazeExit(mazeExit), m_cell_size(cell_size) {}
+    Cell::Cell(bool n, bool l, bool s, bool o, bool maze_exit, int cell_size)
+        : north(n), east(l), south(s), west(o), maze_exit(maze_exit), m_cell_size(cell_size) {}
 
     void Cell::draw(int xpos, int ypos) const {
         SDL_Color greenColor { 0, 255, 0, 255 };
         SDL_Color blackColor { 0, 0, 0, 255 };
         int wt = Cell::wall_thickness - 3;
 
-        if (mazeExit) {
+        if (maze_exit) {
             engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, greenColor);
         }
         if (north) {

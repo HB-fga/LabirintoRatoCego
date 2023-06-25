@@ -36,8 +36,8 @@ namespace game {
                    bool east = cellValue & 2;
                    bool south = cellValue & 4;
                    bool west = cellValue & 8;
-                   bool mazeExit = cellValue & 16;
-                   maze.setcell(i, j, Cell(north, east, south, west, mazeExit, cell_size));
+                   bool maze_exit = cellValue & 16;
+                   maze.setcell(i, j, Cell(north, east, south, west, maze_exit, cell_size));
                } else {
                    file.close();
                    throw std::invalid_argument("Invalid cell value in file: " + filename);
