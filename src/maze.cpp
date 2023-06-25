@@ -32,12 +32,12 @@ namespace game {
            for (int j = 0; j < cols; j++) {
                int cellValue;
                if (file >> cellValue) {
-                   bool norte = cellValue & 1;
-                   bool leste = cellValue & 2;
-                   bool sul = cellValue & 4;
-                   bool oeste = cellValue & 8;
-                   bool saida = cellValue & 16;
-                   maze.setcell(i, j, Cell(norte, leste, sul, oeste, saida, cell_size));
+                   bool north = cellValue & 1;
+                   bool east = cellValue & 2;
+                   bool south = cellValue & 4;
+                   bool west = cellValue & 8;
+                   bool mazeExit = cellValue & 16;
+                   maze.setcell(i, j, Cell(north, east, south, west, mazeExit, cell_size));
                } else {
                    file.close();
                    throw std::invalid_argument("Invalid cell value in file: " + filename);
