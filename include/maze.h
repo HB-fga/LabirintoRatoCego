@@ -3,6 +3,7 @@
 
 #include "gameObject.h"
 #include "cell.h"
+#include "rat.h"
 #include <vector>
 #include <fstream>
 #include <stdexcept>
@@ -20,6 +21,7 @@ namespace game {
     private:
         int rows, cols;
         std::vector<std::vector<Cell>> maze; // matrix to represent the labyrinth
+        game::Rat rat;
     };
 }
 

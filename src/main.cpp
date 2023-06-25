@@ -15,24 +15,22 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("E:/TCC/LabirintoRatoCego/assets/maps/maze1.txt");
+        maze = game::Maze::fromFile("./assets/maps/maze1.txt");
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
         return -1;
     }
-
-    game::Rat rat(0, 0);
     
     // Main loop
     bool quit = false;
     while (!quit)
     {
         engine::screen::clear();
-        maze.draw(10, 10);
-        rat.draw(10, 10);
-		rat.update(75);
+        maze.update(SDL_GetTicks());
+        maze.draw(117, 37);
+
         engine::screen::show();
     }
 

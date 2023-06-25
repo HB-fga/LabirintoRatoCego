@@ -6,13 +6,14 @@
 namespace game {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c))
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0)
     {
         
     }
 
-    void Maze::update(unsigned)
+    void Maze::update(unsigned ticks)
     {
+        rat.update(ticks);
     }
 
     void Maze::setcell(int xpos, int ypos, Cell cell){
@@ -56,6 +57,9 @@ namespace game {
                 maze[i][j].draw(xpos + j * cell_size, ypos + i * cell_size);
             }
         }
+
+        auto p = rat.getPos();
+        rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
     }
 
 }

@@ -11,6 +11,7 @@ namespace game {
         void update(unsigned ticks);
         void draw(int xpos, int ypos) const;
         int cell_size() const { return m_cell_size; };
+        static const int wall_thickness;
 
     private:
         bool norte, leste, sul, oeste, saida;
