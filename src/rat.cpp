@@ -92,7 +92,7 @@ namespace game {
         const int ratWidth{ 71 }, ratHeight{ 58 };
 
         // Load the mouse texture using the engine's loadTexture function
-        auto ratTexture = engine::loadTexture("E:/TCC/LabirintoRatoCego/assets/rat/rat.png");
+        auto ratTexture = engine::loadTexture("./assets/rat/rat.png");
         if (!ratTexture) {
             return;
         }
