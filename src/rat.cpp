@@ -4,12 +4,12 @@
 
 namespace game {
 
-    Rat::Rat(int xv, int yv) : x(xv), y(yv), last_ticks(-1) {
+    Rat::Rat(int xv, int yv) : x(xv), y(yv), last_ticks(0) {
     }
 
     void Rat::update(unsigned ticks)
     {
-        if (last_ticks == -1) {
+        if (not last_ticks) {
             last_ticks = ticks;
         }
         else if (ticks - last_ticks > 1000) {

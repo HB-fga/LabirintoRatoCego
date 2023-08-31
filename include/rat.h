@@ -3,6 +3,7 @@
 
 #include "gameObject.h"
 #include <utility>
+#include <cstdint>
 
 namespace game {
 
