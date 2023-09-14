@@ -25,11 +25,17 @@ int main(int, char* [])
     
     // Main loop
     bool quit = false;
+    int loops = 1;
     while (!quit)
     {
         engine::screen::clear();
         maze.update(SDL_GetTicks());
         maze.draw(117, 37);
+
+
+        if (loops == 400)
+            quit = true;
+        loops++;
 
         engine::screen::show();
     }
