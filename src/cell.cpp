@@ -65,6 +65,12 @@ namespace game {
                 engine::draw::rect(centerX - (m_cell_size / 2), centerY, arrowWidth, arrowSize, blackColor);
             }
         }
+
+        // Paredes
+        engine::draw::rect(xpos, ypos, m_cell_size, wall_thickness, blackColor);
+        engine::draw::rect(xpos + m_cell_size - wall_thickness, ypos, wall_thickness, m_cell_size, blackColor);
+        engine::draw::rect(xpos, ypos + m_cell_size - wall_thickness, m_cell_size, wall_thickness, blackColor);
+        engine::draw::rect(xpos, ypos, wall_thickness, m_cell_size, blackColor);
     }
 
     void Cell::update(unsigned) {
