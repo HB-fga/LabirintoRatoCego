@@ -5,7 +5,7 @@
 int main(int, char* [])
 {
     // Start up the engine
-    if (not engine::init(640, 480))
+    if (not engine::init(1280, 960))
     {
         engine::close();
         return -1;
@@ -15,7 +15,7 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("./assets/maps/maze1.txt");
+        maze = game::Maze::fromFile("./assets/maps/maze2.txt");
     }
     catch(const std::exception& e)
     {
@@ -26,8 +26,19 @@ int main(int, char* [])
     // Main loop
     bool quit = false;
     int loops = 1;
+
     while (!quit)
     {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT)
+            {
+                quit = true;
+                break;
+            }
+        }
+
         engine::screen::clear();
         maze.update(SDL_GetTicks());
         maze.draw(117, 37);
