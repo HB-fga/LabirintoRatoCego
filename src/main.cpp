@@ -5,7 +5,7 @@
 int main(int, char* [])
 {
     // Start up the engine
-    if (not engine::init(1280, 960))
+    if (not engine::init(640, 480))
     {
         engine::close();
         return -1;
@@ -15,7 +15,7 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("./assets/maps/maze2.txt");
+        maze = game::Maze::fromFile("./assets/maps/maze1.txt");
     }
     catch(const std::exception& e)
     {
