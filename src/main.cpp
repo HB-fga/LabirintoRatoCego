@@ -15,14 +15,14 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("./assets/maps/maze1.txt");
+        maze = game::Maze::fromFile("./assets/maps/maze1.txt", "./assets/movements/rat.txt");
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
         return -1;
     }
-    
+
     // Main loop
     bool quit = false;
     int loops = 1;
@@ -44,9 +44,9 @@ int main(int, char* [])
         maze.draw(117, 37);
 
 
-        if (loops == 400)
-            quit = true;
-        loops++;
+        // if (loops == 400)
+        //     quit = true;
+        // loops++;
 
         engine::screen::show();
     }

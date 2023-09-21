@@ -16,11 +16,12 @@ namespace game {
         void update(unsigned ticks);
         void draw(int xpos, int ypos) const;
 		void setcell(int xpos, int ypos, Cell cell);
-        static Maze fromFile(const std::string& filename);
+        static Maze fromFile(const std::string& filename, const std::string& movementsFilename);
 
     private:
         int rows, cols;
-        std::vector<std::vector<Cell>> maze; // matrix to represent the labyrinth
+        std::vector<std::vector<Cell>> maze;
+        std::vector<char> movements;
         game::Rat rat;
     };
 }

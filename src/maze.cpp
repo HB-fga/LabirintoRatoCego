@@ -13,6 +13,7 @@ namespace game
 
     void Maze::update(unsigned ticks)
     {
+        rat.setMovements(movements);
         rat.update(ticks);
     }
 
@@ -21,7 +22,7 @@ namespace game
         maze[xpos][ypos] = cell;
     }
 
-    Maze Maze::fromFile(const std::string &filename)
+    Maze Maze::fromFile(const std::string &filename, const std::string& movementsFilename)
     {
         std::ifstream file(filename);
         if (!file.is_open())
@@ -60,7 +61,23 @@ namespace game
             }
         }
 
+        std::ifstream movementsFile(movementsFilename);
+        if (!movementsFile.is_open()) {
+            throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
+        }
+
+        std::vector<char> movements;
+        char movement;
+        while (movementsFile >> movement) {
+            movements.push_back(movement);
+        }
+
+        maze.movements = movements;  // Assign movements to the maze
+
+        std::cout << "MOVEMENTS = " << movements.size() << "\n";
+
         file.close();
+        movementsFile.close();
         return maze;
     }
 
