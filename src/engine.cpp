@@ -22,7 +22,7 @@ namespace engine {
         }
 
         // Create window
-        gWindow = SDL_CreateWindow("Labirinto do Rago Cego", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
+        gWindow = SDL_CreateWindow("Labirinto do Rago Cego", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
 
         if (not gWindow)
         {

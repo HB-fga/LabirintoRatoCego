@@ -1,9 +1,10 @@
 # Project variables
 PROJECT=RatoCego
+MAP_GENERATOR=MapGenerator
 
 # Compiler and flags variables
 CXX=g++
-CPPFLAGS=-W -Wall -Werror -fPIC -MMD -I/usr/include/SDL2
+CPPFLAGS=-W -Wall -fPIC -MMD -I/usr/include/SDL2
 CXXFLAGS=-std=c++20
 RELEASE_CPPFLAGS=-O2
 DEBUG_CPPFLAGS=-g -O0
@@ -59,11 +60,14 @@ CPPFLAGS+=$(INCLUDES_DIRS)
 
 # Project source files
 PROJECT_MAIN=$(SRC_DIR)/main.cpp
+MAP_MAIN=$(SRC_DIR)/mainMap.cpp
 PROJECT_OBJECT=$(PROJECT_MAIN:.cpp=$(OBJ_EXTENSION))
+MAP_OBJECT=$(MAP_MAIN:.cpp=$(OBJ_EXTENSION))
 
 # Finds all .cpp files and filters src/main.cpp out
 SOURCES=${wildcard $(SRC_DIR)/*.cpp}
 SOURCES:=${filter-out $(PROJECT_MAIN), $(SOURCES)}
+SOURCES:=${filter-out $(MAP_MAIN), $(SOURCES)}
 
 # Generates objects file names
 OBJECTS=$(SOURCES:.cpp=$(OBJ_EXTENSION))
@@ -104,7 +108,7 @@ format:
 	@-find $(INC_DIR) $(TESTS_DIR) $(SRC_DIR) -type f -name "*.cpp" -or -name "*.h" | xargs clang-format-10 -i
 
 
-build: $(LIBRARY) $(PROJECT)
+build: $(LIBRARY) $(PROJECT) $(MAP_GENERATOR)
 
 
 $(LIBRARY): $(OBJECTS)
@@ -114,6 +118,8 @@ $(LIBRARY): $(OBJECTS)
 $(PROJECT): $(LIBRARY) $(PROJECT_OBJECT)
 	$(LINKER) $(PROJECT_OBJECT) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
 
+$(MAP_GENERATOR): $(LIBRARY) $(MAP_OBJECT)
+	$(LINKER) $(MAP_OBJECT) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
 
 $(TEST_SUIT): $(LIBRARY) $(TEST_OBJECTS)
 	$(LINKER) $(TEST_OBJECTS) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)

@@ -9,7 +9,7 @@ namespace game {
 
     void Rat::update(unsigned ticks)
     {
-        if (current_movement_index < movements.size()) {
+        if (current_movement_index < (int) movements.size()) {
             if (not last_ticks) {
                 last_ticks = ticks;
             } else if (ticks - last_ticks > 1000) {

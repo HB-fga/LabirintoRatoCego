@@ -1,7 +1,6 @@
 #include "mapRender.h"
 #include "engine.h"
 
-
 MapRenderer::MapRenderer(int screenWidth, int screenHeight, int mazeWidth, int mazeHeight)
     : SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight), MAZE_WIDTH(mazeWidth),
       MAZE_HEIGHT(mazeHeight), CELL_SIZE(60) {
@@ -35,15 +34,15 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
 
     file << MAZE_WIDTH << " " << MAZE_HEIGHT << " " << CELL_SIZE << "\n";
 
-    for (int y = 0; y < MAZE_HEIGHT; ++y) {
-        for (int x = 0; x < MAZE_WIDTH; ++x) {
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
             int cellValue = 0;
 
-            if (mapMaze[y][x] == CELL_PATH) {
+            if (mapMaze[row][col] == CELL_PATH) {
                 cellValue = 1;
-            } else if (mapMaze[y][x] == CELL_DECISION) {
+            } else if (mapMaze[row][col] == CELL_DECISION) {
                 cellValue = 2;
-            } else if (mapMaze[y][x] == CELL_EXIT) {
+            } else if (mapMaze[row][col] == CELL_EXIT) {
                 cellValue = 3;
             }
 
@@ -53,9 +52,9 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
     }
 
     int decisionCount = 0;
-    for (int y = 0; y < MAZE_HEIGHT; ++y) {
-        for (int x = 0; x < MAZE_WIDTH; ++x) {
-            if (mapMaze[y][x] == CELL_DECISION) {
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_DECISION) {
                 decisionCount++;
             }
         }
@@ -64,19 +63,49 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
     // Print the number of decision points
     file << decisionCount << "\n";
 
-    for (int y = 0; y < MAZE_HEIGHT; ++y) {
-        for (int x = 0; x < MAZE_WIDTH; ++x) {
-            if (mapMaze[y][x] == CELL_DECISION) {
-                file << x << " " << y << "\n";
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_DECISION) {
+                file << row << " " << col << ' ';
+
+                for (int i = row - 1; i >= 0; --i)
+                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
+                    {
+                        file << "N";
+                        break;
+                    }
+
+                for (int i = row + 1; i < MAZE_HEIGHT; ++i)
+                    if (mapMaze[i][col] == CELL_DECISION)
+                    {
+                        file << "S";
+                        break;
+                    }
+
+                for (int j = col + 1; j < MAZE_WIDTH; ++j)
+                    if (mapMaze[row][j] == CELL_DECISION)
+                    {
+                        file << "E";
+                        break;
+                    }
+
+                for (int j = col - 1; j >= 0; --j)
+                    if (mapMaze[row][j] == CELL_DECISION)
+                    {
+                        file << "W";
+                        break;
+                    }
+
+                file << '\n';
             }
         }
     }
 
     // Coordinates of the exit
-    for (int y = 0; y < MAZE_HEIGHT; ++y) {
-        for (int x = 0; x < MAZE_WIDTH; ++x) {
-            if (mapMaze[y][x] == CELL_EXIT) {
-                file << x << " " << y << "\n";
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_EXIT) {
+                file << row << " " << col << "\n";
                 break;
             }
         }
