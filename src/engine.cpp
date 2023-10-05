@@ -120,6 +120,7 @@ namespace engine {
             SDL_Rect rect{ x, y, w, h };
             SDL_RenderFillRect(gRenderer, &rect);
         }
+
     }
 
     namespace screen {

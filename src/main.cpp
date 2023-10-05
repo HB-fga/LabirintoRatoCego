@@ -5,7 +5,7 @@
 int main(int, char* [])
 {
     // Start up the engine
-    if (not engine::init(640, 480))
+    if (not engine::init(1920, 1080))
     {
         engine::close();
         return -1;
@@ -15,7 +15,7 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("./assets/maps/maze1.txt", "./assets/movements/rat.txt");
+        maze = game::Maze::fromFile("./assets/maps/map.txt", "./assets/movements/rat.txt");
     }
     catch(const std::exception& e)
     {
@@ -37,11 +37,15 @@ int main(int, char* [])
                 quit = true;
                 break;
             }
+            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+               quit = true;  // Permite fechar o jogo ao pressionar 'esc'
+               break;
+           }
         }
 
         engine::screen::clear();
         maze.update(SDL_GetTicks());
-        maze.draw(117, 37);
+        maze.draw(60, 90);
 
 
         // if (loops == 400)

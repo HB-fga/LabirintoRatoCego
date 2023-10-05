@@ -7,7 +7,7 @@ namespace game
 {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0)
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(6, 7)
     {
     }
 
@@ -30,7 +30,7 @@ namespace game
             throw std::invalid_argument("Failed to open file: " + filename);
         }
         int rows, cols, cell_size;
-        file >> rows >> cols >> cell_size;
+        file >> cols >> rows >> cell_size;
         Maze maze(rows, cols);
         for (int i = 0; i < rows; i++)
         {
@@ -41,17 +41,19 @@ namespace game
                 {
                     bool not_valid = false;
                     bool is_valid = false;
+                    bool is_decision = false;
+                    bool maze_exit = false;
+
                     if (cellValue == 0)
                         not_valid = true;
                     if (cellValue == 1)
                         is_valid = true;
+                    if (cellValue == 2)
+                        is_decision = true;
+                    if (cellValue == 3)
+                        maze_exit = true;
 
-                    bool north = cellValue & 2;
-                    bool east = cellValue & 4;
-                    bool south = cellValue & 8;
-                    bool west = cellValue & 16;
-                    bool maze_exit = cellValue & 32;
-                    maze.setcell(i, j, Cell(not_valid, is_valid, north, east, south, west, maze_exit, cell_size));
+                    maze.setcell(i, j, Cell(not_valid, is_valid, is_decision, maze_exit, cell_size));
                 }
                 else
                 {
@@ -74,7 +76,7 @@ namespace game
 
         maze.movements = movements;  // Assign movements to the maze
 
-        std::cout << "MOVEMENTS = " << movements.size() << "\n";
+        // std::cout << "MOVEMENTS = " << movements.size() << "\n";
 
         file.close();
         movementsFile.close();
@@ -93,7 +95,7 @@ namespace game
         }
 
         auto p = rat.getPos();
-        rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
+        // rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
     }
 
 }
