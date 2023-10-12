@@ -3,20 +3,28 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 class MapRenderer {
     public:
-        MapRenderer(int screenWidth, int screenHeight, int mazeWidth, int mazeHeight);
+        MapRenderer(int screenWidth, int screenHeight, int initialMazeWidth, int initialMazeHeight);
         ~MapRenderer();
+        void increaseMazeWidth();
+        void decreaseMazeWidth();
+        void increaseMazeHeight();
+        void decreaseMazeHeight();
 
         void updateCellColor(int x, int y);
         void generateMaze();
+        void resetMap();
         void saveMapToFile(const std::string& filePath);
 
         int buttonWidth;
         int buttonHeight;
-        int buttonX;
-        int buttonY;
+        int buttonXgererated;
+        int buttonYgererated;
+        int buttonXreset;
+        int buttonYreset;
         
     private:
         int SCREEN_WIDTH;
@@ -30,7 +38,8 @@ class MapRenderer {
             CELL_DECISION,
             CELL_PATH,
             CELL_EXIT,
-            CELL_FORBIDDEN
+            CELL_FORBIDDEN,
+            CELL_START
         };
 
         CellType** mapMaze;

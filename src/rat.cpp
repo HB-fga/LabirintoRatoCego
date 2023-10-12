@@ -4,7 +4,7 @@
 
 namespace game {
 
-    Rat::Rat(int xv, int yv) : x(xv), y(yv), last_ticks(0), current_movement_index(0), direction(0){
+    Rat::Rat(int xv, int yv) : x(xv), y(yv), last_ticks(0), current_movement_index(0), direction(0), is_flip(false){
     }
 
     void Rat::update(unsigned ticks)
@@ -14,23 +14,24 @@ namespace game {
                 last_ticks = ticks;
             } else if (ticks - last_ticks > 1000) {
                 char movement = movements[current_movement_index];
+                is_flip = (is_flip) ? false : true;
                 // std::cout << "INDEX = " << current_movement_index << "\n";
-                // std::cout << "MOVIMENTO = " << movement << "\n";
+                // std::cout << "flip = " << flip << "\n";
                 if (movement == 'D') {
                     y++;
                     direction = 0;
                     // std::cout << "MOVIMENTO = " << movement << "\n";
                 } else if (movement == 'L') {
                     x--;
-                    direction = 1;
+                    direction = 90;
                     // std::cout << "MOVIMENTO = " << movement << "\n";
                 } else if (movement == 'R') {
                     x++;
-                    direction = 2;
+                    direction = 270;
                     // std::cout << "MOVIMENTO = " << movement << "\n";
                 } else if (movement == 'U') {
                     y--;
-                    direction = 3;
+                    direction = 180;
                     // std::cout << "MOVIMENTO = " << movement << "\n";
                 }
                 last_ticks = ticks;
@@ -46,10 +47,15 @@ namespace game {
     void Rat::draw(int xpos, int ypos) const
     {
         // The width and height of the mouse
-        const int ratWidth{ 71 }, ratHeight{ 58 };
+        const int ratWidth{ 40 }, ratHeight{ 48 };
+
+        SDL_RendererFlip flip = SDL_FLIP_NONE;
+        if (is_flip) {
+            flip = SDL_FLIP_HORIZONTAL;
+        }
 
         // Load the mouse texture using the engine's loadTexture function
-        auto ratTexture = engine::loadTexture("./assets/rat/rat.png");
+        auto ratTexture = engine::loadTexture("./assets/rat/whiteRat.png");
         if (!ratTexture) {
             return;
         }
@@ -57,11 +63,9 @@ namespace game {
         // Define the position where the mouse will be drawn
         SDL_Rect destRect{ xpos, ypos, ratWidth, ratHeight };
 
-        SDL_Rect srcRect{ 0, ratHeight, ratWidth, ratHeight };
-        srcRect.y = direction * ratHeight;
+        SDL_Point center{ ratWidth / 2, ratHeight / 2 };
 
-        // Draw mouse texture in renderer
-        SDL_RenderCopy(engine::getRenderer(), ratTexture.get(), &srcRect, &destRect);
+        SDL_RenderCopyEx(engine::getRenderer(), ratTexture.get(), nullptr, &destRect, direction, &center, flip);
     }
 
 }

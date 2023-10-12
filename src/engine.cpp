@@ -51,6 +51,12 @@ namespace engine {
             return false;
         }
 
+        if( TTF_Init() == -1 )
+        {
+            printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+            return false;
+        }
+
         return true;
     }
 
@@ -103,6 +109,28 @@ namespace engine {
         SDL_FreeSurface(loadedSurface);
 
         return sharedTexture;
+    }
+
+    void renderText(const std::string& text, int x, int y, TTF_Font* font, SDL_Color color)
+    {
+        SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+        if (surface == nullptr) {
+            // Trate o erro ao renderizar o texto
+            return;
+        }
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(engine::getRenderer(), surface);
+        if (texture == nullptr) {
+            // Trate o erro ao criar a textura
+            SDL_FreeSurface(surface);
+            return;
+        }
+
+        SDL_Rect destRect{ x, y, surface->w, surface->h };
+        SDL_RenderCopy(engine::getRenderer(), texture, nullptr, &destRect);
+
+        SDL_DestroyTexture(texture);
+        SDL_FreeSurface(surface);
     }
 
     namespace draw {

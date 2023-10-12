@@ -22,6 +22,7 @@ namespace game {
         uint32_t last_ticks;
         int current_movement_index;
         int direction;
+        bool is_flip;
         std::vector<char> movements;
     };
 }

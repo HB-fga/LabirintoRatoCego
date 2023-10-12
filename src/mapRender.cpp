@@ -1,14 +1,17 @@
 #include "mapRender.h"
 #include "engine.h"
 
-MapRenderer::MapRenderer(int screenWidth, int screenHeight, int mazeWidth, int mazeHeight)
-    : SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight), MAZE_WIDTH(mazeWidth),
-      MAZE_HEIGHT(mazeHeight), CELL_SIZE(60) {
+MapRenderer::MapRenderer(int screenWidth, int screenHeight, int initialMazeWidth, int initialMazeHeight)
+    : SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight), MAZE_WIDTH(initialMazeWidth),
+      MAZE_HEIGHT(initialMazeHeight), CELL_SIZE(60) {
 
     buttonWidth = 200;
     buttonHeight = 30;
-    buttonX = (SCREEN_WIDTH - buttonWidth) / 2;
-    buttonY = SCREEN_HEIGHT - 80;
+    buttonXgererated = (SCREEN_WIDTH - buttonWidth) / 2;
+    buttonYgererated = SCREEN_HEIGHT - 80;
+
+    buttonXreset = (SCREEN_WIDTH - MAZE_WIDTH * CELL_SIZE) / 2;
+    buttonYreset = SCREEN_HEIGHT - 80;
 
     mapMaze = new CellType*[MAZE_HEIGHT];
     for (int i = 0; i < MAZE_HEIGHT; ++i) {
@@ -21,6 +24,27 @@ MapRenderer::~MapRenderer() {
         delete[] mapMaze[i];
     }
     delete[] mapMaze;
+}
+
+
+void MapRenderer::increaseMazeWidth() {
+    if (MAZE_WIDTH < 30)
+        MAZE_WIDTH++;
+}
+
+void MapRenderer::decreaseMazeWidth() {
+    if (MAZE_WIDTH > 1)
+        MAZE_WIDTH--;
+}
+
+void MapRenderer::increaseMazeHeight() {
+    if (MAZE_HEIGHT < 15)
+        MAZE_HEIGHT++;
+}
+
+void MapRenderer::decreaseMazeHeight() {
+    if (MAZE_HEIGHT > 1)
+        MAZE_HEIGHT--;
 }
 
 
@@ -44,6 +68,8 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
                 cellValue = 2;
             } else if (mapMaze[row][col] == CELL_EXIT) {
                 cellValue = 3;
+            } else if (mapMaze[row][col] == CELL_START) {
+                cellValue = 4;
             }
 
             file << cellValue << " ";
@@ -60,12 +86,11 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
         }
     }
 
-    // Print the number of decision points
     file << decisionCount << "\n";
 
     for (int row = 0; row < MAZE_HEIGHT; ++row) {
         for (int col = 0; col < MAZE_WIDTH; ++col) {
-            if (mapMaze[row][col] == CELL_DECISION) {
+            if (mapMaze[row][col] == CELL_DECISION || mapMaze[row][col] == CELL_START) {
                 file << row << " " << col << ' ';
 
                 for (int i = row - 1; i >= 0; --i)
@@ -76,21 +101,21 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
                     }
 
                 for (int i = row + 1; i < MAZE_HEIGHT; ++i)
-                    if (mapMaze[i][col] == CELL_DECISION)
+                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
                     {
                         file << "S";
                         break;
                     }
 
                 for (int j = col + 1; j < MAZE_WIDTH; ++j)
-                    if (mapMaze[row][j] == CELL_DECISION)
+                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
                     {
                         file << "E";
                         break;
                     }
 
                 for (int j = col - 1; j >= 0; --j)
-                    if (mapMaze[row][j] == CELL_DECISION)
+                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
                     {
                         file << "W";
                         break;
@@ -138,26 +163,44 @@ void MapRenderer::updateCellColor(int x, int y) {
         } else if (mapMaze[cellY][cellX] == CELL_PATH) {
             mapMaze[cellY][cellX] = CELL_EXIT;
         } else if (mapMaze[cellY][cellX] == CELL_EXIT) {
+            mapMaze[cellY][cellX] = CELL_START;
+        } else if (mapMaze[cellY][cellX] == CELL_START) {
             mapMaze[cellY][cellX] = CELL_FORBIDDEN;
         } else if (mapMaze[cellY][cellX] == CELL_FORBIDDEN) {
             mapMaze[cellY][cellX] = CELL_EMPTY;
-        }
+        } 
     }
 }
 
 void MapRenderer::generateMaze() {
     engine::screen::clear();
 
-    auto titleGererateTexture = engine::loadTexture("./assets/texts/generateMapTitle.png");
-    if (!titleGererateTexture) {
-        return;
-    }
-    SDL_Rect destRectTitle{ (SCREEN_WIDTH - 800) / 2, 30, 800, 50 };
-    SDL_RenderCopy(engine::getRenderer(), titleGererateTexture.get(), 0, &destRectTitle);
-
-    // Centraliza o mapa na tela
     int offsetX = (SCREEN_WIDTH - MAZE_WIDTH * CELL_SIZE) / 2;
     int offsetY = (SCREEN_HEIGHT - MAZE_HEIGHT * CELL_SIZE) / 2;
+
+    SDL_Color whiteColor{ 255, 255, 255, 255 };
+    SDL_Color blackColor{ 0, 0, 0, 0 };
+    SDL_Color grayDarkColor{ 64, 64, 64, 255 };
+    SDL_Color grayLightColor{ 192, 192, 192, 255 };
+
+    engine::draw::rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, grayLightColor);
+    engine::draw::rect(0, 0, SCREEN_WIDTH, 60, grayDarkColor);
+    engine::draw::rect(10, 10, SCREEN_WIDTH - 20, 40, blackColor);
+
+    TTF_Font* font30p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 30);
+    if (font30p == nullptr) {
+        return;
+    }
+    engine::renderText("Gerador de mapa Labirinto do Rato Cego", SCREEN_WIDTH / 4 - 95, 20, font30p, whiteColor);
+
+
+    TTF_Font* font15p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 15);
+    if (font15p == nullptr) {
+        return;
+    }
+    engine::renderText("Controle o tamanho do labirinto com as setas", 60, 70, font15p, whiteColor);
+    engine::renderText(std::to_string(MAZE_HEIGHT) + "x" + std::to_string(MAZE_WIDTH), SCREEN_WIDTH / 2 - 35, 70, font15p, whiteColor);
+
 
     for (int y = 0; y < MAZE_HEIGHT; ++y) {
         for (int x = 0; x < MAZE_WIDTH; ++x) {
@@ -171,6 +214,9 @@ void MapRenderer::generateMaze() {
                     break;
                 case CELL_EXIT:
                     color = { 0, 255, 0, 255 }; // Verde
+                    break;
+                case CELL_START:
+                    color = { 255, 255, 0, 255 }; // amarelo
                     break;
                 case CELL_FORBIDDEN:
                     color = { 0, 0, 0, 255 }; // Preto
@@ -190,13 +236,58 @@ void MapRenderer::generateMaze() {
         }
     }
 
+    engine::draw::rect(buttonXgererated-5, buttonYgererated-5, buttonWidth+10, buttonHeight+10, grayDarkColor);
+    engine::draw::rect(buttonXgererated, buttonYgererated, buttonWidth, buttonHeight, blackColor);
 
-    auto buttonGererateTexture = engine::loadTexture("./assets/texts/generateMapButton.png");
-    if (!buttonGererateTexture) {
+    TTF_Font* font18p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 18);
+    if (font18p == nullptr) {
         return;
     }
-    SDL_Rect destRectButton{ buttonX, buttonY, buttonWidth, buttonHeight };
-    SDL_RenderCopy(engine::getRenderer(), buttonGererateTexture.get(), 0, &destRectButton);
+
+    engine::renderText("Gerar Mapa", buttonXgererated+10, buttonYgererated+5, font18p, whiteColor);
+
+    engine::draw::rect(buttonXreset-5, buttonYreset-5, buttonWidth+10, buttonHeight+10, grayDarkColor);
+    engine::draw::rect(buttonXreset, buttonYreset, buttonWidth, buttonHeight, blackColor);
+
+    engine::renderText("Resetar", buttonXreset+40, buttonYreset+5, font18p, whiteColor);
+
+
+    // Legenda
+    int legendOffsetX = SCREEN_WIDTH - 500;  // Offset horizontal da legenda
+    int legendOffsetY = SCREEN_HEIGHT - 80;  // Offset vertical da legenda
+    int legendSquareSize = 20;  // Tamanho do quadrado na legenda
+    int numColumns = 3;  // Número de colunas na legenda
+
+    // Defina as cores e os significados
+    std::vector<std::pair<SDL_Color, std::string>> legendColors = {
+        { { 0, 0, 255, 255 }, "Decisao" },  // Azul
+        { { 255, 0, 0, 255 }, "Caminho" },  // Vermelho
+        { { 0, 255, 0, 255 }, "Saida" },  // Verde
+        { { 255, 255, 0, 255 }, "Inicio" },  // Amarelo
+        { { 0, 0, 0, 255 }, "Proibido" },  // Preto
+        { { 255, 255, 255, 255 }, "Vazio" }  // Branco
+    };
+
+    // Desenha os quadrados e seus significados
+    for (int i = 0; i < legendColors.size(); ++i) {
+        SDL_Color color = legendColors[i].first;
+        std::string label = legendColors[i].second;
+        int row = i / numColumns;  // Calcular a linha atual
+        int col = i % numColumns;  // Calcular a coluna atual
+        int posX = legendOffsetX + col * (legendSquareSize + 150);
+        int posY = legendOffsetY + row * (legendSquareSize + 25);
+        engine::draw::rect(posX, posY, legendSquareSize, legendSquareSize, color);
+        TTF_Font* fontLegend = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 15);
+        engine::renderText(label, posX + legendSquareSize + 5, posY + 3, fontLegend, blackColor);
+    }
 
     engine::screen::show();
+}
+
+void MapRenderer::resetMap() {
+    for (int i = 0; i < MAZE_HEIGHT; ++i) {
+        for (int j = 0; j < MAZE_WIDTH; ++j) {
+            mapMaze[i][j] = CELL_EMPTY;
+        }
+    }
 }

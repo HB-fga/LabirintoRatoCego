@@ -47,11 +47,6 @@ int main(int, char* [])
         maze.update(SDL_GetTicks());
         maze.draw(60, 90);
 
-
-        // if (loops == 400)
-        //     quit = true;
-        // loops++;
-
         engine::screen::show();
     }
 

@@ -7,7 +7,7 @@ namespace game
 {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(6, 7)
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0)
     {
     }
 
@@ -95,7 +95,7 @@ namespace game
         }
 
         auto p = rat.getPos();
-        // rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
+        rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
     }
 
 }

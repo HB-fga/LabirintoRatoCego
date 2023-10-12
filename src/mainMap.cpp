@@ -25,13 +25,31 @@ int main(int argc, char* args[]) {
                 int mouseX = e.button.x;
                 int mouseY = e.button.y;
 
-                if (mouseX >= mapRenderer.buttonX && mouseX <= mapRenderer.buttonX + mapRenderer.buttonWidth &&
-                    mouseY >= mapRenderer.buttonY && mouseY <= mapRenderer.buttonY + mapRenderer.buttonHeight) {
-                    mapRenderer.saveMapToFile("./assets/maps/map.txt");
+                if (mouseX >= mapRenderer.buttonXgererated && mouseX <= mapRenderer.buttonXgererated + mapRenderer.buttonWidth &&
+                    mouseY >= mapRenderer.buttonYgererated && mouseY <= mapRenderer.buttonYgererated + mapRenderer.buttonHeight) {
+                    mapRenderer.saveMapToFile("../assets/maps/map.txt");
+                } else if (mouseX >= mapRenderer.buttonXreset && mouseX <= mapRenderer.buttonXreset + mapRenderer.buttonWidth &&
+                    mouseY >= mapRenderer.buttonYreset && mouseY <= mapRenderer.buttonYreset + mapRenderer.buttonHeight) {
+                    mapRenderer.resetMap();
                 } else {
                     mapRenderer.updateCellColor(e.button.x, e.button.y);
                 }
-            } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+            } else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_UP:
+                        mapRenderer.increaseMazeHeight();
+                        break;
+                    case SDLK_DOWN:
+                        mapRenderer.decreaseMazeHeight();
+                        break;
+                    case SDLK_LEFT:
+                        mapRenderer.decreaseMazeWidth();
+                        break;
+                    case SDLK_RIGHT:
+                        mapRenderer.increaseMazeWidth();
+                        break;
+                }
+            } else if (e.key.keysym.sym == SDLK_ESCAPE) {
                 quit = true;
             }
         }
