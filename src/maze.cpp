@@ -7,7 +7,7 @@ namespace game
 {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0)
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0), gameDesign(1920, 1080)
     {
     }
 
@@ -22,7 +22,7 @@ namespace game
         maze[xpos][ypos] = cell;
     }
 
-    Maze Maze::fromFile(const std::string &filename, const std::string& movementsFilename)
+    Maze Maze::loadMapfromFile(const std::string &filename)
     {
         std::ifstream file(filename);
         if (!file.is_open())
@@ -43,6 +43,7 @@ namespace game
                     bool is_valid = false;
                     bool is_decision = false;
                     bool maze_exit = false;
+                    bool maze_start = false;
 
                     if (cellValue == 0)
                         not_valid = true;
@@ -52,8 +53,12 @@ namespace game
                         is_decision = true;
                     if (cellValue == 3)
                         maze_exit = true;
+                    if (cellValue == 4){
+                        maze_start = true;
+                        maze.rat = Rat(j, i);
+                    }
 
-                    maze.setcell(i, j, Cell(not_valid, is_valid, is_decision, maze_exit, cell_size));
+                    maze.setcell(i, j, Cell(not_valid, is_valid, is_decision, maze_exit, maze_start, cell_size));
                 }
                 else
                 {
@@ -63,28 +68,53 @@ namespace game
             }
         }
 
+        file.close();
+        return maze;
+    }
+
+    std::vector<char> Maze::loadMovementsFromFile(const std::string& movementsFilename)
+    {
         std::ifstream movementsFile(movementsFilename);
-        if (!movementsFile.is_open()) {
+        if (!movementsFile.is_open())
+        {
             throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
         }
 
         std::vector<char> movements;
         char movement;
-        while (movementsFile >> movement) {
+        while (movementsFile >> movement)
+        {
             movements.push_back(movement);
         }
 
-        maze.movements = movements;  // Assign movements to the maze
-
-        // std::cout << "MOVEMENTS = " << movements.size() << "\n";
-
-        file.close();
         movementsFile.close();
-        return maze;
+        return movements;
+    }
+
+    void Maze::setMovements(const std::vector<char>& movements)
+    {
+        this->movements = movements;
+        rat.setMovements(movements); // Atualizar os movimentos da rat
+    }
+
+    void Maze::drawCentered() const
+    {
+        int screenWidth = 1920;
+        int screenHeight = 1080;
+        int mazeWidth = cols * maze[0][0].cell_size();
+        int mazeHeight = rows * maze[0][0].cell_size();
+
+        int xpos = (screenWidth - mazeWidth) / 2;
+        int ypos = (screenHeight - mazeHeight) / 2;
+
+        draw(xpos, ypos);
     }
 
     void Maze::draw(int xpos, int ypos) const
     {
+
+        gameDesign.draw();
+
         int cell_size = maze[0][0].cell_size();
         for (int i = 0; i < rows; i++)
         {
@@ -93,6 +123,7 @@ namespace game
                 maze[i][j].draw(xpos + j * cell_size, ypos + i * cell_size);
             }
         }
+
 
         auto p = rat.getPos();
         rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);

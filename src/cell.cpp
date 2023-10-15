@@ -6,8 +6,8 @@ namespace game {
 
     const int Cell::wall_thickness = 5;
 
-    Cell::Cell(bool v, bool nv, bool d, bool maze_exit, int cell_size)
-        : not_valid(v), is_valid(nv), is_decision(d), maze_exit(maze_exit), m_cell_size(cell_size) {}
+    Cell::Cell(bool v, bool nv, bool d, bool maze_exit, bool maze_start, int cell_size)
+        : not_valid(v), is_valid(nv), is_decision(d), maze_exit(maze_exit), maze_start(maze_start), m_cell_size(cell_size) {}
 
     void Cell::draw(int xpos, int ypos) const {
         SDL_Color greenColor { 0, 255, 0, 255 };
@@ -25,6 +25,9 @@ namespace game {
         }
         else if (maze_exit) {
             engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, greenColor);
+        } 
+        else if (maze_start) {
+            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, blueColor);
         }
         else {
             engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, grayLightColor);

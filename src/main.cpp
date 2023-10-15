@@ -2,6 +2,7 @@
 #include "maze.h"
 #include "rat.h"
 
+
 int main(int, char* [])
 {
     // Start up the engine
@@ -15,13 +16,26 @@ int main(int, char* [])
     game::Maze maze;
     try
     {
-        maze = game::Maze::fromFile("./assets/maps/map.txt", "./assets/movements/rat.txt");
+        maze = game::Maze::loadMapfromFile("./assets/maps/map2.txt");
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
         return -1;
     }
+
+    std::vector<char> movements;
+    try
+    {
+        movements = maze.loadMovementsFromFile("./assets/movements/rat.txt");
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        return -1;
+    }
+
+    maze.setMovements(movements);
 
     // Main loop
     bool quit = false;
@@ -45,7 +59,7 @@ int main(int, char* [])
 
         engine::screen::clear();
         maze.update(SDL_GetTicks());
-        maze.draw(60, 90);
+        maze.drawCentered();
 
         engine::screen::show();
     }

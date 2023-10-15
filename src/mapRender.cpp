@@ -187,14 +187,14 @@ void MapRenderer::generateMaze() {
     engine::draw::rect(0, 0, SCREEN_WIDTH, 60, grayDarkColor);
     engine::draw::rect(10, 10, SCREEN_WIDTH - 20, 40, blackColor);
 
-    TTF_Font* font30p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 30);
+    TTF_Font* font30p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 30);
     if (font30p == nullptr) {
         return;
     }
     engine::renderText("Gerador de mapa Labirinto do Rato Cego", SCREEN_WIDTH / 4 - 95, 20, font30p, whiteColor);
 
 
-    TTF_Font* font15p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 15);
+    TTF_Font* font15p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 15);
     if (font15p == nullptr) {
         return;
     }
@@ -239,7 +239,7 @@ void MapRenderer::generateMaze() {
     engine::draw::rect(buttonXgererated-5, buttonYgererated-5, buttonWidth+10, buttonHeight+10, grayDarkColor);
     engine::draw::rect(buttonXgererated, buttonYgererated, buttonWidth, buttonHeight, blackColor);
 
-    TTF_Font* font18p = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 18);
+    TTF_Font* font18p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 18);
     if (font18p == nullptr) {
         return;
     }
@@ -277,7 +277,7 @@ void MapRenderer::generateMaze() {
         int posX = legendOffsetX + col * (legendSquareSize + 150);
         int posY = legendOffsetY + row * (legendSquareSize + 25);
         engine::draw::rect(posX, posY, legendSquareSize, legendSquareSize, color);
-        TTF_Font* fontLegend = TTF_OpenFont("../assets/texts/PressStart2P-Regular.ttf", 15);
+        TTF_Font* fontLegend = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 15);
         engine::renderText(label, posX + legendSquareSize + 5, posY + 3, fontLegend, blackColor);
     }
 
