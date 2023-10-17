@@ -191,7 +191,7 @@ void MapRenderer::generateMaze() {
     if (font30p == nullptr) {
         return;
     }
-    engine::renderText("Gerador de mapa Labirinto do Rato Cego", SCREEN_WIDTH / 4 - 95, 20, font30p, whiteColor);
+    engine::renderText("Criador de mapa Labirinto do Rato Cego", SCREEN_WIDTH / 4 - 95, 20, font30p, whiteColor);
 
 
     TTF_Font* font15p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 15);

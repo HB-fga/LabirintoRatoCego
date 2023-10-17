@@ -97,7 +97,7 @@ namespace game
         rat.setMovements(movements); // Atualizar os movimentos da rat
     }
 
-    void Maze::drawCentered() const
+    void Maze::drawCentered(bool is_selection) const
     {
         int screenWidth = 1920;
         int screenHeight = 1080;
@@ -107,7 +107,10 @@ namespace game
         int xpos = (screenWidth - mazeWidth) / 2;
         int ypos = (screenHeight - mazeHeight) / 2;
 
-        draw(xpos, ypos);
+        if(!is_selection)
+            draw(xpos, ypos);
+        else
+            drawSelection(xpos, ypos);
     }
 
     void Maze::draw(int xpos, int ypos) const
@@ -124,9 +127,23 @@ namespace game
             }
         }
 
-
         auto p = rat.getPos();
         rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
+    }
+
+    void Maze::drawSelection(int xpos, int ypos) const
+    {
+        // engine::draw::rect(0, 0, 1920, 1080, { 192, 192, 192, 255 });
+        gameDesign.drawSelection();
+
+        int cell_size = maze[0][0].cell_size();
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                maze[i][j].draw(xpos + j * cell_size, ypos + i * cell_size);
+            }
+        }
     }
 
 }

@@ -1,10 +1,12 @@
 #ifndef RC_GAMEDESIGN_H
 #define RC_GAMEDESIGN_H
 
+#include "engine.h"
 class GameDesign {
     public:
         GameDesign(int screenWidth, int screenHeight);
         void draw() const;
+        void drawSelection() const;
         
     private:
         int SCREEN_WIDTH;

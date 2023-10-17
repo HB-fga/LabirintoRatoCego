@@ -16,7 +16,8 @@ namespace game {
         Maze(int rows = 1, int cols = 1);
         void update(unsigned ticks);
         void draw(int xpos, int ypos) const;
-        void drawCentered() const;
+        void drawSelection(int xpos, int ypos) const;
+        void drawCentered(bool is_selection = false) const;
 		void setcell(int xpos, int ypos, Cell cell);
         static Maze loadMapfromFile(const std::string& filename);
         std::vector<char> loadMovementsFromFile(const std::string& movementsFilename);

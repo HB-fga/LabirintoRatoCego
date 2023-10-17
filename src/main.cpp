@@ -1,22 +1,86 @@
 #include "engine.h"
 #include "maze.h"
 #include "rat.h"
-
+#include "configSelection.h"
+#include <iostream>
 
 int main(int, char* [])
 {
-    // Start up the engine
+    // Inicializa o mecanismo
     if (not engine::init(1920, 1080))
     {
         engine::close();
         return -1;
     }
 
-    // Start the game
+    // Seleção do mapa
+    game::ConfigSelection mapSelection("./assets/maps");
+    int loops = 1;
+
+    bool quitSelection = false;
+
+    while (!quitSelection)
+    {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_KEYDOWN)
+            {
+                if (e.key.keysym.sym == SDLK_UP)
+                {
+                    mapSelection.navigateUp();
+                }
+                else if (e.key.keysym.sym == SDLK_DOWN)
+                {
+                    mapSelection.navigateDown();
+                }
+                else if (e.key.keysym.sym == SDLK_RETURN)
+                {
+                    quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                    break;
+                }
+                else if (e.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    engine::close();  // Fecha o mecanismo ao pressionar Esc
+                    return 0;
+                }
+            }
+            else if (e.type == SDL_QUIT)
+            {
+                engine::close();
+                return 0;
+            }
+        }
+        engine::screen::clear();
+
+
+        // Obtenha o labirinto selecionado
+        game::Maze mazePreview;
+        try
+        {
+            mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
+            mazePreview.drawCentered(true); // Desenhe o preview do labirinto
+            mapSelection.writeTextSelection(mapSelection.getSelectedMap());
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return -1;
+        }
+
+        engine::screen::show();
+
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN)
+        {
+            break;
+        }
+    }
+
+    // Inicia o jogo com o mapa selecionado
     game::Maze maze;
     try
     {
-        maze = game::Maze::loadMapfromFile("./assets/maps/map2.txt");
+        maze = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
     }
     catch(const std::exception& e)
     {
@@ -37,9 +101,9 @@ int main(int, char* [])
 
     maze.setMovements(movements);
 
-    // Main loop
+
+    // Loop principal
     bool quit = false;
-    int loops = 1;
 
     while (!quit)
     {
@@ -51,16 +115,16 @@ int main(int, char* [])
                 quit = true;
                 break;
             }
-            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-               quit = true;  // Permite fechar o jogo ao pressionar 'esc'
-               break;
-           }
+            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            {
+                quit = true;  // Permite fechar o jogo ao pressionar 'esc'
+                break;
+            }
         }
 
         engine::screen::clear();
         maze.update(SDL_GetTicks());
         maze.drawCentered();
-
         engine::screen::show();
     }
 
