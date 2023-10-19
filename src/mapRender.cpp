@@ -1,3 +1,6 @@
+#include <vector>
+#include <utility>
+
 #include "mapRender.h"
 #include "engine.h"
 
@@ -192,7 +195,7 @@ void MapRenderer::generateMaze() {
         return;
     }
     engine::renderText("Criador de mapa Labirinto do Rato Cego", SCREEN_WIDTH / 4 - 95, 20, font30p, whiteColor);
-
+    TTF_CloseFont(font30p);
 
     TTF_Font* font15p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 15);
     if (font15p == nullptr) {
@@ -250,6 +253,7 @@ void MapRenderer::generateMaze() {
     engine::draw::rect(buttonXreset, buttonYreset, buttonWidth, buttonHeight, blackColor);
 
     engine::renderText("Resetar", buttonXreset+40, buttonYreset+5, font18p, whiteColor);
+    TTF_CloseFont(font18p);
 
 
     // Legenda
@@ -279,7 +283,9 @@ void MapRenderer::generateMaze() {
         engine::draw::rect(posX, posY, legendSquareSize, legendSquareSize, color);
         TTF_Font* fontLegend = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 15);
         engine::renderText(label, posX + legendSquareSize + 5, posY + 3, fontLegend, blackColor);
+        TTF_CloseFont(fontLegend);
     }
+    TTF_CloseFont(font15p);
 
     engine::screen::show();
 }
