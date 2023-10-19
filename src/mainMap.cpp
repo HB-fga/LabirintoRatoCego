@@ -55,6 +55,7 @@ int main(int argc, char* args[]) {
         }
 
         mapRenderer.generateMaze();
+        SDL_Delay(10);
     }
 
     engine::close();
