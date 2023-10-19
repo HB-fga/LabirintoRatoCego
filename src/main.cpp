@@ -42,7 +42,7 @@ int main(int, char* [])
                 }
                 else if (e.key.keysym.sym == SDLK_ESCAPE)
                 {
-                    engine::close();  // Fecha o mecanismo ao pressionar Esc
+                    engine::close();  //  Permite fechar o jogo ao pressionar 'esc'
                     return 0;
                 }
             }
@@ -55,7 +55,7 @@ int main(int, char* [])
         engine::screen::clear();
 
 
-        // Obtenha o labirinto selecionado
+        // Selecao do labirinto
         game::Maze mazePreview;
         try
         {
@@ -109,7 +109,7 @@ int main(int, char* [])
     };
 
     for (const std::string& file : movementFiles) {
-        RatInstance newRat(0, 0, file, mapSelection.getSelectedMap()); // Inicialize as posições como desejado
+        RatInstance newRat(0, 0, file, mapSelection.getSelectedMap());
         rats.push_back(newRat);
     }
 
@@ -141,7 +141,7 @@ int main(int, char* [])
         maze.drawCentered();
         for (RatInstance& ratInstance : rats) {
             ratInstance.update(SDL_GetTicks());
-            ratInstance.draw(); // Defina as posições apropriadas
+            ratInstance.draw();
         }
         engine::screen::show();
     }
