@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "ratInstance.h"
 #include "maze.h"
 #include "rat.h"
 #include "configSelection.h"
@@ -88,18 +89,29 @@ int main(int, char* [])
         return -1;
     }
 
-    std::vector<char> movements;
-    try
-    {
-        movements = maze.loadMovementsFromFile("./assets/movements/rat.txt");
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-        return -1;
-    }
+    // std::vector<char> movements;
+    // try
+    // {
+    //     movements = maze.loadMovementsFromFile("./assets/movements/rat.txt");
+    // }
+    // catch (const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    //     return -1;
+    // }
+    // maze.setMovements(movements);
 
-    maze.setMovements(movements);
+    std::vector<RatInstance> rats;
+
+    std::vector<std::string> movementFiles = {
+        "./assets/movements/rat.txt",
+        "./assets/movements/rat2.txt",
+    };
+
+    for (const std::string& file : movementFiles) {
+        RatInstance newRat(0, 0, file, mapSelection.getSelectedMap()); // Inicialize as posições como desejado
+        rats.push_back(newRat);
+    }
 
 
     // Loop principal
@@ -123,8 +135,14 @@ int main(int, char* [])
         }
 
         engine::screen::clear();
-        maze.update(SDL_GetTicks());
+
+
+        // maze.update(SDL_GetTicks());
         maze.drawCentered();
+        for (RatInstance& ratInstance : rats) {
+            ratInstance.update(SDL_GetTicks());
+            ratInstance.draw(); // Defina as posições apropriadas
+        }
         engine::screen::show();
     }
 

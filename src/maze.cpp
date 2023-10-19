@@ -127,8 +127,8 @@ namespace game
             }
         }
 
-        auto p = rat.getPos();
-        rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
+        // auto p = rat.getPos();
+        // rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
     }
 
     void Maze::drawSelection(int xpos, int ypos) const
