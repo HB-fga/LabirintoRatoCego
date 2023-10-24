@@ -203,6 +203,7 @@ void MapRenderer::generateMaze() {
     }
     engine::renderText("Controle o tamanho do labirinto com as setas", 60, 70, font15p, whiteColor);
     engine::renderText(std::to_string(MAZE_HEIGHT) + "x" + std::to_string(MAZE_WIDTH), SCREEN_WIDTH / 2 - 35, 70, font15p, whiteColor);
+    TTF_CloseFont(font15p);
 
 
     for (int y = 0; y < MAZE_HEIGHT; ++y) {
@@ -285,7 +286,6 @@ void MapRenderer::generateMaze() {
         engine::renderText(label, posX + legendSquareSize + 5, posY + 3, fontLegend, blackColor);
         TTF_CloseFont(fontLegend);
     }
-    TTF_CloseFont(font15p);
 
     engine::screen::show();
 }

@@ -9,38 +9,37 @@ namespace game {
 
     void Rat::update(unsigned ticks)
     {
-        if (current_movement_index < (int) movements.size()) {
-            if (not last_ticks) {
+        if (current_movement_index < movements.size()) {
+            if (!last_ticks) {
                 last_ticks = ticks;
             } else if (ticks - last_ticks > 1000) {
-                char movement = movements[current_movement_index];
+                int new_x = movements[current_movement_index].first;
+                int new_y = movements[current_movement_index].second;
                 is_flip = (is_flip) ? false : true;
-                // std::cout << "INDEX = " << current_movement_index << "\n";
-                // std::cout << "flip = " << flip << "\n";
-                if (movement == 'D') {
-                    y++;
-                    direction = 0;
-                    // std::cout << "MOVIMENTO = " << movement << "\n";
-                } else if (movement == 'L') {
-                    x--;
-                    direction = 90;
-                    // std::cout << "MOVIMENTO = " << movement << "\n";
-                } else if (movement == 'R') {
-                    x++;
-                    direction = 270;
-                    // std::cout << "MOVIMENTO = " << movement << "\n";
-                } else if (movement == 'U') {
-                    y--;
-                    direction = 180;
-                    // std::cout << "MOVIMENTO = " << movement << "\n";
+
+                // Calcular a direção com base nas coordenadas
+                int delta_x = new_x - x;
+                int delta_y = new_y - y;
+                if (delta_x > 0) {
+                    direction = 270; // Direita
+                } else if (delta_x < 0) {
+                    direction = 90; // Esquerda
+                } else if (delta_y > 0) {
+                    direction = 0; // Baixo
+                } else if (delta_y < 0) {
+                    direction = 180; // Cima
                 }
+
+                x = new_x;
+                y = new_y;
+
                 last_ticks = ticks;
                 current_movement_index++;
             }
         }
     }
 
-    void Rat::setMovements(const std::vector<char>& movements) {
+    void Rat::setMovements(const std::vector<std::pair<int, int>>& movements) {
         this->movements = movements;
     }
 

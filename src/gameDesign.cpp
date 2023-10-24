@@ -34,6 +34,7 @@ void GameDesign::draw() const{
         return;
     }
     engine::renderText("Labirinto do Rato Cego", SCREEN_WIDTH / 3, 20, font30p, whiteColor);
+    TTF_CloseFont(font30p);
 }
 
 void GameDesign::drawSelection() const{
@@ -52,6 +53,7 @@ void GameDesign::drawSelection() const{
         return;
     }
     engine::renderText("Selecione o Mapa", 1920 / 4 + 195, 20, font30p, whiteColor);
+    TTF_CloseFont(font30p);
 
     TTF_Font* font15p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 15);
     if (font15p == nullptr) {
@@ -65,4 +67,6 @@ void GameDesign::drawSelection() const{
 
     engine::renderText("Selecione o labirinto com as setas (Cima/Baixo)", 60, 70, font15p, whiteColor);
     engine::renderText("Pressione ENTER para confirmar", 60, 1000, font25p, whiteColor);
+    TTF_CloseFont(font15p);
+    TTF_CloseFont(font25p);
 }

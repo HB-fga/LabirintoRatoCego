@@ -60,5 +60,6 @@ namespace game
         mapFileName = mapFileName.substr(0, extensionPos);
 
         engine::renderText(mapFileName, 1920 / 2 - 100, 63, font25p, blueColor);
+        TTF_CloseFont(font25p);
     } 
 }

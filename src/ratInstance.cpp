@@ -53,7 +53,7 @@ void RatInstance::draw() const
     rat.draw(xpos + p.first * 60 + 5, ypos + p.second * 60 + 5);
 }
 
-std::vector<char> RatInstance::LoadMovementsFromFile(const std::string& movementsFilename)
+std::vector<std::pair<int, int>> RatInstance::LoadMovementsFromFile(const std::string& movementsFilename)
 {
     std::ifstream movementsFile(movementsFilename);
     if (!movementsFile.is_open())
@@ -61,11 +61,14 @@ std::vector<char> RatInstance::LoadMovementsFromFile(const std::string& movement
         throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
     }
 
-    std::vector<char> movements;
-    char movement;
-    while (movementsFile >> movement)
-    {
-        movements.push_back(movement);
+    int n;
+    movementsFile >> n;
+
+    std::vector<std::pair<int, int>> movements;
+    int col, row;
+    for (int i = 0; i < n; i++) {
+        movementsFile >> col >> row;
+        movements.push_back(std::make_pair(row, col));
     }
 
     movementsFile.close();

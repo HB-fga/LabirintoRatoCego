@@ -16,10 +16,10 @@ public:
     int xpos, ypos;
 
 private:
-    static std::vector<char> LoadMovementsFromFile(const std::string& movementsFilename);
+    static std::vector<std::pair<int, int>> LoadMovementsFromFile(const std::string& movementsFilename);
     int x, y;
     game::Rat rat;
-    std::vector<char> movements;
+    std::vector<std::pair<int, int>> movements;
 };
 
 

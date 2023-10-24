@@ -21,12 +21,12 @@ namespace game {
 		void setcell(int xpos, int ypos, Cell cell);
         static Maze loadMapfromFile(const std::string& filename);
         std::vector<char> loadMovementsFromFile(const std::string& movementsFilename);
-        void setMovements(const std::vector<char> &movements);
+        // void setMovements(const std::vector<char> &movements);
 
     private:
         int rows, cols;
         std::vector<std::vector<Cell>> maze;
-        std::vector<char> movements;
+        // std::vector<char> movements;
         game::Rat rat;
         GameDesign gameDesign;
 

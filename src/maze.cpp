@@ -13,8 +13,8 @@ namespace game
 
     void Maze::update(unsigned ticks)
     {
-        rat.setMovements(movements);
-        rat.update(ticks);
+        // rat.setMovements(movements);
+        // rat.update(ticks);
     }
 
     void Maze::setcell(int xpos, int ypos, Cell cell)
@@ -91,11 +91,11 @@ namespace game
         return movements;
     }
 
-    void Maze::setMovements(const std::vector<char>& movements)
-    {
-        this->movements = movements;
-        rat.setMovements(movements); // Atualizar os movimentos da rat
-    }
+    // void Maze::setMovements(const std::vector<char>& movements)
+    // {
+    //     // this->movements = movements;
+    //     // rat.setMovements(movements); // Atualizar os movimentos da rat
+    // }
 
     void Maze::drawCentered(bool is_selection) const
     {
