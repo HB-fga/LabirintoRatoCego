@@ -7,7 +7,7 @@ namespace game
 {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0), gameDesign(1920, 1080)
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0, "./assets/rat/whiteRat.png"), gameDesign(1920, 1080)
     {
     }
 
@@ -55,7 +55,7 @@ namespace game
                         maze_exit = true;
                     if (cellValue == 4){
                         maze_start = true;
-                        maze.rat = Rat(j, i);
+                        // maze.rat = Rat(j, i);
                     }
 
                     maze.setcell(i, j, Cell(not_valid, is_valid, is_decision, maze_exit, maze_start, cell_size));

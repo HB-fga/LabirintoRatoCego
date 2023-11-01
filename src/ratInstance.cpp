@@ -1,8 +1,8 @@
 #include "ratInstance.h"
 #include "engine.h"
 
-RatInstance::RatInstance(int xv, int yv, const std::string& movementFile, const std::string& mapFile)
-    : rat(xv, yv), movements(LoadMovementsFromFile(movementFile))
+RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std::string& movementFile, const std::string& mapFile)
+    : rat(xv, yv, imageRat), movements(LoadMovementsFromFile(movementFile))
 {
     int screenWidth = 1920;
     int screenHeight = 1080;

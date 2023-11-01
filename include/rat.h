@@ -5,12 +5,13 @@
 #include <utility>
 #include <cstdint>
 #include <vector>
+#include <fstream>
 
 namespace game {
 
     class Rat : public GameObject{
     public:
-        Rat(int xv, int yv);
+        Rat(int xv, int yv, const std::string& textureFilename);
         void update(unsigned ticks);
         void setMovements(const std::vector<std::pair<int, int>>& movements);
         void draw(int xpos, int ypos) const;
@@ -24,6 +25,7 @@ namespace game {
         int direction;
         bool is_flip;
         std::vector<std::pair<int, int>> movements;
+        std::string textureFilename;
     };
 }
 

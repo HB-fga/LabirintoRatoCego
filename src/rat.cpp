@@ -4,7 +4,8 @@
 
 namespace game {
 
-    Rat::Rat(int xv, int yv) : x(xv), y(yv), last_ticks(0), current_movement_index(0), direction(0), is_flip(false){
+    Rat::Rat(int xv, int yv, const std::string& textureFilename)
+        : x(xv), y(yv), last_ticks(0), current_movement_index(0), direction(0), is_flip(false), textureFilename(textureFilename) {
     }
 
     void Rat::update(unsigned ticks)
@@ -43,27 +44,21 @@ namespace game {
         this->movements = movements;
     }
 
-    void Rat::draw(int xpos, int ypos) const
+    void Rat::draw(int xpos, int ypos) const 
     {
-        // The width and height of the mouse
         const int ratWidth{ 40 }, ratHeight{ 48 };
-
         SDL_RendererFlip flip = SDL_FLIP_NONE;
         if (is_flip) {
             flip = SDL_FLIP_HORIZONTAL;
         }
 
-        // Load the mouse texture using the engine's loadTexture function
-        auto ratTexture = engine::loadTexture("./assets/rat/whiteRat.png");
+        auto ratTexture = engine::loadTexture(textureFilename);  // Use o nome do arquivo recebido como parâmetro
         if (!ratTexture) {
             return;
         }
 
-        // Define the position where the mouse will be drawn
         SDL_Rect destRect{ xpos, ypos, ratWidth, ratHeight };
-
         SDL_Point center{ ratWidth / 2, ratHeight / 2 };
-
         SDL_RenderCopyEx(engine::getRenderer(), ratTexture.get(), nullptr, &destRect, direction, &center, flip);
     }
 

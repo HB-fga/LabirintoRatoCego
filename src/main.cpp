@@ -103,13 +103,20 @@ int main(int, char* [])
 
     std::vector<RatInstance> rats;
 
+    std::vector<std::string> ratImages = {
+        "./assets/rat/whiteRat.png",
+        "./assets/rat/redRat.png",
+        "./assets/rat/brownRat.png",
+    };
+
     std::vector<std::string> movementFiles = {
         "./assets/movements/rat.txt",
         "./assets/movements/rat2.txt",
+        "./assets/movements/rat3.txt",
     };
 
-    for (const std::string& file : movementFiles) {
-        RatInstance newRat(0, 0, file, mapSelection.getSelectedMap());
+    for (size_t i = 0; i < movementFiles.size(); ++i) {
+        RatInstance newRat(0, 0, ratImages[i], movementFiles[i], mapSelection.getSelectedMap());
         rats.push_back(newRat);
     }
 
