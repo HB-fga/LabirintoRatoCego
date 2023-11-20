@@ -7,7 +7,7 @@ namespace game
 {
 
     Maze::Maze(int r, int c)
-        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), rat(0, 0, "./assets/rat/whiteRat.png"), gameDesign(1920, 1080)
+        : rows(r), cols(c), maze(r, std::vector<Cell>(c)), gameDesign(1920, 1080)
     {
     }
 
@@ -67,25 +67,6 @@ namespace game
 
         file.close();
         return maze;
-    }
-
-    std::vector<char> Maze::loadMovementsFromFile(const std::string& movementsFilename)
-    {
-        std::ifstream movementsFile(movementsFilename);
-        if (!movementsFile.is_open())
-        {
-            throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
-        }
-
-        std::vector<char> movements;
-        char movement;
-        while (movementsFile >> movement)
-        {
-            movements.push_back(movement);
-        }
-
-        movementsFile.close();
-        return movements;
     }
 
     void Maze::drawCentered(bool is_selection) const

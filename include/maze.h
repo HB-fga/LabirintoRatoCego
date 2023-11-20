@@ -20,12 +20,10 @@ namespace game {
         void drawCentered(bool is_selection = false) const;
 		void setcell(int xpos, int ypos, Cell cell);
         static Maze loadMapfromFile(const std::string& filename);
-        std::vector<char> loadMovementsFromFile(const std::string& movementsFilename);
 
     private:
         int rows, cols;
         std::vector<std::vector<Cell>> maze;
-        game::Rat rat;
         GameDesign gameDesign;
 
     };
