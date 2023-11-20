@@ -17,7 +17,7 @@ namespace game
         std::string getSelectedMap() const;
         void navigateUp();
         void navigateDown();
-        void writeTextSelection(const std::string &mapsDirectory);
+        void writeTextSelection(const std::string &mapsDirectory, int height = 63);
     };
 }
 

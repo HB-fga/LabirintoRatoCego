@@ -96,33 +96,41 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
             if (mapMaze[row][col] == CELL_DECISION || mapMaze[row][col] == CELL_START) {
                 file << row << " " << col << ' ';
 
-                for (int i = row - 1; i >= 0; --i)
+                for (int i = row - 1; i >= 0; --i) {
+                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
                     if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
                     {
                         file << "N";
                         break;
                     }
+                }
 
-                for (int i = row + 1; i < MAZE_HEIGHT; ++i)
+                for (int i = row + 1; i < MAZE_HEIGHT; ++i) {
+                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
                     if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
                     {
                         file << "S";
                         break;
                     }
+                }
 
-                for (int j = col + 1; j < MAZE_WIDTH; ++j)
+                for (int j = col + 1; j < MAZE_WIDTH; ++j) {
+                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
                     if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
                     {
                         file << "E";
                         break;
                     }
+                }
 
-                for (int j = col - 1; j >= 0; --j)
+                for (int j = col - 1; j >= 0; --j) {
+                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
                     if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
                     {
                         file << "W";
                         break;
                     }
+                }
 
                 file << '\n';
             }
@@ -154,9 +162,6 @@ void MapRenderer::updateCellColor(int x, int y) {
     if (x >= 0 && x < MAZE_WIDTH * CELL_SIZE && y >= 0 && y < MAZE_HEIGHT * CELL_SIZE) {
         int cellX = x / CELL_SIZE;
         int cellY = y / CELL_SIZE;
-
-        // Printe as coordenadas (x, y)
-        // std::cout << "Clicked cell coordinates: (" << cellX << ", " << cellY << ")" << std::endl;
 
         // Atualize a cor da célula com base na regra
         if (mapMaze[cellY][cellX] == CELL_EMPTY) {

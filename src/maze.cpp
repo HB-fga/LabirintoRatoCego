@@ -13,8 +13,6 @@ namespace game
 
     void Maze::update(unsigned ticks)
     {
-        // rat.setMovements(movements);
-        // rat.update(ticks);
     }
 
     void Maze::setcell(int xpos, int ypos, Cell cell)
@@ -55,7 +53,6 @@ namespace game
                         maze_exit = true;
                     if (cellValue == 4){
                         maze_start = true;
-                        // maze.rat = Rat(j, i);
                     }
 
                     maze.setcell(i, j, Cell(not_valid, is_valid, is_decision, maze_exit, maze_start, cell_size));
@@ -91,12 +88,6 @@ namespace game
         return movements;
     }
 
-    // void Maze::setMovements(const std::vector<char>& movements)
-    // {
-    //     // this->movements = movements;
-    //     // rat.setMovements(movements); // Atualizar os movimentos da rat
-    // }
-
     void Maze::drawCentered(bool is_selection) const
     {
         int screenWidth = 1920;
@@ -126,14 +117,10 @@ namespace game
                 maze[i][j].draw(xpos + j * cell_size, ypos + i * cell_size);
             }
         }
-
-        // auto p = rat.getPos();
-        // rat.draw(xpos + p.first * cell_size + Cell::wall_thickness, ypos + p.second * cell_size + Cell::wall_thickness);
     }
 
     void Maze::drawSelection(int xpos, int ypos) const
     {
-        // engine::draw::rect(0, 0, 1920, 1080, { 192, 192, 192, 255 });
         gameDesign.drawSelection();
 
         int cell_size = maze[0][0].cell_size();

@@ -45,21 +45,35 @@ namespace game
         }
     }
 
-    void ConfigSelection::writeTextSelection(const std::string &mapsDirectory)
+    void ConfigSelection::writeTextSelection(const std::string &mapsDirectory, int height)
     {
+
         SDL_Color blueColor{ 0, 0, 255, 255 };
+        SDL_Color whiteColor{ 255, 255, 255, 255 };
 
         TTF_Font* font25p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 25);
         if (font25p == nullptr) {
             return;
         }
 
+        TTF_Font* font15p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 15);
+        if (font15p == nullptr) {
+            return;
+        }
+
+
         size_t lastSlashPos = mapsDirectory.find_last_of("/\\");
         std::string mapFileName = mapsDirectory.substr(lastSlashPos + 1);
         size_t extensionPos = mapFileName.find(".txt");
         mapFileName = mapFileName.substr(0, extensionPos);
 
-        engine::renderText(mapFileName, 1920 / 2 - 100, 63, font25p, blueColor);
+        engine::renderText(mapFileName, 1920 / 2 - 100, height, font25p, blueColor);
+        
+        if (height > 63){
+            engine::renderText("Selecione os arquivos de movimento com as setas (Cima/Baixo)", 60, 63*3, font15p, whiteColor);
+            return;
+        }
         TTF_CloseFont(font25p);
+        TTF_CloseFont(font15p);
     } 
 }

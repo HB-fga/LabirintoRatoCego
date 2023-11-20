@@ -4,7 +4,8 @@ while True:
     options = input()
     if options == "LOSE" or options == "WIN":
         break
-    print(random.choice(options))
+    choice = random.randint(0, len(options) - 1)
+    print(options[choice])
 
 ratName = "ratoAleatorioPython"
 

@@ -16,6 +16,7 @@ namespace game {
         void setMovements(const std::vector<std::pair<int, int>>& movements);
         void draw(int xpos, int ypos) const;
         std::pair<int, int> getPos() const { return { x, y };}
+        int getIndex() const;
 
 
     private:

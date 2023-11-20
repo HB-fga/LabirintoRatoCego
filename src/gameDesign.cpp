@@ -4,18 +4,6 @@
 GameDesign::GameDesign(int screenWidth, int screenHeight)
     : SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight) {
 
-    // buttonWidth = 200;
-    // buttonHeight = 30;
-    // buttonXgererated = (SCREEN_WIDTH - buttonWidth) / 2;
-    // buttonYgererated = SCREEN_HEIGHT - 80;
-
-    // buttonXreset = (SCREEN_WIDTH - MAZE_WIDTH * CELL_SIZE) / 2;
-    // buttonYreset = SCREEN_HEIGHT - 80;
-
-    // mapMaze = new CellType*[MAZE_HEIGHT];
-    // for (int i = 0; i < MAZE_HEIGHT; ++i) {
-    //     mapMaze[i] = new CellType[MAZE_WIDTH]();
-    // }
 }
 
 void GameDesign::draw() const{
@@ -34,7 +22,32 @@ void GameDesign::draw() const{
         return;
     }
     engine::renderText("Labirinto do Rato Cego", SCREEN_WIDTH / 3, 20, font30p, whiteColor);
-    TTF_CloseFont(font30p);
+    TTF_CloseFont(font30p);    
+}
+
+void GameDesign::drawButtonSpeedy() const {
+    SDL_Color whiteColor{ 255, 255, 255, 255 };
+    SDL_Color blackColor{ 0, 0, 0, 0 };
+    SDL_Color grayDarkColor{ 64, 64, 64, 255 };
+
+
+    engine::draw::rect(745, 995, 210, 40, grayDarkColor);
+    engine::draw::rect(750, 1000, 200, 30, blackColor);
+
+
+    engine::draw::rect(965, 995, 210, 40, grayDarkColor);
+    engine::draw::rect(970, 1000, 200, 30, blackColor);
+
+
+
+
+    TTF_Font* font18p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 18);
+    if (font18p == nullptr) {
+        return;
+    }
+    engine::renderText("-Velocidade", 750, 1005, font18p, whiteColor);
+    engine::renderText("+Velocidade", 970, 1005, font18p, whiteColor);
+    TTF_CloseFont(font18p);
 }
 
 void GameDesign::drawSelection() const{

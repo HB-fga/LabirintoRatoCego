@@ -12,5 +12,5 @@
 2 2 NSEW
 2 4 NSW
 4 0 NE
-4 2 NEW
+4 2 NW
 4 4

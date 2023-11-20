@@ -5,7 +5,7 @@
 namespace game {
 
     Rat::Rat(int xv, int yv, const std::string& textureFilename)
-        : x(xv), y(yv), last_ticks(0), current_movement_index(0), direction(0), is_flip(false), textureFilename(textureFilename) {
+        : x(xv), y(yv), last_ticks(0), current_movement_index(1), direction(0), is_flip(false), textureFilename(textureFilename) {
     }
 
     void Rat::update(unsigned ticks)
@@ -44,6 +44,11 @@ namespace game {
         this->movements = movements;
     }
 
+    int Rat::getIndex() const
+    {
+        return current_movement_index;
+    }
+
     void Rat::draw(int xpos, int ypos) const 
     {
         const int ratWidth{ 40 }, ratHeight{ 48 };
@@ -52,7 +57,7 @@ namespace game {
             flip = SDL_FLIP_HORIZONTAL;
         }
 
-        auto ratTexture = engine::loadTexture(textureFilename);  // Use o nome do arquivo recebido como parâmetro
+        auto ratTexture = engine::loadTexture(textureFilename);
         if (!ratTexture) {
             return;
         }

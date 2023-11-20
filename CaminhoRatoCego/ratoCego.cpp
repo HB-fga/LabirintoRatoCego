@@ -80,7 +80,6 @@ int main(int argc, char* argv[]) {
     vector<pair<int, int>> pathRat;
     pathRat.emplace_back(xCurrent, yCurrent);
 
-
     while(true){
         // Verifica se o rato ultrapassou o número máximo de moviments
         if (moviments == P){
