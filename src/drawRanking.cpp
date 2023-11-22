@@ -48,8 +48,7 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
             engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
             engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
         }
-        // engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
-        // engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
+
         y += 70;
     }
 
