@@ -14,6 +14,7 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
     SDL_Color blackColor{ 0, 0, 0, 0 };
     SDL_Color grayDarkColor{ 64, 64, 64, 255 };
     SDL_Color grayLightColor{ 192, 192, 192, 255 };
+    SDL_Color greenColor{ 0, 255, 0, 255 };
 
     engine::draw::rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, grayLightColor);
     engine::draw::rect(0, 0, SCREEN_WIDTH, 60, grayDarkColor);
@@ -34,11 +35,21 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
     engine::renderText("Qtd Movimentos", SCREEN_WIDTH / 5 + 400, 100, font30p, whiteColor);
     engine::renderText("Rato", 1740, 100, font30p, whiteColor);
 
+    int minMoves = std::stoi(std::get<1>(mouseData[0]));
+
     int y = 170;
     for (const auto& mouse : mouseData) {
 
-        engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
-        engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
+        if (std::stoi(std::get<1>(mouse)) == minMoves) {
+            engine::renderText(std::get<0>(mouse), 60, y, font30p, greenColor);
+            engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, greenColor);
+        }
+        else {
+            engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
+            engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
+        }
+        // engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
+        // engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
         y += 70;
     }
 

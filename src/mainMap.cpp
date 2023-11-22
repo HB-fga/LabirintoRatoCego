@@ -1,6 +1,11 @@
 #include "mapRender.h"
 #include "engine.h"
 
+// nome do arquivo de saida
+std::string outputFileName = "labirinto.txt";
+
+
+
 int main(int argc, char* args[]) {
     const int SCREEN_WIDTH = 1920;
     const int SCREEN_HEIGHT = 1080;
@@ -27,7 +32,7 @@ int main(int argc, char* args[]) {
 
                 if (mouseX >= mapRenderer.buttonXgererated && mouseX <= mapRenderer.buttonXgererated + mapRenderer.buttonWidth &&
                     mouseY >= mapRenderer.buttonYgererated && mouseY <= mapRenderer.buttonYgererated + mapRenderer.buttonHeight) {
-                    mapRenderer.saveMapToFile("../assets/maps/map.txt");
+                    mapRenderer.saveMapToFile("../assets/maps/" + outputFileName);
                 } else if (mouseX >= mapRenderer.buttonXreset && mouseX <= mapRenderer.buttonXreset + mapRenderer.buttonWidth &&
                     mouseY >= mapRenderer.buttonYreset && mouseY <= mapRenderer.buttonYreset + mapRenderer.buttonHeight) {
                     mapRenderer.resetMap();

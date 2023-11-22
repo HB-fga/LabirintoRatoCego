@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
 
             // directionsCurrent na posição pos
             directionsCurrent = possibleDirections[pos];
-            cerr << "Possicao atual: " << xCurrent << " " << yCurrent << endl;
+            cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
             cerr << "Possiveis direcoes: " << directionsCurrent << endl;
             cout << directionsCurrent << endl;
 
