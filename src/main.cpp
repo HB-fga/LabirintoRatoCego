@@ -232,24 +232,24 @@ int main(int, char* [])
     {
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0) {
-        if (e.type == SDL_QUIT) {
-            quit = true;
-            break;
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-            quit = true;
-            quitRanking = true;
-            break;
-        } else if (e.type == SDL_MOUSEBUTTONDOWN) {
-            int mouseX, mouseY;
-            SDL_GetMouseState(&mouseX, &mouseY);
+            if (e.type == SDL_QUIT) {
+                quit = true;
+                break;
+            } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+                quit = true;
+                quitRanking = true;
+                break;
+            } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
 
-            if (mouseX >= 750 && mouseX <= 950 && mouseY >= 1000 && mouseY <= 1030) {
-                speed = std::max(1, speed - 1);
-            } else if (mouseX >= 970 && mouseX <= 1170 && mouseY >= 1000 && mouseY <= 1030) {
-                speed = std::min(50, speed + 1);
+                if (mouseX >= 750 && mouseX <= 950 && mouseY >= 1000 && mouseY <= 1030) {
+                    speed = std::max(1, speed - 1);
+                } else if (mouseX >= 970 && mouseX <= 1170 && mouseY >= 1000 && mouseY <= 1030) {
+                    speed = std::min(50, speed + 1);
+                }
             }
         }
-    }
 
         engine::screen::clear();
 
