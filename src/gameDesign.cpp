@@ -80,6 +80,9 @@ void GameDesign::drawSelection() const{
 
     engine::renderText("Selecione o labirinto com as setas (Cima/Baixo)", 60, 70, font15p, whiteColor);
     engine::renderText("Pressione ENTER para confirmar", 60, 1000, font25p, whiteColor);
+    engine::renderText("Pressione ESC para fechar o jogo", 1060, 1000, font25p, whiteColor);
+
+
     TTF_CloseFont(font15p);
     TTF_CloseFont(font25p);
 }

@@ -49,6 +49,7 @@ namespace game {
         std::string text =  "Ratos: " + quantity;
         engine::renderText(text, 1920 / 2 - 60, 63*2, font25p, blueColor);
         engine::renderText("Pressione ENTER para confirmar", 60, 1000, font25p, whiteColor);
+        engine::renderText("Pressione ESC para fechar o jogo", 1060, 1000, font25p, whiteColor);
 
 
         TTF_CloseFont(font25p);
