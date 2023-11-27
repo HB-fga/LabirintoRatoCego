@@ -2,7 +2,7 @@
 #include "engine.h"
 
 RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std::string& movementFile, const std::string& mapFile)
-    : rat(xv, yv, imageRat), movements(LoadMovementsFromFile(movementFile))
+    : rat(xv, yv, imageRat), movements(loadMovementsFromFile(movementFile))
 {
     int screenWidth = 1920;
     int screenHeight = 1080;
@@ -42,7 +42,7 @@ int RatInstance::getIndex() const
     return rat.getIndex();
 }
 
-std::vector<std::pair<int, int>> RatInstance::LoadMovementsFromFile(const std::string& movementsFilename)
+std::vector<std::pair<int, int>> RatInstance::loadMovementsFromFile(const std::string& movementsFilename)
 {
     std::ifstream movementsFile(movementsFilename);
     if (!movementsFile.is_open())
