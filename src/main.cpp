@@ -220,17 +220,11 @@ int main(int, char* [])
     }
 
 
-    int maxMovements = 0;
-    int qtdRats = 0;
+    int maxMovements = -1;
     for (const auto& mouse : mouseData) {
-        qtdRats++;
         if (std::stoi(get<1>(mouse)) > maxMovements and std::stoi(get<1>(mouse)) != 1000) {
             maxMovements = std::stoi(get<1>(mouse));
         }
-    }
-
-    if (qtdRats == 1 and std::stoi(get<1>(mouseData[0])) == 1000) {
-        maxMovements = -1;
     }
 
     GameDesign button(1920, 1080);
