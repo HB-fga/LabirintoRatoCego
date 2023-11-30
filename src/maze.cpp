@@ -114,4 +114,80 @@ namespace game
         }
     }
 
+    int Maze::validatorMovement(const std::string& movementsFilename, const std::string& mapFilename)
+    {
+        std::ifstream movementsFile(movementsFilename);
+        if (!movementsFile.is_open())
+        {
+            throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
+        }
+        
+        std::string ratName;
+        int n;
+
+        movementsFile >> ratName;
+        movementsFile >> n;
+
+        std::vector<std::pair<int, int>> movements;
+        int col, row;
+        for (int i = 0; i < n; i++) {
+            movementsFile >> row >> col;
+            movements.push_back(std::make_pair(col, row));
+        }
+
+        std::ifstream mapF(mapFilename);
+
+        if (!mapF.is_open())
+        {
+            throw std::invalid_argument("Failed to open file: " + mapFilename);
+        }
+
+        int rows, cols, cellValue;
+        mapF >> cols >> rows >> cellValue;
+
+        std::vector<std::vector<int>> mazeV;
+
+        for (int i = 0; i < rows; i++)
+        {
+            std::vector<int> row;
+            for (int j = 0; j < cols; j++)
+            {
+                int cellValue;
+                if (mapF >> cellValue)
+                {
+                    row.push_back(cellValue);
+                }
+                else
+                {
+                    mapF.close();
+                    throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
+                }
+            }
+            mazeV.push_back(row);
+        }
+
+        for (const auto& movement : movements)
+        {
+            int row = movement.second;
+            int col = movement.first;
+
+            // Verificar se as coordenadas estão dentro dos limites do labirinto
+            if (row < 0 || row >= rows || col < 0 || col >= cols)
+            {
+                return -1;
+            }
+
+            // Verificar se o valor correspondente no labirinto é diferente de zero
+            if (mazeV[row][col] == 0)
+            {
+                return -1;
+            }
+        }
+        
+        movementsFile.close();
+        mapF.close();
+
+        return 0;
+    }
+
 }

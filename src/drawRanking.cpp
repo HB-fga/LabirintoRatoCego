@@ -15,6 +15,7 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
     SDL_Color grayDarkColor{ 64, 64, 64, 255 };
     SDL_Color grayLightColor{ 192, 192, 192, 255 };
     SDL_Color greenColor{ 0, 255, 0, 255 };
+    SDL_Color redColor{ 255, 0, 0, 255 };
 
     engine::draw::rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, grayLightColor);
     engine::draw::rect(0, 0, SCREEN_WIDTH, 60, grayDarkColor);
@@ -40,7 +41,11 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
     int y = 170;
     for (const auto& mouse : mouseData) {
 
-        if (std::stoi(std::get<1>(mouse)) == minMoves) {
+        if (std::stoi(std::get<1>(mouse)) == 1000) {
+            engine::renderText(std::get<0>(mouse), 60, y, font30p, redColor);
+            engine::renderText("INVALIDO", SCREEN_WIDTH / 5 + 490, y, font30p, redColor);
+        }
+        else if (std::stoi(std::get<1>(mouse)) == minMoves) {
             engine::renderText(std::get<0>(mouse), 60, y, font30p, greenColor);
             engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, greenColor);
         }

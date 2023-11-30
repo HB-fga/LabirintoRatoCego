@@ -20,6 +20,7 @@ namespace game {
         void drawCentered(bool is_selection = false) const;
 		void setcell(int xpos, int ypos, Cell cell);
         static Maze loadMapfromFile(const std::string& filename);
+        int validatorMovement(const std::string& movementsFilename, const std::string& mapFilename);
 
     private:
         int rows, cols;

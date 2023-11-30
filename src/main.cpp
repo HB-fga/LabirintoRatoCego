@@ -204,21 +204,36 @@ int main(int, char* [])
         movementsFile >> n;
         movementsFile >> row >> col;
 
-        RatInstance newRat(col, row, ratImages[i], movementFiles[i], mapSelection.getSelectedMap());
-        rats.push_back(newRat);
-        
-        mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
+        int validator = maze.validatorMovement(movementFiles[i], mapSelection.getSelectedMap());
 
+        if (validator == 0) {
+            RatInstance newRat(col, row, ratImages[i], movementFiles[i], mapSelection.getSelectedMap());
+            rats.push_back(newRat);
+        }
+        
+        if (validator == -1) {
+            n = 1000;
+        }
+
+        mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
         movementsFile.close();
     }
 
+
     int maxMovements = 0;
+    int qtdRats = 0;
     for (const auto& mouse : mouseData) {
-        if (std::stoi(get<1>(mouse)) > maxMovements) {
+        qtdRats++;
+        if (std::stoi(get<1>(mouse)) > maxMovements and std::stoi(get<1>(mouse)) != 1000) {
             maxMovements = std::stoi(get<1>(mouse));
         }
     }
 
+    if (qtdRats == 1 and std::stoi(get<1>(mouseData[0])) == 1000) {
+        maxMovements = -1;
+    }
+
+    GameDesign button(1920, 1080);
     // Loop principal
     bool quit = false;
     bool quitRanking = false;
@@ -227,9 +242,12 @@ int main(int, char* [])
 
     int speed = 1;
 
-    GameDesign button(1920, 1080);
+    if (maxMovements == -1){
+        quit = true;
+    }
     while (!quit)
     {
+
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
