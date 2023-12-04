@@ -166,6 +166,18 @@ namespace game
             mazeV.push_back(row);
         }
 
+        int numDecisions, rowExit, colExit;
+        mapF >> numDecisions;
+        for (int i = 0; i < numDecisions; i++)
+        {
+            int row, col;
+            std::string decision;
+            mapF >> row >> col >> decision;
+        }
+
+        mapF >> rowExit >> colExit;
+
+        
         for (const auto& movement : movements)
         {
             int row = movement.second;
@@ -183,6 +195,13 @@ namespace game
                 return -1;
             }
         }
+
+        // verificar se o rato chegou à saída
+        if (movements.back().first != colExit && movements.back().second != rowExit && movements.size() < 999)
+        {
+            return 1;
+        }
+
         
         movementsFile.close();
         mapF.close();

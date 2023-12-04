@@ -192,6 +192,7 @@ int main(int, char* [])
     std::vector<std::tuple<std::string, std::string, std::string>> mouseData;
 
 
+    int maxMovements = -1;
     for (size_t i = 0; i < movementFiles.size(); ++i) {
 
         std::ifstream movementsFile(movementFiles[i]);
@@ -206,7 +207,7 @@ int main(int, char* [])
 
         int validator = maze.validatorMovement(movementFiles[i], mapSelection.getSelectedMap());
 
-        if (validator == 0) {
+        if (validator != -1) {
             RatInstance newRat(col, row, ratImages[i], movementFiles[i], mapSelection.getSelectedMap());
             rats.push_back(newRat);
         }
@@ -215,17 +216,20 @@ int main(int, char* [])
             n = 1000;
         }
 
+        if (validator == 1) {
+            n = 999;
+        }
+
         mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
+
+
+        if (n > maxMovements and n != 1000 and validator != 1) {
+            maxMovements = n;
+        }
+
         movementsFile.close();
     }
 
-
-    int maxMovements = -1;
-    for (const auto& mouse : mouseData) {
-        if (std::stoi(get<1>(mouse)) > maxMovements and std::stoi(get<1>(mouse)) != 1000) {
-            maxMovements = std::stoi(get<1>(mouse));
-        }
-    }
 
     GameDesign button(1920, 1080);
     // Loop principal
