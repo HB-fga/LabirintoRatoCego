@@ -45,7 +45,7 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
             engine::renderText(std::get<0>(mouse), 60, y, font30p, redColor);
             engine::renderText("INVALIDO", SCREEN_WIDTH / 5 + 490, y, font30p, redColor);
         }
-        else if (std::stoi(std::get<1>(mouse)) == minMoves) {
+        else if (std::stoi(std::get<1>(mouse)) == minMoves and minMoves < 999 ) {
             engine::renderText(std::get<0>(mouse), 60, y, font30p, greenColor);
             engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, greenColor);
         }
