@@ -52,6 +52,20 @@ void MapRenderer::decreaseMazeHeight() {
 
 
 void MapRenderer::saveMapToFile(const std::string& filePath) {
+
+    SDL_Color whiteColor{ 255, 255, 255, 255 };
+    SDL_Color grayLightColor{ 192, 192, 192, 255 };
+
+    TTF_Font* font30p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 30);
+    if (font30p == nullptr) {
+        return;
+    }
+    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, whiteColor);
+    engine::screen::show();
+    SDL_Delay(1300);
+    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, grayLightColor);
+
+
     std::ofstream file(filePath);
 
     if (!file.is_open()) {
@@ -147,6 +161,7 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
         }
     }
 
+    TTF_CloseFont(font30p);
     file.close();
 }
 
