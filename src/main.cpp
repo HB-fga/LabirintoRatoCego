@@ -217,13 +217,13 @@ int main(int, char* [])
         }
 
         if (validator == 1) {
-            n = 999;
+            mouseData.push_back(std::make_tuple(ratName, std::to_string(999), ratImages[i]));
+        } else {
+            mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
         }
 
-        mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
 
-
-        if (n > maxMovements and n != 1000 and validator != 1) {
+        if (n > maxMovements and n != 1000) {
             maxMovements = n;
         }
 

@@ -168,7 +168,7 @@ namespace game
 
         int numDecisions, rowExit, colExit;
         mapF >> numDecisions;
-        for (int i = 0; i < numDecisions; i++)
+        for (int i = 0; i <= numDecisions; i++)
         {
             int row, col;
             std::string decision;
@@ -197,7 +197,7 @@ namespace game
         }
 
         // verificar se o rato chegou à saída
-        if (movements.back().first != colExit && movements.back().second != rowExit && movements.size() < 999)
+        if ((movements.back().first != colExit || movements.back().second != rowExit) && movements.size() < 999)
         {
             return 1;
         }
