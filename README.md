@@ -4,13 +4,13 @@ O Labirinto do Rato Cego é um jogo que tem como objetivo motivar e tornar a apr
 
 Nele, o jogador deve criar um código que guie um rato cego por um labirinto até a saída. O jogo é composto por três componentes: o Criador de Labirintos, a Interface do Labirinto do Rato Cego e o Rato Cego.
 ___
-    Através do componente Criador de Labirintos, definido na classe MapRenderer, os usuários podem elaborar seus próprios mapas. É possível selecionar a altura e largura do mapa e desenhar o labirinto, definindo pontos de decisão, caminhos, pontos de início e fim, e caminhos proibidos.
+Através do componente Criador de Labirintos, definido na classe MapRenderer, os usuários podem elaborar seus próprios mapas. É possível selecionar a altura e largura do mapa e desenhar o labirinto, definindo pontos de decisão, caminhos, pontos de início e fim, e caminhos proibidos.
 
 ___
-    A Interface do Labirinto do Rato Cego proporciona aos jogadores uma visualização gráfica para selecionar configurações pré-jogo, como o labirinto, a quantidade de jogadores e o arquivo de movimento de cada rato. Por meio dessa interface, os jogadores também acompanham a movimentação de todos os ratos no labirinto, tentando encontrar a saída, e conferem o ranking final com a colocação de cada participante.
+A Interface do Labirinto do Rato Cego proporciona aos jogadores uma visualização gráfica para selecionar configurações pré-jogo, como o labirinto, a quantidade de jogadores e o arquivo de movimento de cada rato. Por meio dessa interface, os jogadores também acompanham a movimentação de todos os ratos no labirinto, tentando encontrar a saída, e conferem o ranking final com a colocação de cada participante.
 
 ___
-    O componente Rato Cego é representa a comunicação entre o arquivo ratoCego.cpp e o código criado pelo jogador. Com essa comunicação é criado o arquivo de movimento do rato, que é utilizado pela Interface do Labirinto do Rato Cego para simular a movimentação do rato no labirinto.
+O componente Rato Cego é representa a comunicação entre o arquivo ratoCego.cpp e o código criado pelo jogador. Com essa comunicação é criado o arquivo de movimento do rato, que é utilizado pela Interface do Labirinto do Rato Cego para simular a movimentação do rato no labirinto.
 
 
 
