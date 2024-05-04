@@ -2,7 +2,7 @@
 #include "engine.h"
 
 // nome do arquivo de saida
-std::string outputFileName = "labirinto.txt";
+std::string outputFileName = "labirinto.json";
 
 
 

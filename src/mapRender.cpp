@@ -1,8 +1,11 @@
 #include <vector>
 #include <utility>
+#include <nlohmann/json.hpp>
 
 #include "mapRender.h"
 #include "engine.h"
+
+using pJSON = nlohmann::json;
 
 MapRenderer::MapRenderer(int screenWidth, int screenHeight, int initialMazeWidth, int initialMazeHeight)
     : SCREEN_WIDTH(screenWidth), SCREEN_HEIGHT(screenHeight), MAZE_WIDTH(initialMazeWidth),
@@ -49,9 +52,116 @@ void MapRenderer::decreaseMazeHeight() {
     if (MAZE_HEIGHT > 1)
         MAZE_HEIGHT--;
 }
+void MapRenderer::saveMapToFile(const std::string& filePath){
+    SDL_Color whiteColor{ 255, 255, 255, 255 };
+    SDL_Color grayLightColor{ 192, 192, 192, 255 };
+
+    TTF_Font* font30p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 30);
+    if (font30p == nullptr) {
+        return;
+    }
+    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, whiteColor);
+    engine::screen::show();
+    SDL_Delay(1300);
+    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, grayLightColor);
+
+    pJSON jsonFile;
+    std::ofstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for writing." << std::endl;
+        return;
+    }
+
+    jsonFile["height"] = MAZE_HEIGHT;
+    jsonFile["width"] = MAZE_WIDTH;
+    jsonFile["cellSize"] = CELL_SIZE;
+
+    // Temporary
+    std::vector<std::vector<int>> map;
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        std::vector<int> line;
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            int cellValue = 0;
+            if (mapMaze[row][col] == CELL_PATH) {
+                cellValue = 1;
+            } else if (mapMaze[row][col] == CELL_DECISION) {
+                cellValue = 2;
+            } else if (mapMaze[row][col] == CELL_EXIT) {
+                cellValue = 3;
+            } else if (mapMaze[row][col] == CELL_START) {
+                cellValue = 4;
+            }
+            line.push_back(cellValue);
+        }
+        map.push_back(line);
+    }
+
+    jsonFile["map"] = map;
+
+    int decisionCount = 0;
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_DECISION) {
+                decisionCount++;
+            }
+        }
+    }
+
+    jsonFile["decisionCount"] = decisionCount;
 
 
-void MapRenderer::saveMapToFile(const std::string& filePath) {
+    jsonFile["decisions"] = pJSON::array();
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_DECISION || mapMaze[row][col] == CELL_START) {
+                //file << row << " " << col << ' ';
+                std::string s;
+
+                for (int i = row - 1; i >= 0; --i) {
+                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
+                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
+                    {
+                        s.append("N");
+                        break;
+                    }
+                }
+
+                for (int i = row + 1; i < MAZE_HEIGHT; ++i) {
+                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
+                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
+                    {
+                        s.append("S");
+                        break;
+                    }
+                }
+
+                for (int j = col + 1; j < MAZE_WIDTH; ++j) {
+                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
+                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
+                    {
+                        s.append("E");
+                        break;
+                    }
+                }
+
+                for (int j = col - 1; j >= 0; --j) {
+                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
+                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
+                    {
+                        s.append("W");
+                        break;
+                    }
+                }
+                jsonFile["decisions"].push_back({{"row", row}, {"col", col}, {"moves", s}});
+                
+            }
+        }
+    }
+    file << jsonFile.dump(4) << std::endl;
+}
+
+/* void MapRenderer::saveMapToFile(const std::string& filePath) {
 
     SDL_Color whiteColor{ 255, 255, 255, 255 };
     SDL_Color grayLightColor{ 192, 192, 192, 255 };
@@ -163,7 +273,7 @@ void MapRenderer::saveMapToFile(const std::string& filePath) {
 
     TTF_CloseFont(font30p);
     file.close();
-}
+} */
 
 void MapRenderer::updateCellColor(int x, int y) {
     int offsetX = (SCREEN_WIDTH - MAZE_WIDTH * CELL_SIZE) / 2;

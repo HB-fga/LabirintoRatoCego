@@ -1,5 +1,5 @@
 # Project variables
-PROJECT=RatoCego
+PROJECT=RatoCegoBin
 MAP_GENERATOR=MapGenerator
 
 # Compiler and flags variables
