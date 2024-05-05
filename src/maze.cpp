@@ -2,6 +2,9 @@
 #include "engine.h"
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
+
+using pJSON = nlohmann::json;
 
 namespace game
 {
@@ -27,15 +30,18 @@ namespace game
         {
             throw std::invalid_argument("Failed to open file: " + filename);
         }
-        int rows, cols, cell_size;
-        file >> cols >> rows >> cell_size;
+
+        pJSON jsonFile = pJSON::parse(file);
+
+        int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
         Maze maze(rows, cols);
+
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
-                int cellValue;
-                if (file >> cellValue)
+                int cellValue = jsonFile["map"][i][j];
+                if (cellValue >= 0 && cellValue < 5) 
                 {
                     bool not_valid = false;
                     bool is_valid = false;

@@ -158,7 +158,21 @@ void MapRenderer::saveMapToFile(const std::string& filePath){
             }
         }
     }
+
+    // Coordinates of the exit
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            if (mapMaze[row][col] == CELL_EXIT) {
+                jsonFile["exit"] ={{"col", col}, {"row", row}};
+                break;
+            }
+        }
+    }
+    
     file << jsonFile.dump(4) << std::endl;
+
+    TTF_CloseFont(font30p);
+    file.close();
 }
 
 /* void MapRenderer::saveMapToFile(const std::string& filePath) {
