@@ -62,6 +62,8 @@ namespace game {
             return;
         }
 
+        printf("%d, %d\n", xpos, ypos); 
+
         SDL_Rect destRect{ xpos, ypos, ratWidth, ratHeight };
         SDL_Point center{ ratWidth / 2, ratHeight / 2 };
         SDL_RenderCopyEx(engine::getRenderer(), ratTexture.get(), nullptr, &destRect, direction, &center, flip);

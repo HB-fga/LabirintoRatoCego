@@ -1,5 +1,8 @@
 #include "ratInstance.h"
 #include "engine.h"
+#include <nlohmann/json.hpp>
+
+using pJSON = nlohmann::json;
 
 RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std::string& movementFile, const std::string& mapFile)
     : rat(xv, yv, imageRat), movements(loadMovementsFromFile(movementFile))
@@ -13,7 +16,8 @@ RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std:
         throw std::invalid_argument("Failed to open file: " + mapFile);
     }
 
-    int rows, cols, cellValue;
+    pJSON jsonFile = pJSON::parse(mapF);
+        int rows = jsonFile["height"], cols = jsonFile["width"], cellValue = jsonFile["cellSize"];
     mapF >> cols >> rows >> cellValue;
 
     int mazeWidth = cols * 60;

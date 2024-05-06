@@ -3,8 +3,11 @@
 #include <utility>
 #include <fstream>
 #include <string>
+#include <nlohmann/json.hpp>
+
 
 using namespace std;
+using pJSON = nlohmann::json;
 
 const int P = 999; // Número máximo de moviments permitidos
 
@@ -27,24 +30,24 @@ int main(int argc, char* argv[]) {
     cerr << "=           LABIRINTO DO RATO CEGO           =" << endl;
     cerr << "==============================================\n" << endl;
 
+    pJSON jsonFile = pJSON::parse(inputFile);
 
-    int width, height, cellSize;
-    inputFile >> width >> height >> cellSize;
+    int width = jsonFile["width"], height = jsonFile["height"], cellSize = jsonFile["cellSize"];
+    //inputFile >> width >> height >> cellSize;
     cerr << "Largura: " << width << " - Altura: " << height << " - Tamanho da celula: " << cellSize << endl;
 
     vector<vector<int>> maze;
     for (int i = 0; i < height; i++) {
         vector<int> row;
         for (int j = 0; j < width; j++) {
-            int cell;
-            inputFile >> cell;
+            int cell = jsonFile["map"][i][j];
             row.push_back(cell);
         }
         maze.push_back(row);
     }
 
-    int numDecisionPoints;
-    inputFile >> numDecisionPoints;
+    int numDecisionPoints = jsonFile["decisionCount"];
+    //inputFile >> numDecisionPoints;
 
     cerr << "Numero de pontos de decisao: " << numDecisionPoints << endl;
 
@@ -54,9 +57,9 @@ int main(int argc, char* argv[]) {
     string directionsCurrent;
     int xInitial, yInitial;
     for (int i = 0; i <= numDecisionPoints; i++) {
-        int x, y;
-        string directions;
-        inputFile >> x >> y >> directions;
+        int x = jsonFile["decisions"][i]["row"], y = jsonFile["decisions"][i]["col"];
+        string directions = jsonFile["decisions"][i]["moves"];
+        //inputFile >> x >> y >> directions;
         decisionPoints.push_back({x, y});
         possibleDirections.push_back(directions);
         if (maze[x][y] == 4) {
@@ -66,8 +69,8 @@ int main(int argc, char* argv[]) {
     }
 
     // coordenadas finais
-    int xFinal, yFinal;
-    inputFile >> xFinal >> yFinal;
+    int xFinal = jsonFile["exit"]["row"], yFinal = jsonFile["exit"]["col"];
+    //inputFile >> xFinal >> yFinal;
     cerr << "Ponto Final: " << xFinal << " " << yFinal << endl;
     cerr << "==============================================\n" << endl;
 

@@ -143,13 +143,15 @@ namespace game
 
         std::ifstream mapF(mapFilename);
 
+
         if (!mapF.is_open())
         {
             throw std::invalid_argument("Failed to open file: " + mapFilename);
         }
 
-        int rows, cols, cellValue;
-        mapF >> cols >> rows >> cellValue;
+        pJSON jsonFile = pJSON::parse(mapF);
+        int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
+        //mapF >> cols >> rows >> cellValue;
 
         std::vector<std::vector<int>> mazeV;
 
@@ -158,8 +160,8 @@ namespace game
             std::vector<int> row;
             for (int j = 0; j < cols; j++)
             {
-                int cellValue;
-                if (mapF >> cellValue)
+                int cellValue = jsonFile["map"][i][j];
+                if (cellValue >= 0 && cellValue < 5) 
                 {
                     row.push_back(cellValue);
                 }
@@ -172,16 +174,16 @@ namespace game
             mazeV.push_back(row);
         }
 
-        int numDecisions, rowExit, colExit;
-        mapF >> numDecisions;
-        for (int i = 0; i <= numDecisions; i++)
+        int numDecisions = jsonFile["decisionCount"], rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
+        //mapF >> numDecisions;
+        /* for (int i = 0; i <= numDecisions; i++)
         {
             int row, col;
             std::string decision;
             mapF >> row >> col >> decision;
         }
-
-        mapF >> rowExit >> colExit;
+ */
+        //mapF >> rowExit >> colExit;
 
         
         for (const auto& movement : movements)
