@@ -123,8 +123,9 @@ namespace game
     int Maze::validatorMovement(const std::string& movementsFilename, const std::string& mapFilename)
     {
         std::ifstream movementsFile(movementsFilename);
-        if (!movementsFile.is_open())
+        if (!movementsFile)
         {
+            // TODO: Tratar exceção ou abortar o código
             throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
         }
         
@@ -134,58 +135,35 @@ namespace game
         movementsFile >> ratName;
         movementsFile >> n;
 
-        std::vector<std::pair<int, int>> movements;
-        int col, row;
-        for (int i = 0; i < n; i++) {
+        std::vector<std::pair<int, int>> movements(n);
+        for (auto& [row, col] : movements)
             movementsFile >> row >> col;
-            movements.push_back(std::make_pair(col, row));
-        }
 
         std::ifstream mapF(mapFilename);
 
 
-        if (!mapF.is_open())
+        if (!mapF)
         {
+            // TODO: Tratar exceção ou abortar o código
             throw std::invalid_argument("Failed to open file: " + mapFilename);
         }
 
         pJSON jsonFile = pJSON::parse(mapF);
-        int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
-        //mapF >> cols >> rows >> cellValue;
-
-        std::vector<std::vector<int>> mazeV;
-
-        for (int i = 0; i < rows; i++)
-        {
-            std::vector<int> row;
-            for (int j = 0; j < cols; j++)
-            {
-                int cellValue = jsonFile["map"][i][j];
-                if (cellValue >= 0 && cellValue < 5) 
-                {
-                    row.push_back(cellValue);
-                }
-                else
-                {
-                    mapF.close();
-                    throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
-                }
-            }
-            mazeV.push_back(row);
-        }
-
-        int numDecisions = jsonFile["decisionCount"], rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
-        //mapF >> numDecisions;
-        /* for (int i = 0; i <= numDecisions; i++)
-        {
-            int row, col;
-            std::string decision;
-            mapF >> row >> col >> decision;
-        }
- */
-        //mapF >> rowExit >> colExit;
-
+        int rows = jsonFile["height"], cols = jsonFile["width"];
         
+        auto mazeV = jsonFile["map"];
+
+        auto [a, b] = minmax_element(mazeV.begin(), mazeV.end());
+
+
+        if (*a < 0 or *b > 4) 
+        {
+            // TODO: Tratar exceção ou abortar o código
+            throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
+        }
+
+        int rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
+
         for (const auto& movement : movements)
         {
             int row = movement.second;

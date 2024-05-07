@@ -115,7 +115,6 @@ void MapRenderer::saveMapToFile(const std::string& filePath){
     for (int row = 0; row < MAZE_HEIGHT; ++row) {
         for (int col = 0; col < MAZE_WIDTH; ++col) {
             if (mapMaze[row][col] == CELL_DECISION || mapMaze[row][col] == CELL_START) {
-                //file << row << " " << col << ' ';
                 std::string s;
 
                 for (int i = row - 1; i >= 0; --i) {
@@ -174,120 +173,6 @@ void MapRenderer::saveMapToFile(const std::string& filePath){
     TTF_CloseFont(font30p);
     file.close();
 }
-
-/* void MapRenderer::saveMapToFile(const std::string& filePath) {
-
-    SDL_Color whiteColor{ 255, 255, 255, 255 };
-    SDL_Color grayLightColor{ 192, 192, 192, 255 };
-
-    TTF_Font* font30p = TTF_OpenFont("../assets/fonts/PressStart2P-Regular.ttf", 30);
-    if (font30p == nullptr) {
-        return;
-    }
-    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, whiteColor);
-    engine::screen::show();
-    SDL_Delay(1300);
-    engine::renderText("Mapa criado!", buttonXgererated-65, buttonYgererated+40, font30p, grayLightColor);
-
-
-    std::ofstream file(filePath);
-
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file for writing." << std::endl;
-        return;
-    }
-
-    file << MAZE_WIDTH << " " << MAZE_HEIGHT << " " << CELL_SIZE << "\n";
-
-    for (int row = 0; row < MAZE_HEIGHT; ++row) {
-        for (int col = 0; col < MAZE_WIDTH; ++col) {
-            int cellValue = 0;
-
-            if (mapMaze[row][col] == CELL_PATH) {
-                cellValue = 1;
-            } else if (mapMaze[row][col] == CELL_DECISION) {
-                cellValue = 2;
-            } else if (mapMaze[row][col] == CELL_EXIT) {
-                cellValue = 3;
-            } else if (mapMaze[row][col] == CELL_START) {
-                cellValue = 4;
-            }
-
-            file << cellValue << " ";
-        }
-        file << "\n";
-    }
-
-    int decisionCount = 0;
-    for (int row = 0; row < MAZE_HEIGHT; ++row) {
-        for (int col = 0; col < MAZE_WIDTH; ++col) {
-            if (mapMaze[row][col] == CELL_DECISION) {
-                decisionCount++;
-            }
-        }
-    }
-
-    file << decisionCount << "\n";
-
-    for (int row = 0; row < MAZE_HEIGHT; ++row) {
-        for (int col = 0; col < MAZE_WIDTH; ++col) {
-            if (mapMaze[row][col] == CELL_DECISION || mapMaze[row][col] == CELL_START) {
-                file << row << " " << col << ' ';
-
-                for (int i = row - 1; i >= 0; --i) {
-                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
-                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
-                    {
-                        file << "N";
-                        break;
-                    }
-                }
-
-                for (int i = row + 1; i < MAZE_HEIGHT; ++i) {
-                    if (mapMaze[i][col] == CELL_EMPTY || mapMaze[i][col] == CELL_FORBIDDEN) break;
-                    if (mapMaze[i][col] == CELL_DECISION || mapMaze[i][col] == CELL_EXIT || mapMaze[i][col] == CELL_START)
-                    {
-                        file << "S";
-                        break;
-                    }
-                }
-
-                for (int j = col + 1; j < MAZE_WIDTH; ++j) {
-                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
-                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
-                    {
-                        file << "E";
-                        break;
-                    }
-                }
-
-                for (int j = col - 1; j >= 0; --j) {
-                    if (mapMaze[row][j] == CELL_EMPTY || mapMaze[row][j] == CELL_FORBIDDEN) break; 
-                    if (mapMaze[row][j] == CELL_DECISION || mapMaze[row][j] == CELL_EXIT || mapMaze[row][j] == CELL_START)
-                    {
-                        file << "W";
-                        break;
-                    }
-                }
-
-                file << '\n';
-            }
-        }
-    }
-
-    // Coordinates of the exit
-    for (int row = 0; row < MAZE_HEIGHT; ++row) {
-        for (int col = 0; col < MAZE_WIDTH; ++col) {
-            if (mapMaze[row][col] == CELL_EXIT) {
-                file << row << " " << col << "\n";
-                break;
-            }
-        }
-    }
-
-    TTF_CloseFont(font30p);
-    file.close();
-} */
 
 void MapRenderer::updateCellColor(int x, int y) {
     int offsetX = (SCREEN_WIDTH - MAZE_WIDTH * CELL_SIZE) / 2;
