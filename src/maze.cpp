@@ -152,23 +152,19 @@ namespace game
         int rows = jsonFile["height"], cols = jsonFile["width"];
         
         auto mazeV = jsonFile["map"];
-
-        auto [a, b] = minmax_element(mazeV.begin(), mazeV.end());
-
-
-        if (*a < 0 or *b > 4) 
-        {
-            // TODO: Tratar exceção ou abortar o código
-            throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
+        for(auto& row : mazeV){
+            auto [a, b] = minmax_element(row.begin(), row.end());
+            if (*a < 0 or *b > 4) 
+            {
+                // TODO: Tratar exceção ou abortar o código
+                throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
+            }
         }
 
         int rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
 
-        for (const auto& movement : movements)
+        for (const auto& [row, col] : movements)
         {
-            int row = movement.second;
-            int col = movement.first;
-
             // Verificar se as coordenadas estão dentro dos limites do labirinto
             if (row < 0 || row >= rows || col < 0 || col >= cols)
             {
