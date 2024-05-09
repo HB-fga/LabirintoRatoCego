@@ -128,20 +128,16 @@ namespace game
             // TODO: Tratar exceção ou abortar o código
             throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
         }
+
+        pJSON jsonMoves = pJSON::parse(movementsFile);
+
+        // TODO: Tem no ratInstance, verificar se pode ser retirado de lá
+        auto path = jsonMoves["path"];
+        std::vector<std::pair<int, int>> movements;
+        for (auto& move : path)
+            movements.push_back({move["row"], move["col"]});
         
-        std::string ratName;
-        int n;
-
-        movementsFile >> ratName;
-        movementsFile >> n;
-
-        std::vector<std::pair<int, int>> movements(n);
-        for (auto& [row, col] : movements)
-            movementsFile >> row >> col;
-
         std::ifstream mapF(mapFilename);
-
-
         if (!mapF)
         {
             // TODO: Tratar exceção ou abortar o código
@@ -152,7 +148,8 @@ namespace game
         int rows = jsonFile["height"], cols = jsonFile["width"];
         
         auto mazeV = jsonFile["map"];
-        for(auto& row : mazeV){
+        for(auto& row : mazeV)
+        {
             auto [a, b] = minmax_element(row.begin(), row.end());
             if (*a < 0 or *b > 4) 
             {
@@ -183,7 +180,6 @@ namespace game
         {
             return 1;
         }
-
         
         movementsFile.close();
         mapF.close();

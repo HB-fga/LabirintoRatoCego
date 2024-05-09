@@ -6,8 +6,11 @@
 #include "configSelection.h"
 #include "ratSelection.h"
 #include "drawRanking.h"
+#include <nlohmann/json.hpp>
 
 #include <iostream>
+
+using pJSON = nlohmann::json;
 
 
 int main(int, char* [])
@@ -197,13 +200,12 @@ int main(int, char* [])
 
         std::ifstream movementsFile(movementFiles[i]);
 
-        std::string ratName;
-        int n;
-        int col, row;
 
-        movementsFile >> ratName;
-        movementsFile >> n;
-        movementsFile >> row >> col;
+        // TODO: Tem no ratInstance, verificar se pode ser retirado de lá
+        pJSON jsonFile = pJSON::parse(movementsFile);
+        std::string ratName = jsonFile["ratName"];
+        int n = jsonFile["movements"];
+        int col = jsonFile["path"][0]["col"], row = jsonFile["path"][0]["row"];
 
         int validator = maze.validatorMovement(movementFiles[i], mapSelection.getSelectedMap());
 

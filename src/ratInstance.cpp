@@ -17,8 +17,7 @@ RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std:
     }
 
     pJSON jsonFile = pJSON::parse(mapF);
-        int rows = jsonFile["height"], cols = jsonFile["width"], cellValue = jsonFile["cellSize"];
-    mapF >> cols >> rows >> cellValue;
+    int rows = jsonFile["height"], cols = jsonFile["width"];
 
     int mazeWidth = cols * 60;
     int mazeHeight = rows * 60;
@@ -53,20 +52,13 @@ std::vector<std::pair<int, int>> RatInstance::loadMovementsFromFile(const std::s
     {
         throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
     }
-    
-    std::string ratName;
-    int n;
-
-    movementsFile >> ratName;
-    movementsFile >> n;
-
-    std::vector<std::pair<int, int>> movements;
-    int col, row;
-    for (int i = 0; i < n; i++) {
-        movementsFile >> row >> col;
-        movements.push_back(std::make_pair(col, row));
-    }
-
+    pJSON jsonFile = pJSON::parse(movementsFile);
     movementsFile.close();
+
+   auto path = jsonFile["path"];
+    std::vector<std::pair<int, int>> movements;
+    for (auto& move : path)
+        movements.push_back({move["col"], move["row"]});
+
     return movements;
 }

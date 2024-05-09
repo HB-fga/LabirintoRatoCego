@@ -9,7 +9,7 @@
 using namespace std;
 using pJSON = nlohmann::json;
 
-const int P = 999; // Número máximo de moviments permitidos
+const int P = 999; // Número máximo de movements permitidos
 
 
 int main(int argc, char* argv[]) {
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     string mapFilePath = argv[1];
     ifstream inputFile(mapFilePath);
 
-    if (!inputFile.is_open()) {
+    if (!inputFile) {
         cerr << "Nao foi possivel abrir o arquivo do mapa: " << mapFilePath << endl;
         return 1;
     }
@@ -32,34 +32,21 @@ int main(int argc, char* argv[]) {
 
     pJSON jsonFile = pJSON::parse(inputFile);
 
-    int width = jsonFile["width"], height = jsonFile["height"], cellSize = jsonFile["cellSize"];
-    //inputFile >> width >> height >> cellSize;
-    cerr << "Largura: " << width << " - Altura: " << height << " - Tamanho da celula: " << cellSize << endl;
-
-    vector<vector<int>> maze;
-    for (int i = 0; i < height; i++) {
-        vector<int> row;
-        for (int j = 0; j < width; j++) {
-            int cell = jsonFile["map"][i][j];
-            row.push_back(cell);
-        }
-        maze.push_back(row);
-    }
+    int width = jsonFile["width"], height = jsonFile["height"];
+    auto maze = jsonFile["map"];
+    cerr << "Largura: " << width << " - Altura: " << height << endl;
 
     int numDecisionPoints = jsonFile["decisionCount"];
-    //inputFile >> numDecisionPoints;
-
     cerr << "Numero de pontos de decisao: " << numDecisionPoints << endl;
 
     vector<pair<int, int>> decisionPoints;
     vector<string> possibleDirections;
-
     string directionsCurrent;
     int xInitial, yInitial;
-    for (int i = 0; i <= numDecisionPoints; i++) {
-        int x = jsonFile["decisions"][i]["row"], y = jsonFile["decisions"][i]["col"];
-        string directions = jsonFile["decisions"][i]["moves"];
-        //inputFile >> x >> y >> directions;
+
+    for(const auto& decision: jsonFile["decisions"]){
+        int x = decision["row"], y = decision["col"];
+        string directions = decision["moves"];
         decisionPoints.push_back({x, y});
         possibleDirections.push_back(directions);
         if (maze[x][y] == 4) {
@@ -70,22 +57,21 @@ int main(int argc, char* argv[]) {
 
     // coordenadas finais
     int xFinal = jsonFile["exit"]["row"], yFinal = jsonFile["exit"]["col"];
-    //inputFile >> xFinal >> yFinal;
     cerr << "Ponto Final: " << xFinal << " " << yFinal << endl;
     cerr << "==============================================\n" << endl;
 
 
     int xCurrent = xInitial, yCurrent = yInitial;
     string currentDirection;
-    int moviments = 1;
+    int movements = 1;
 
     // Vetor para armazenar o caminho percorrido
     vector<pair<int, int>> pathRat;
     pathRat.emplace_back(xCurrent, yCurrent);
 
     while(true){
-        // Verifica se o rato ultrapassou o número máximo de moviments
-        if (moviments == P){
+        // Verifica se o rato ultrapassou o número máximo de movements
+        if (movements == P){
             cout << "LOSE" << endl;
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
@@ -100,7 +86,7 @@ int main(int argc, char* argv[]) {
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            cerr << "O rato chegou ao ponto final em " << moviments << " passos." << endl;
+            cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl;
             break;
         }
 
@@ -129,7 +115,7 @@ int main(int argc, char* argv[]) {
 
             if (directionsCurrent.find(currentDirection) != string::npos) {
                 cerr << "OK - Movendo para o proximo ponto" << endl;
-                moviments++;
+                movements++;
                 // Atualiza as coordenadas atuais
                 if (currentDirection == "N") {
                     xCurrent--;
@@ -152,7 +138,7 @@ int main(int argc, char* argv[]) {
             }
         } 
         else {
-            moviments++;
+            movements++;
             // Atualiza as coordenadas atuais
             if (currentDirection == "N") {
                 xCurrent--;
@@ -186,14 +172,16 @@ int main(int argc, char* argv[]) {
     }
 
     // arquivo de saída para o movimento do rato
-    ofstream outputFile("../assets/movements/" + fileName + ".txt");
-    outputFile << ratName << endl;
-    outputFile << moviments << endl;
-    for (int i = 0; i < pathRat.size(); i++) {
-        outputFile << pathRat[i].first << " " << pathRat[i].second << endl;
-    }
+    pJSON jsonOutput;
+    jsonOutput["ratName"] = ratName;
+    jsonOutput["movements"] = movements;
+    jsonOutput["path"] = pJSON::array();
 
+    for(const auto& [row, col] : pathRat)
+        jsonOutput["path"].push_back({{"row", row}, {"col", col}});
 
+    ofstream outputFile("../assets/movements/" + fileName + ".json");
+    outputFile << jsonOutput.dump(4) << endl;
     inputFile.close(); // Fecha o arquivo após a leitura.
     outputFile.close(); // Fecha o arquivo após a escrita.
 
