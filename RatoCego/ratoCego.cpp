@@ -173,6 +173,19 @@ int main(int argc, char* argv[]) {
 
     // arquivo de saída para o movimento do rato
     pJSON jsonOutput;
+
+    // Descobrindo o nome do arquivo de mapa
+    char* mapName;
+    for(int i = strlen(argv[1]); i >= 0; i--)
+    {
+        if(argv[1][i] == '/')
+        {
+            mapName = &argv[1][i+1];
+            break;
+        }
+    }
+
+    jsonOutput["mapName"] = mapName;
     jsonOutput["ratName"] = ratName;
     jsonOutput["movements"] = movements;
     jsonOutput["path"] = pJSON::array();
