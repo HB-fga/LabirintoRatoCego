@@ -178,6 +178,7 @@ int main(int argc, char* argv[]) {
     char* mapName;
     for(int i = strlen(argv[1]); i >= 0; i--)
     {
+        // TODO: trocar por find_last_of("/\\");
         if(argv[1][i] == '/')
         {
             mapName = &argv[1][i+1];
@@ -193,7 +194,9 @@ int main(int argc, char* argv[]) {
     for(const auto& [row, col] : pathRat)
         jsonOutput["path"].push_back({{"row", row}, {"col", col}});
 
-    ofstream outputFile("../assets/movements/" + fileName + ".json");
+    // TODO: trocar por find_last_of(".");
+    mapName[strlen(mapName) - 5] = '\0';
+    ofstream outputFile("../assets/movements/" + (string)mapName + "-" + fileName + ".json");
     outputFile << jsonOutput.dump(4) << endl;
     inputFile.close(); // Fecha o arquivo após a leitura.
     outputFile.close(); // Fecha o arquivo após a escrita.
