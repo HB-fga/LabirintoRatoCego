@@ -22,6 +22,7 @@ int main(int, char* [])
         return -1;
     }
 
+    // TODO: tratar caso de zero arquivos de mapa
     // Seleção do mapa
     game::ConfigSelection mapSelection("./assets/maps");
     int loops = 1;
@@ -122,10 +123,11 @@ int main(int, char* [])
         }
     }
 
+    // TODO: tratar caso de zero arquivos de movimento
     // Seleção dos arquivos de movimento
     std::vector<std::string> movementFiles;
     for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i) {
-        game::ConfigSelection movementSelection("./assets/movements");
+        game::ConfigSelection movementSelection("./assets/movements", mapSelection.getSelectedMapPretty());
         quitSelection = false;
 
         while (!quitSelection) {

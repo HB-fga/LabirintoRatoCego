@@ -13,8 +13,9 @@ namespace game
         int selectedMapIndex;               // Índice do mapa selecionado
 
     public:
-        ConfigSelection(const std::string &mapsDirectory);
+        ConfigSelection(const std::string &mapsDirectory, std::string filter = "");
         std::string getSelectedMap() const;
+        std::string getSelectedMapPretty() const;
         void navigateUp();
         void navigateDown();
         void writeTextSelection(const std::string &mapsDirectory, int height = 63);
