@@ -158,6 +158,7 @@ namespace game
             }
         }
 
+        // TODO: Usar pair ou semelhante
         int rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
 
         for (const auto& [row, col] : movements)
@@ -176,7 +177,7 @@ namespace game
         }
 
         // verificar se o rato chegou à saída
-        if ((movements.back().first != colExit || movements.back().second != rowExit) && movements.size() < 999)
+        if ((movements.back().first != rowExit || movements.back().second != colExit) && movements.size() < 999)
         {
             return 1;
         }
