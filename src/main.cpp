@@ -12,7 +12,6 @@
 
 using pJSON = nlohmann::json;
 
-
 int main(int, char* [])
 {
     // Inicializa o mecanismo
@@ -22,9 +21,9 @@ int main(int, char* [])
         return -1;
     }
 
+    // TODO: tratar caso de zero arquivos de mapa
     // Seleção do mapa
     game::ConfigSelection mapSelection("./assets/maps");
-    int loops = 1;
 
     bool quitSelection = false;
 
@@ -122,10 +121,12 @@ int main(int, char* [])
         }
     }
 
+    // TODO: tratar caso de zero arquivos de movimento
     // Seleção dos arquivos de movimento
     std::vector<std::string> movementFiles;
     for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i) {
-        game::ConfigSelection movementSelection("./assets/movements");
+        // TODO: Não tem necessidade de reconstruir a lista de movimentos a cada seleção de movimento
+        game::ConfigSelection movementSelection("./assets/movements", mapSelection.getSelectedMapPretty());
         quitSelection = false;
 
         while (!quitSelection) {
