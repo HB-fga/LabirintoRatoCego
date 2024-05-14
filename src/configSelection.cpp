@@ -1,15 +1,24 @@
 #include "configSelection.h"
-#include "engine.h"
 #include <filesystem>
 
-// TODO: Essa classe não é utilizada apenas para mapas, renomear de acordo
-
+using pJSON = nlohmann::json;
 namespace fs = std::filesystem;
 
+// TODO: Essa classe não é utilizada apenas para mapas, renomear de acordo
 namespace game
 {
     ConfigSelection::ConfigSelection(const std::string &mapsDirectory, std::string filter)
     {
+        font25p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 25);
+        if (font25p == nullptr) {
+            return;
+        }
+
+        font15p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 15);
+        if (font15p == nullptr) {
+            return;
+        }
+
         // Percorre os arquivos no diretório de mapas e os adiciona à lista de mapFiles
         for (const auto &entry : fs::directory_iterator(mapsDirectory))
         {
@@ -17,9 +26,12 @@ namespace game
             {
                 if(filter != "")
                 {
-                    // TODO: não funciona para todos os casos, abrir arquivo json e conferir o nome do mapa
-                    size_t found = entry.path().string().find(filter);
-                    if(found != std::string::npos)
+                    std::ifstream inputFile(entry.path().string());
+                    pJSON movementFile = pJSON::parse(inputFile);
+                    std::string mapName = movementFile["mapName"];
+                    inputFile.close();
+
+                    if(mapName == filter)
                     {
                         mapFiles.push_back(entry.path().string());
                     }
@@ -46,8 +58,7 @@ namespace game
         // Retorna o caminho completo do mapa selecionado
         std::string fileName = mapFiles[selectedMapIndex];
         size_t lastSlashPos = fileName.find_last_of("/\\");
-        size_t fileFormatPos = fileName.find(".json");
-        fileName = fileName.substr(lastSlashPos + 1, fileFormatPos - lastSlashPos - 1);
+        fileName = fileName.substr(lastSlashPos + 1);
         return fileName;
     }
 
@@ -71,21 +82,9 @@ namespace game
 
     void ConfigSelection::writeTextSelection(const std::string &mapsDirectory, int height)
     {
-
         SDL_Color blueColor{ 0, 0, 255, 255 };
         SDL_Color whiteColor{ 255, 255, 255, 255 };
 
-        TTF_Font* font25p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 25);
-        if (font25p == nullptr) {
-            return;
-        }
-
-        TTF_Font* font15p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 15);
-        if (font15p == nullptr) {
-            return;
-        }
-
-        // TODO: ocultar nome do labirinto do arquivo de movimento
         size_t lastSlashPos = mapsDirectory.find_last_of("/\\");
         std::string mapFileName = mapsDirectory.substr(lastSlashPos + 1);
         size_t extensionPos = mapFileName.find(".json");
@@ -97,7 +96,5 @@ namespace game
             engine::renderText("Selecione os arquivos de movimento com as setas (Cima/Baixo)", 60, 63*3, font15p, whiteColor);
             return;
         }
-        TTF_CloseFont(font25p);
-        TTF_CloseFont(font15p);
     } 
 }

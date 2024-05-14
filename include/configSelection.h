@@ -3,6 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <nlohmann/json.hpp>
+#include "engine.h"
 
 namespace game
 {
@@ -11,6 +15,8 @@ namespace game
     private:
         std::vector<std::string> mapFiles;  // Lista de nomes de arquivo de mapas
         int selectedMapIndex;               // Índice do mapa selecionado
+        TTF_Font* font25p;
+        TTF_Font* font15p;
 
     public:
         ConfigSelection(const std::string &mapsDirectory, std::string filter = "");
