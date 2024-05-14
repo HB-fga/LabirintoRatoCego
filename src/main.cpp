@@ -6,9 +6,11 @@
 #include "configSelection.h"
 #include "ratSelection.h"
 #include "drawRanking.h"
+#include <nlohmann/json.hpp>
 
 #include <iostream>
 
+using pJSON = nlohmann::json;
 
 int main(int, char* [])
 {
@@ -19,9 +21,9 @@ int main(int, char* [])
         return -1;
     }
 
+    // TODO: tratar caso de zero arquivos de mapa
     // Seleção do mapa
     game::ConfigSelection mapSelection("./assets/maps");
-    int loops = 1;
 
     bool quitSelection = false;
 
@@ -119,10 +121,12 @@ int main(int, char* [])
         }
     }
 
+    // TODO: tratar caso de zero arquivos de movimento
     // Seleção dos arquivos de movimento
     std::vector<std::string> movementFiles;
     for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i) {
-        game::ConfigSelection movementSelection("./assets/movements");
+        // TODO: Não tem necessidade de reconstruir a lista de movimentos a cada seleção de movimento
+        game::ConfigSelection movementSelection("./assets/movements", mapSelection.getSelectedMapPretty());
         quitSelection = false;
 
         while (!quitSelection) {
@@ -197,13 +201,12 @@ int main(int, char* [])
 
         std::ifstream movementsFile(movementFiles[i]);
 
-        std::string ratName;
-        int n;
-        int col, row;
 
-        movementsFile >> ratName;
-        movementsFile >> n;
-        movementsFile >> row >> col;
+        // TODO: Tem no ratInstance, verificar se pode ser retirado de lá
+        pJSON jsonFile = pJSON::parse(movementsFile);
+        std::string ratName = jsonFile["ratName"];
+        int n = jsonFile["movements"];
+        int col = jsonFile["path"][0]["col"], row = jsonFile["path"][0]["row"];
 
         int validator = maze.validatorMovement(movementFiles[i], mapSelection.getSelectedMap());
 

@@ -2,6 +2,9 @@
 #include "engine.h"
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
+
+using pJSON = nlohmann::json;
 
 namespace game
 {
@@ -27,15 +30,18 @@ namespace game
         {
             throw std::invalid_argument("Failed to open file: " + filename);
         }
-        int rows, cols, cell_size;
-        file >> cols >> rows >> cell_size;
+
+        pJSON jsonFile = pJSON::parse(file);
+
+        int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
         Maze maze(rows, cols);
+
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
-                int cellValue;
-                if (file >> cellValue)
+                int cellValue = jsonFile["map"][i][j];
+                if (cellValue >= 0 && cellValue < 5) 
                 {
                     bool not_valid = false;
                     bool is_valid = false;
@@ -117,72 +123,46 @@ namespace game
     int Maze::validatorMovement(const std::string& movementsFilename, const std::string& mapFilename)
     {
         std::ifstream movementsFile(movementsFilename);
-        if (!movementsFile.is_open())
+        if (!movementsFile)
         {
+            // TODO: Tratar exceção ou abortar o código
             throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
         }
-        
-        std::string ratName;
-        int n;
 
-        movementsFile >> ratName;
-        movementsFile >> n;
+        pJSON jsonMoves = pJSON::parse(movementsFile);
 
+        // TODO: Tem no ratInstance, verificar se pode ser retirado de lá
+        auto path = jsonMoves["path"];
         std::vector<std::pair<int, int>> movements;
-        int col, row;
-        for (int i = 0; i < n; i++) {
-            movementsFile >> row >> col;
-            movements.push_back(std::make_pair(col, row));
-        }
-
+        for (auto& move : path)
+            movements.push_back({move["row"], move["col"]});
+        
         std::ifstream mapF(mapFilename);
-
-        if (!mapF.is_open())
+        if (!mapF)
         {
+            // TODO: Tratar exceção ou abortar o código
             throw std::invalid_argument("Failed to open file: " + mapFilename);
         }
 
-        int rows, cols, cellValue;
-        mapF >> cols >> rows >> cellValue;
-
-        std::vector<std::vector<int>> mazeV;
-
-        for (int i = 0; i < rows; i++)
-        {
-            std::vector<int> row;
-            for (int j = 0; j < cols; j++)
-            {
-                int cellValue;
-                if (mapF >> cellValue)
-                {
-                    row.push_back(cellValue);
-                }
-                else
-                {
-                    mapF.close();
-                    throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
-                }
-            }
-            mazeV.push_back(row);
-        }
-
-        int numDecisions, rowExit, colExit;
-        mapF >> numDecisions;
-        for (int i = 0; i <= numDecisions; i++)
-        {
-            int row, col;
-            std::string decision;
-            mapF >> row >> col >> decision;
-        }
-
-        mapF >> rowExit >> colExit;
-
+        pJSON jsonFile = pJSON::parse(mapF);
+        int rows = jsonFile["height"], cols = jsonFile["width"];
         
-        for (const auto& movement : movements)
+        auto mazeV = jsonFile["map"];
+        for(auto& row : mazeV)
         {
-            int row = movement.second;
-            int col = movement.first;
+            auto [a, b] = minmax_element(row.begin(), row.end());
+            if (*a < 0 or *b > 4) 
+            {
+                // TODO: Tratar exceção ou abortar o código
+                throw std::invalid_argument("Invalid cell value in file: " + mapFilename);
+            }
+        }
 
+        // TODO: Usar pair ou semelhante
+        int rowExit = jsonFile["exit"]["row"], colExit = jsonFile["exit"]["col"];
+
+        for (const auto& [row, col] : movements)
+        {
             // Verificar se as coordenadas estão dentro dos limites do labirinto
             if (row < 0 || row >= rows || col < 0 || col >= cols)
             {
@@ -197,11 +177,10 @@ namespace game
         }
 
         // verificar se o rato chegou à saída
-        if ((movements.back().first != colExit || movements.back().second != rowExit) && movements.size() < 999)
+        if ((movements.back().first != rowExit || movements.back().second != colExit) && movements.size() < 999)
         {
             return 1;
         }
-
         
         movementsFile.close();
         mapF.close();

@@ -1,5 +1,8 @@
 #include "ratInstance.h"
 #include "engine.h"
+#include <nlohmann/json.hpp>
+
+using pJSON = nlohmann::json;
 
 RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std::string& movementFile, const std::string& mapFile)
     : rat(xv, yv, imageRat), movements(loadMovementsFromFile(movementFile))
@@ -13,8 +16,8 @@ RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std:
         throw std::invalid_argument("Failed to open file: " + mapFile);
     }
 
-    int rows, cols, cellValue;
-    mapF >> cols >> rows >> cellValue;
+    pJSON jsonFile = pJSON::parse(mapF);
+    int rows = jsonFile["height"], cols = jsonFile["width"];
 
     int mazeWidth = cols * 60;
     int mazeHeight = rows * 60;
@@ -49,20 +52,13 @@ std::vector<std::pair<int, int>> RatInstance::loadMovementsFromFile(const std::s
     {
         throw std::invalid_argument("Failed to open movements file: " + movementsFilename);
     }
-    
-    std::string ratName;
-    int n;
-
-    movementsFile >> ratName;
-    movementsFile >> n;
-
-    std::vector<std::pair<int, int>> movements;
-    int col, row;
-    for (int i = 0; i < n; i++) {
-        movementsFile >> row >> col;
-        movements.push_back(std::make_pair(col, row));
-    }
-
+    pJSON jsonFile = pJSON::parse(movementsFile);
     movementsFile.close();
+
+   auto path = jsonFile["path"];
+    std::vector<std::pair<int, int>> movements;
+    for (auto& move : path)
+        movements.push_back({move["col"], move["row"]});
+
     return movements;
 }
