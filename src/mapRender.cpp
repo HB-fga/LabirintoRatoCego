@@ -326,3 +326,41 @@ void MapRenderer::resetMap() {
         }
     }
 }
+
+void MapRenderer::loadMapfromFile(const std::string& filePath){
+
+    std::ifstream mapFile(filePath);
+    if (!mapFile.good()) return;
+    
+    pJSON jsonMap = pJSON::parse(mapFile);
+    mapFile.close();
+
+    auto map = jsonMap["map"];
+    MAZE_HEIGHT = jsonMap["height"];
+    MAZE_WIDTH = jsonMap["width"];
+
+    for (int row = 0; row < MAZE_HEIGHT; ++row) {
+        for (int col = 0; col < MAZE_WIDTH; ++col) {
+            CellType *cellValue = new CellType;
+            switch ((int) map[row][col])
+            {
+                case 0:
+                    *cellValue = CELL_FORBIDDEN;
+                    break;
+                case 1:
+                    *cellValue = CELL_PATH;
+                    break;
+                case 2:
+                    *cellValue = CELL_DECISION;
+                    break;
+                case 3:
+                    *cellValue = CELL_EXIT;
+                    break;
+                case 4:
+                    *cellValue = CELL_START;
+                    break;
+            }
+            mapMaze[row][col] = *cellValue;
+        }
+    }
+}
