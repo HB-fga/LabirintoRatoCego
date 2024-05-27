@@ -1,5 +1,9 @@
 #include "cell.h"
+#include <QDebug>
+#include <QFileDialog>
 
-Cell::Cell(QObject *parent)
-    : QObject{parent}
-{}
+Cell::Cell()
+{
+    img.load("../../path.png");
+}
+

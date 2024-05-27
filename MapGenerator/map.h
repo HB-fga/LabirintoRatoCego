@@ -20,7 +20,6 @@ public:
     const int brushSize() const;
 
 public slots:
-    void clear();
     QColor drawColor();
     void setBrushColor(QColor color);
     void increase();
@@ -29,16 +28,16 @@ public slots:
 signals:
 
 protected:
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *) override;
+    //void keyPressEvent(QKeyEvent *) override;
     void resizeEvent(QResizeEvent *);
     void paintGrid(QPainter* painter);
 
+
 private:
     QColor m_drawColor;
-    QImage m_canvas;
     QPoint m_last;
     std::vector<std::vector<Cell>> matrix;
     int m_brushSize;

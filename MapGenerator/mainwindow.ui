@@ -14,14 +14,20 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
    <widget class="Map" name="map" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
       <width>701</width>
-      <height>331</height>
+      <height>581</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
    </widget>
   </widget>

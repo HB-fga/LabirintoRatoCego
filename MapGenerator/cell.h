@@ -2,6 +2,7 @@
 #define CELL_H
 
 #include <QObject>
+#include <QPixmap>
 
 enum class cellType{
     Wall,
@@ -11,15 +12,16 @@ enum class cellType{
     End
 } ;
 
-class Cell : public QObject
+class Cell
 {
-    Q_OBJECT
+
 public:
-    explicit Cell(QObject *parent = nullptr);
+    explicit Cell();
+    QPixmap img;
 
 private:
     cellType type;
-    //QColor color;
+
 signals:
 };
 
