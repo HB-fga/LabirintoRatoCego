@@ -6,7 +6,7 @@
 #include <QRgb>
 #include <QDebug>
 #include <QPainterPath>
-#include <iostream>
+#include <QCursor>
 
 static void clearCanvas(QImage &canvas, int width, int height)
 {
@@ -49,6 +49,7 @@ const int Map::brushSize() const{
 }
 
 void Map::mousePressEvent(QMouseEvent *event){
+    // qDebug() << "mouse pos:" << this->mapFromGlobal(QCursor::pos());
     // if(event->buttons() & Qt::LeftButton){
     //     m_last = event->pos();
     // }
@@ -133,7 +134,7 @@ void Map::paintGrid(QPainter* painter){
     for(int i=0;i<size;i++){
         for(int j=0;j<size;j++){
             //QRect rect(10+i*cellSize, 10+j*cellSize, cellSize, cellSize);
-            painter->drawPixmap(10+i*cellSize, 10+j*cellSize, matrix[i][j].img);
+            painter->drawPixmap(10+i*cellSize, 10+j*cellSize, matrix[i][j].getCellImage());
             //painter->drawRect(rect);
         }
     }
