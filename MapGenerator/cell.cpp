@@ -42,3 +42,10 @@ QPixmap Cell::getCellImage()
 {
     return this->img;
 }
+
+void Cell::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "cell clicada: " << this->pos();
+    this->setCellType(cellType::Start);
+    repaint();
+}

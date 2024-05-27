@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QGenericMatrix>
+#include <QGridLayout>
 #include <vector>
 #include "cell.h"
 
@@ -39,7 +40,7 @@ protected:
 private:
     QColor m_drawColor;
     QPoint m_last;
-    std::vector<std::vector<Cell>> matrix;
+    QGridLayout cellGrid;
     int m_brushSize;
     int size;
 };

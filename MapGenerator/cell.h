@@ -1,7 +1,7 @@
 #ifndef CELL_H
 #define CELL_H
 
-#include "qwidget.h"
+#include <QWidget>
 #include <QObject>
 #include <QPixmap>
 #include <QPushButton>
@@ -14,14 +14,15 @@ enum class cellType{
     End
 };
 
-class Cell
+class Cell : public QWidget
 {
-
+    Q_OBJECT
 public:
     explicit Cell();
     cellType getCellType();
     void setCellType(cellType newType);
     QPixmap getCellImage();
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     cellType type;
