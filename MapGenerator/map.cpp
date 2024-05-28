@@ -11,14 +11,18 @@
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
-    rows = 10;
-    columns = 10;
-    visibleRows = rows;
-    visibleCols = columns;
+    rows = 20;
+    columns = 20;
+    visibleRows = 10;
+    visibleCols = 10;
 
     for(int i=0; i<rows;i++)
-        for(int j=0; j<columns;j++)
-            cellGrid.addWidget(new Cell, i, j);
+        for(int j=0; j<columns;j++){
+            Cell* cell = new Cell;
+            if(i >= visibleRows || j >= visibleCols)
+                cell->setVisible(false);
+            cellGrid.addWidget(cell, i, j);
+        }
 
     this->cellGrid.setSpacing(0);
     this->setLayout(&cellGrid);
@@ -84,6 +88,7 @@ void Map::increaseCols(){
 }
 
 void Map::decreaseRows(){
+    if(visibleRows-1 < 2) return;
     for(int j=0;j<visibleCols;j++){
         Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(visibleRows-1, j)->widget());
         cell->setVisible(false);
@@ -94,6 +99,7 @@ void Map::decreaseRows(){
 }
 
 void Map::decreaseCols(){
+    if(visibleCols-1 < 2) return;
     for(int i=0;i<visibleRows;i++){
         Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, visibleCols-1)->widget());
         cell->setVisible(false);
