@@ -1,6 +1,5 @@
 #include "cell.h"
 #include <QDebug>
-#include <QFileDialog>
 
 Cell::Cell()
 {
@@ -42,11 +41,4 @@ void Cell::setCellType(cellType newType)
 QPixmap Cell::getCellImage()
 {
     return this->img;
-}
-
-void Cell::mousePressEvent(QMouseEvent *event)
-{
-    // qDebug() << "cell clicada: " << this->pos();
-    this->setCellType(cellType::Start);
-    repaint();
 }

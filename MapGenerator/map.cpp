@@ -33,19 +33,25 @@ Map::~Map()
 
 }
 
-void Map::mousePressEvent(QMouseEvent *event){
-    // qDebug() << "mouse pos:" << this->mapFromGlobal(QCursor::pos());
-
-    // if(event->buttons() & Qt::LeftButton){
-    //     m_last = event->pos();
-    // }
+void Map::mousePressEvent(QMouseEvent *event)
+{
+    QWidget * const widget = childAt(event->pos());
+    if (widget) {
+        Cell* cell = qobject_cast<Cell*>(widget);
+        cell->setCellType(cellType::Start);
+        repaint();
+    }
 }
 
 void Map::mouseMoveEvent(QMouseEvent *event){
-    // if(event->buttons() & Qt::LeftButton){
-        // drawPixel(event->pos());
-    //     repaint();
-    // }
+    if(event->buttons() & Qt::LeftButton){
+        QWidget * const widget = childAt(event->pos());
+        if (widget) {
+            Cell* cell = qobject_cast<Cell*>(widget);
+            cell->setCellType(cellType::Start);
+            repaint();
+        }
+    }
 }
 
 // void Map::keyPressEvent( QKeyEvent* event ) {
