@@ -46,8 +46,10 @@
     <property name="title">
      <string>Map</string>
     </property>
-    <addaction name="actionIncrease"/>
-    <addaction name="actionDecrease"/>
+    <addaction name="actionIncreaseRows"/>
+    <addaction name="actionDecreaseRows"/>
+    <addaction name="actionIncrease_Cols"/>
+    <addaction name="actionDecrease_Cols"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMap"/>
@@ -61,14 +63,24 @@
     <string>SaveAs</string>
    </property>
   </action>
-  <action name="actionIncrease">
+  <action name="actionIncreaseRows">
    <property name="text">
-    <string>Increase</string>
+    <string>Increase Rows</string>
    </property>
   </action>
-  <action name="actionDecrease">
+  <action name="actionDecreaseRows">
    <property name="text">
-    <string>Decrease</string>
+    <string>Decrease Rows</string>
+   </property>
+  </action>
+  <action name="actionIncrease_Cols">
+   <property name="text">
+    <string>Increase Cols</string>
+   </property>
+  </action>
+  <action name="actionDecrease_Cols">
+   <property name="text">
+    <string>Decrease Cols</string>
    </property>
   </action>
  </widget>
@@ -79,34 +91,52 @@
    <header>map.h</header>
    <container>1</container>
    <slots>
-    <slot>increase()</slot>
-    <slot>decrease()</slot>
+    <slot>increaseRows()</slot>
+    <slot>decreaseRows()</slot>
+    <slot>increaseCols()</slot>
+    <slot>decreaseCols()</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>actionDecrease</sender>
+   <sender>actionDecreaseRows</sender>
    <signal>triggered()</signal>
    <receiver>map</receiver>
-   <slot>decrease()</slot>
+   <slot>decreaseRows()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>350</x>
-     <y>188</y>
+     <x>355</x>
+     <y>304</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionIncrease</sender>
+   <sender>actionIncreaseRows</sender>
    <signal>triggered()</signal>
    <receiver>map</receiver>
-   <slot>increase()</slot>
+   <slot>increaseRows()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>355</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionIncrease_Cols</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>increaseCols()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -114,7 +144,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
-     <y>188</y>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDecrease_Cols</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>decreaseCols()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>299</y>
     </hint>
    </hints>
   </connection>

@@ -11,10 +11,13 @@
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
-    size = 10;
+    rows = 10;
+    columns = 10;
+    visibleRows = rows;
+    visibleCols = columns;
 
-    for(int i=0; i<size;i++)
-        for(int j=0; j<size;j++)
+    for(int i=0; i<rows;i++)
+        for(int j=0; j<columns;j++)
             cellGrid.addWidget(new Cell, i, j);
 
     this->cellGrid.setSpacing(0);
@@ -58,27 +61,46 @@ void Map::mouseMoveEvent(QMouseEvent *event){
 //     }
 // }
 
-void Map::increase(){
-    // size++;
-    // std::vector<Cell> line;
+void Map::increaseRows(){
+    if(visibleRows+1 > rows) return;
+    for(int j=0;j<visibleCols;j++){
+        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(visibleRows, j)->widget());
+        cell->setVisible(true);
+    }
+    visibleRows++;
 
-    // Cell cell;
-    // for(auto &c : matrix)
-    //     c.push_back(cell);
-
-    // for(int j=0; j<size;j++){
-    //     line.push_back(cell);
-    // }
-    // matrix.push_back(line);
-
-    // repaint();
+    repaint();
 }
 
-void Map::decrease(){
-    // size--;
-    // matrix.pop_back();
+void Map::increaseCols(){
+    if(visibleCols+1 > columns) return;
+    for(int i=0;i<visibleRows;i++){
+        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, visibleCols)->widget());
+        cell->setVisible(true);
+    }
+    visibleCols++;
 
-    // repaint();
+    repaint();
+}
+
+void Map::decreaseRows(){
+    for(int j=0;j<visibleCols;j++){
+        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(visibleRows-1, j)->widget());
+        cell->setVisible(false);
+    }
+    visibleRows--;
+
+    repaint();
+}
+
+void Map::decreaseCols(){
+    for(int i=0;i<visibleRows;i++){
+        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, visibleCols-1)->widget());
+        cell->setVisible(false);
+    }
+    visibleCols--;
+
+    repaint();
 }
 
 void Map::paintEvent(QPaintEvent *event)
@@ -93,8 +115,8 @@ void Map::paintEvent(QPaintEvent *event)
 void Map::paintGrid(QPainter* painter){
     // Draw Grid
     int cellSize = 30;
-    for(int i=0;i<size;i++){
-        for(int j=0;j<size;j++){
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<columns;j++){
             Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, j)->widget());
 
             if(cell->isVisible())

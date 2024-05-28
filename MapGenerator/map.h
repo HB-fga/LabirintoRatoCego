@@ -15,8 +15,10 @@ public:
     ~Map();
 
 public slots:
-    void increase();
-    void decrease();
+    void increaseRows();
+    void increaseCols();
+    void decreaseRows();
+    void decreaseCols();
 
 signals:
 
@@ -30,7 +32,10 @@ protected:
 
 private:
     QGridLayout cellGrid;
-    int size;
+    int rows;
+    int columns;
+    int visibleRows;
+    int visibleCols;
 };
 
 #endif // MAP_H
