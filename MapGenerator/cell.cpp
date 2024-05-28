@@ -5,6 +5,7 @@
 Cell::Cell()
 {
     img.load("../../assets/path.png");
+    this->setFixedSize(30, 30);
 }
 
 cellType Cell::getCellType()
@@ -45,7 +46,7 @@ QPixmap Cell::getCellImage()
 
 void Cell::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << "cell clicada: " << this->pos();
+    // qDebug() << "cell clicada: " << this->pos();
     this->setCellType(cellType::Start);
     repaint();
 }

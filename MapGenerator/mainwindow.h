@@ -14,19 +14,14 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-protected:
-    //bool eventFilter(QObject *obj, QEvent *event);
-
 public:
     MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
 
 public slots:
-    void colorPicked();
     void on_actionSaveAs_triggered();
     //void keyPressEvent(QKeyEvent *) override;
-
 
 private:
     Map *m_map;

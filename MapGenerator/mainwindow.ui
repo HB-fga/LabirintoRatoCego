@@ -17,19 +17,15 @@
    <property name="cursor">
     <cursorShape>ArrowCursor</cursorShape>
    </property>
-   <widget class="Map" name="map" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>701</width>
-      <height>581</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+     <widget class="Map" name="map" native="true">
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -46,15 +42,6 @@
     </property>
     <addaction name="actionSaveAs"/>
    </widget>
-   <widget class="QMenu" name="menuColor">
-    <property name="title">
-     <string>Color</string>
-    </property>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
-    <addaction name="actionPick"/>
-    <addaction name="actionSquare"/>
-   </widget>
    <widget class="QMenu" name="menuMap">
     <property name="title">
      <string>Map</string>
@@ -63,20 +50,9 @@
     <addaction name="actionDecrease"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuColor"/>
    <addaction name="menuMap"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionPick">
-   <property name="text">
-    <string>Pick</string>
-   </property>
-  </action>
-  <action name="actionSquare">
-   <property name="text">
-    <string>Square</string>
-   </property>
-  </action>
   <action name="actionSaveAs">
    <property name="icon">
     <iconset theme="document-save-as"/>
@@ -110,22 +86,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>actionPick</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>colorPicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>actionDecrease</sender>
    <signal>triggered()</signal>
