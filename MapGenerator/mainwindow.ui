@@ -37,6 +37,9 @@
           <iconset>
            <normaloff>assets/path.png</normaloff>assets/path.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>P</string>
+         </property>
         </widget>
        </item>
        <item row="4" column="0">
@@ -48,6 +51,9 @@
           <iconset>
            <normaloff>assets/decision.png</normaloff>assets/decision.png</iconset>
          </property>
+         <property name="shortcut">
+          <string>D</string>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -58,6 +64,9 @@
          <property name="icon">
           <iconset>
            <normaloff>assets/start.png</normaloff>assets/start.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>S</string>
          </property>
         </widget>
        </item>
@@ -83,6 +92,9 @@
          <property name="icon">
           <iconset>
            <normaloff>assets/wall.png</normaloff>assets/wall.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>W</string>
          </property>
         </widget>
        </item>
@@ -131,20 +143,32 @@
    <property name="text">
     <string>Increase Rows</string>
    </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
   </action>
   <action name="actionDecreaseRows">
    <property name="text">
     <string>Decrease Rows</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
    </property>
   </action>
   <action name="actionIncrease_Cols">
    <property name="text">
     <string>Increase Cols</string>
    </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
   </action>
   <action name="actionDecrease_Cols">
    <property name="text">
     <string>Decrease Cols</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
    </property>
   </action>
  </widget>
