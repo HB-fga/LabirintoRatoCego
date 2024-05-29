@@ -25,6 +25,70 @@
       </property>
      </widget>
     </item>
+    <item row="0" column="1" alignment="Qt::AlignRight|Qt::AlignTop">
+     <widget class="QWidget" name="gridWidget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="0">
+        <widget class="QPushButton" name="cellPath">
+         <property name="text">
+          <string>Path</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/path.png</normaloff>assets/path.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="cellDecision">
+         <property name="text">
+          <string>Decision</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/decision.png</normaloff>assets/decision.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="cellStart">
+         <property name="text">
+          <string>Start</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/start.png</normaloff>assets/start.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="cellEnd">
+         <property name="text">
+          <string>End</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/end.png</normaloff>assets/end.png</iconset>
+         </property>
+         <property name="shortcut">
+          <string>E</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="cellWall">
+         <property name="text">
+          <string>Wall</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>assets/wall.png</normaloff>assets/wall.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -95,6 +159,11 @@
     <slot>decreaseRows()</slot>
     <slot>increaseCols()</slot>
     <slot>decreaseCols()</slot>
+    <slot>changeCellTypeWall()</slot>
+    <slot>changeCellTypeEnd()</slot>
+    <slot>changeCellTypeStart()</slot>
+    <slot>changeCellTypePath()</slot>
+    <slot>changeCellTypeDecision()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -111,7 +180,7 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>355</x>
+     <x>182</x>
      <y>304</y>
     </hint>
    </hints>
@@ -127,7 +196,7 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>355</x>
+     <x>182</x>
      <y>304</y>
     </hint>
    </hints>
@@ -143,7 +212,7 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>350</x>
+     <x>177</x>
      <y>299</y>
     </hint>
    </hints>
@@ -159,14 +228,90 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>350</x>
+     <x>177</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cellWall</sender>
+   <signal>clicked()</signal>
+   <receiver>map</receiver>
+   <slot>changeCellTypeWall()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>617</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cellEnd</sender>
+   <signal>clicked()</signal>
+   <receiver>map</receiver>
+   <slot>changeCellTypeEnd()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>647</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cellPath</sender>
+   <signal>clicked()</signal>
+   <receiver>map</receiver>
+   <slot>changeCellTypePath()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>647</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cellStart</sender>
+   <signal>clicked()</signal>
+   <receiver>map</receiver>
+   <slot>changeCellTypeStart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>647</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cellDecision</sender>
+   <signal>clicked()</signal>
+   <receiver>map</receiver>
+   <slot>changeCellTypeDecision()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>647</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
      <y>299</y>
     </hint>
    </hints>
   </connection>
  </connections>
- <slots>
-  <slot>colorPicked()</slot>
-  <slot>squared()</slot>
- </slots>
 </ui>

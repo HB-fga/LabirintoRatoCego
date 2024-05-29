@@ -1,6 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "cell.h"
+
 #include <QWidget>
 #include <QGenericMatrix>
 #include <QGridLayout>
@@ -19,6 +21,11 @@ public slots:
     void increaseCols();
     void decreaseRows();
     void decreaseCols();
+    void changeCellTypeWall();
+    void changeCellTypeStart();
+    void changeCellTypeEnd();
+    void changeCellTypeDecision();
+    void changeCellTypePath();
 
 signals:
 
@@ -32,6 +39,7 @@ protected:
 
 private:
     QGridLayout cellGrid;
+    cellType selectedCell;
     int rows;
     int columns;
     int visibleRows;

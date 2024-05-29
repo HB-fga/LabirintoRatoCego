@@ -1,5 +1,4 @@
 #include "map.h"
-#include "cell.h"
 
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -15,6 +14,7 @@ Map::Map(QWidget *parent) : QWidget(parent)
     columns = 20;
     visibleRows = 10;
     visibleCols = 10;
+    selectedCell = cellType::Start;
 
     for(int i=0; i<rows;i++)
         for(int j=0; j<columns;j++){
@@ -33,12 +33,32 @@ Map::~Map()
 
 }
 
+void Map::changeCellTypeWall(){
+    selectedCell = cellType::Wall;
+}
+
+void Map::changeCellTypeStart(){
+    selectedCell = cellType::Start;
+}
+
+void Map::changeCellTypeEnd(){
+    selectedCell = cellType::End;
+}
+
+void Map::changeCellTypeDecision(){
+    selectedCell = cellType::Decision;
+}
+
+void Map::changeCellTypePath(){
+    selectedCell = cellType::Path;
+}
+
 void Map::mousePressEvent(QMouseEvent *event)
 {
     QWidget * const widget = childAt(event->pos());
     if (widget) {
         Cell* cell = qobject_cast<Cell*>(widget);
-        cell->setCellType(cellType::Start);
+        cell->setCellType(selectedCell);
         repaint();
     }
 }
@@ -48,7 +68,7 @@ void Map::mouseMoveEvent(QMouseEvent *event){
         QWidget * const widget = childAt(event->pos());
         if (widget) {
             Cell* cell = qobject_cast<Cell*>(widget);
-            cell->setCellType(cellType::Start);
+            cell->setCellType(selectedCell);
             repaint();
         }
     }
