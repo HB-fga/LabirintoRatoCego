@@ -16,13 +16,20 @@ Map::Map(QWidget *parent) : QWidget(parent)
     visibleCols = 10;
     selectedCell = cellType::Start;
 
-    for(int i=0; i<rows;i++)
-        for(int j=0; j<columns;j++){
+    for(int i=0; i<rows; i++)
+    {
+        for(int j=0; j<columns; j++){
             Cell* cell = new Cell;
             if(i >= visibleRows || j >= visibleCols)
                 cell->setVisible(false);
             cellGrid.addWidget(cell, i, j);
         }
+    }
+
+    Cell* startCell = qobject_cast<Cell*>(cellGrid.itemAtPosition(0, 0)->widget());
+    startCell->setCellType(cellType::Start);
+    Cell* endCell = qobject_cast<Cell*>(cellGrid.itemAtPosition(9, 9)->widget());
+    endCell->setCellType(cellType::End);
 
     this->cellGrid.setSpacing(0);
     this->setLayout(&cellGrid);

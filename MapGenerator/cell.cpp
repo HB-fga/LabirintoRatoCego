@@ -3,7 +3,7 @@
 
 Cell::Cell()
 {
-    img.load("../../assets/path.png");
+    this->setCellType(cellType::Path);
     this->setFixedSize(30, 30);
 }
 
