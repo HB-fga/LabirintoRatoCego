@@ -117,6 +117,7 @@
      <string>File</string>
     </property>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionOpen"/>
    </widget>
    <widget class="QMenu" name="menuMap">
     <property name="title">
@@ -169,6 +170,14 @@
    </property>
    <property name="shortcut">
     <string>Left</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="document-open"/>
+   </property>
+   <property name="text">
+    <string>Open</string>
    </property>
   </action>
  </widget>

@@ -10,8 +10,8 @@
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
-    rows = 20;
-    columns = 20;
+    rows = 30;
+    columns = 30;
     visibleRows = 10;
     visibleCols = 10;
     startPos = QPoint(0, 0);
@@ -197,4 +197,29 @@ void Map::paintGrid(QPainter* painter){
                 painter->drawPixmap(cell->pos(), cell->getCellImage());
         }
     }
+}
+
+void Map::setVisibleCols(int w){
+    while(w > this->visibleCols)increaseCols();
+    while(w < this->visibleCols) decreaseCols();
+}
+
+void Map::setVisibleRows(int h){
+    while(h > this->visibleRows) increaseRows();
+    while(h < this->visibleRows) decreaseRows();
+}
+
+void Map::setCellAtGrid(int i, int j, cellType type){
+    Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, j)->widget());
+
+    if(type == cellType::Start){
+        startPos.setX(i);
+        startPos.setY(j);
+    }
+    else if(type == cellType::End)
+    {
+        endPos.setX(i);
+        endPos.setY(j);
+    }
+    cell->setCellType(type);
 }

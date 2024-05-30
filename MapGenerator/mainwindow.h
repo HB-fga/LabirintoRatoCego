@@ -23,6 +23,9 @@ public slots:
     void on_actionSaveAs_triggered();
     //void keyPressEvent(QKeyEvent *) override;
 
+private slots:
+    void on_actionOpen_triggered();
+
 private:
     Map *m_map;
     Ui::MainWindow *m_ui;

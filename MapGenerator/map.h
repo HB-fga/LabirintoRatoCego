@@ -18,6 +18,9 @@ public:
 
     Cell* getCell(int x, int y);
     Cell* getCell(QMouseEvent *event);
+    void setVisibleCols(int w);
+    void setVisibleRows(int h);
+    void setCellAtGrid(int i, int j, cellType type);
 
 public slots:
     void increaseRows();

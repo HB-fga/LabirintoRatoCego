@@ -9,8 +9,8 @@ enum class cellType{
     Wall,
     Path,
     Decision,
-    Start,
-    End
+    End,
+    Start
 };
 
 class Cell : public QWidget
