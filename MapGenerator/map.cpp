@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QPainterPath>
 #include <QCursor>
+#include <QJsonArray>
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
@@ -188,11 +189,9 @@ void Map::paintEvent(QPaintEvent *event)
 }
 
 void Map::paintGrid(QPainter* painter){
-    int cellSize = 30;
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
             Cell* cell = getCell(i, j);
-
             if(cell->isVisible())
                 painter->drawPixmap(cell->pos(), cell->getCellImage());
         }
@@ -222,4 +221,88 @@ void Map::setCellAtGrid(int i, int j, cellType type){
         endPos.setY(j);
     }
     cell->setCellType(type);
+}
+
+QString Map::findMoves(int row, int col){
+    QString moves = "";
+
+    for (int i = row - 1; i >= 0; --i) {
+        Cell* cell = getCell(i, col);
+        if (cell->getCellType() == cellType::Wall) break;
+        if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
+        {
+            moves.append("N");
+            break;
+        }
+    }
+
+    for (int i = row + 1; i < this->visibleRows; ++i) {
+        Cell* cell = getCell(i, col);
+        if (cell->getCellType() == cellType::Wall) break;
+        if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
+        {
+            moves.append("S");
+            break;
+        }
+    }
+
+    for (int j = col + 1; j < this->visibleCols; ++j) {
+        Cell* cell = getCell(row, j);
+        if (cell->getCellType() == cellType::Wall) break;
+        if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
+        {
+            moves.append("E");
+            break;
+        }
+    }
+
+    for (int j = col - 1; j >= 0; --j) {
+        Cell* cell = getCell(row, j);
+        if (cell->getCellType() == cellType::Wall) break;
+        if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
+        {
+            moves.append("W");
+            break;
+        }
+    }
+
+    return moves;
+}
+
+QJsonObject Map::getJSON(){
+    QJsonObject json;
+
+    json.insert("cellSize", 60);
+    json.insert("height", this->visibleRows);
+    json.insert("width", this->visibleCols);
+
+    QJsonObject exit;
+    exit.insert("row", this->endPos.x());
+    exit.insert("col", this->endPos.y());
+    json.insert("exit", exit);
+
+    QJsonArray map;
+    QJsonArray decisions;
+    int dCount = 0;
+    for(int i=0;i<visibleRows;i++){
+        QJsonArray line;
+        for(int j=0;j<visibleCols;j++){
+            Cell* cell = getCell(i, j);
+            line.push_back(static_cast<int>(cell->getCellType()));
+            if(cell->getCellType() == cellType::Decision or cell->getCellType() == cellType::Start){
+                QJsonObject decision;
+                decision.insert("row", i);
+                decision.insert("col", j);
+                decision.insert("moves", findMoves(i, j));
+                dCount++;
+                decisions.push_back(decision);
+            }
+        }
+        map.append(line);
+    }
+    json.insert("map", map);
+    json.insert("decisionCount", dCount);
+    json.insert("decisions", decisions);
+
+    return json;
 }

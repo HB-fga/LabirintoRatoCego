@@ -26,7 +26,18 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionSaveAs_triggered()
 {
     QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
-    std::cout << name.toStdString() << std::endl;
+
+    QFile file(name);
+    // TODO: Tratamento de erro
+    if(!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "File open error";
+        return;
+    }
+
+    //QJsonDocument map = ;
+
+    file.write(QJsonDocument(m_ui->map->getJSON()).toJson());
+    file.close();
 }
 
 

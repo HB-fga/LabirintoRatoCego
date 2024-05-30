@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QGenericMatrix>
 #include <QGridLayout>
+#include <QJsonObject>
 
 class QPaintEvent;
 class QMouseEvent;
@@ -21,6 +22,7 @@ public:
     void setVisibleCols(int w);
     void setVisibleRows(int h);
     void setCellAtGrid(int i, int j, cellType type);
+    QJsonObject getJSON();
 
 public slots:
     void increaseRows();
@@ -46,6 +48,7 @@ protected:
 
 private:
     void setGridCellType(Cell* cell);
+    QString findMoves(int row, int col);
     QGridLayout cellGrid;
     cellType selectedCell;
     QPoint startPos;
