@@ -16,6 +16,9 @@ public:
     explicit Map(QWidget *parent = 0);
     ~Map();
 
+    Cell* getCell(int x, int y);
+    Cell* getCell(QMouseEvent *event);
+
 public slots:
     void increaseRows();
     void increaseCols();
@@ -26,6 +29,7 @@ public slots:
     void changeCellTypeEnd();
     void changeCellTypeDecision();
     void changeCellTypePath();
+
 
 signals:
 
@@ -38,8 +42,11 @@ protected:
 
 
 private:
+    void setGridCellType(Cell* cell);
     QGridLayout cellGrid;
     cellType selectedCell;
+    QPoint startPos;
+    QPoint endPos;
     int rows;
     int columns;
     int visibleRows;

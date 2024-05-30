@@ -14,7 +14,9 @@ Map::Map(QWidget *parent) : QWidget(parent)
     columns = 20;
     visibleRows = 10;
     visibleCols = 10;
-    selectedCell = cellType::Start;
+    startPos = QPoint(0, 0);
+    endPos = QPoint(9, 9);
+    selectedCell = cellType::Wall;
 
     for(int i=0; i<rows; i++)
     {
@@ -26,9 +28,9 @@ Map::Map(QWidget *parent) : QWidget(parent)
         }
     }
 
-    Cell* startCell = qobject_cast<Cell*>(cellGrid.itemAtPosition(0, 0)->widget());
+    Cell* startCell = getCell(startPos.x(), startPos.y());
     startCell->setCellType(cellType::Start);
-    Cell* endCell = qobject_cast<Cell*>(cellGrid.itemAtPosition(9, 9)->widget());
+    Cell* endCell = getCell(endPos.x(), endPos.y());
     endCell->setCellType(cellType::End);
 
     this->cellGrid.setSpacing(0);
@@ -60,24 +62,58 @@ void Map::changeCellTypePath(){
     selectedCell = cellType::Path;
 }
 
-void Map::mousePressEvent(QMouseEvent *event)
+Cell* Map::getCell(int x, int y)
+{
+    return qobject_cast<Cell*>(cellGrid.itemAtPosition(x, y)->widget());
+}
+
+Cell* Map::getCell(QMouseEvent *event)
 {
     QWidget * const widget = childAt(event->pos());
-    if (widget) {
-        Cell* cell = qobject_cast<Cell*>(widget);
-        cell->setCellType(selectedCell);
-        repaint();
-    }
+    if (widget) return qobject_cast<Cell*>(widget);
+    else return NULL;
+}
+
+void Map::mousePressEvent(QMouseEvent *event)
+{
+    Cell* cell = getCell(event);
+    setGridCellType(cell);
 }
 
 void Map::mouseMoveEvent(QMouseEvent *event){
     if(event->buttons() & Qt::LeftButton){
-        QWidget * const widget = childAt(event->pos());
-        if (widget) {
-            Cell* cell = qobject_cast<Cell*>(widget);
-            cell->setCellType(selectedCell);
-            repaint();
+        Cell* cell = getCell(event);
+        setGridCellType(cell);
+    }
+}
+
+void Map::setGridCellType(Cell* cell)
+{
+    if (cell != NULL) {
+        cell->setCellType(selectedCell);
+        if(selectedCell == cellType::Start)
+        {
+            Cell* oldStartCell = getCell(startPos.x(), startPos.y());
+            oldStartCell->setCellType(cellType::Path);
+
+            int newCellRow = cellGrid.indexOf(cell)/rows;
+            int newCellCol = cellGrid.indexOf(cell)%rows;
+
+            startPos.setX(newCellRow);
+            startPos.setY(newCellCol);
         }
+        else if(selectedCell == cellType::End)
+        {
+            Cell* oldEndCell = getCell(endPos.x(), endPos.y());
+            oldEndCell->setCellType(cellType::Path);
+
+            int newCellRow = cellGrid.indexOf(cell)/rows;
+            int newCellCol = cellGrid.indexOf(cell)%rows;
+
+            endPos.setX(newCellRow);
+            endPos.setY(newCellCol);
+        }
+        repaint();
     }
 }
 
@@ -101,7 +137,7 @@ void Map::mouseMoveEvent(QMouseEvent *event){
 void Map::increaseRows(){
     if(visibleRows+1 > rows) return;
     for(int j=0;j<visibleCols;j++){
-        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(visibleRows, j)->widget());
+        Cell* cell = getCell(visibleRows, j);
         cell->setVisible(true);
     }
     visibleRows++;
@@ -112,7 +148,7 @@ void Map::increaseRows(){
 void Map::increaseCols(){
     if(visibleCols+1 > columns) return;
     for(int i=0;i<visibleRows;i++){
-        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, visibleCols)->widget());
+        Cell* cell = getCell(i, visibleCols);
         cell->setVisible(true);
     }
     visibleCols++;
@@ -123,7 +159,7 @@ void Map::increaseCols(){
 void Map::decreaseRows(){
     if(visibleRows-1 < 2) return;
     for(int j=0;j<visibleCols;j++){
-        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(visibleRows-1, j)->widget());
+        Cell* cell = getCell(visibleRows-1, j);
         cell->setVisible(false);
     }
     visibleRows--;
@@ -134,7 +170,7 @@ void Map::decreaseRows(){
 void Map::decreaseCols(){
     if(visibleCols-1 < 2) return;
     for(int i=0;i<visibleRows;i++){
-        Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, visibleCols-1)->widget());
+        Cell* cell = getCell(i, visibleCols-1);
         cell->setVisible(false);
     }
     visibleCols--;
@@ -152,17 +188,13 @@ void Map::paintEvent(QPaintEvent *event)
 }
 
 void Map::paintGrid(QPainter* painter){
-    // Draw Grid
     int cellSize = 30;
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
-            Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, j)->widget());
+            Cell* cell = getCell(i, j);
 
             if(cell->isVisible())
                 painter->drawPixmap(cell->pos(), cell->getCellImage());
-
-            // qDebug() << "global pos" << cell->pos();
-            // qDebug() << "local pos" << this->mapFromGlobal(cell->pos());
         }
     }
 }
