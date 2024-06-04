@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     // m_map(new Map(this)),
@@ -16,11 +17,38 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_ui->setupUi(this);
     m_ui->centralwidget->setLayout(new QVBoxLayout(this));
+
+    // ToolBar
+    QWidget* toolbarWidget = new QWidget();
+    QGridLayout* toolbarLayout = new QGridLayout(toolbarWidget);
+
+    // TODO: Verificar se é possível fazer de outra forma
+    toolbarLayout->addWidget(makeButton("Path", SLOT(changeCellTypePath()), QKeySequence(Qt::Key_P)), 0, 0);
+    toolbarLayout->addWidget(makeButton("Decision", SLOT(changeCellTypeDecision()), QKeySequence(Qt::Key_D)), 0, 1);
+    toolbarLayout->addWidget(makeButton("Start", SLOT(changeCellTypeStart()), QKeySequence(Qt::Key_S)), 1, 0);
+    toolbarLayout->addWidget(makeButton("End", SLOT(changeCellTypeEnd()), QKeySequence(Qt::Key_E)), 1, 1);
+    toolbarLayout->addWidget(makeButton("Wall", SLOT(changeCellTypeWall()), QKeySequence(Qt::Key_W)), 2, 0);
+    toolbarWidget->setLayout(toolbarLayout);
+    m_ui->toolBar->addWidget(toolbarWidget);
+
 }
 
 MainWindow::~MainWindow()
 {
 
+}
+
+QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence key)
+{
+    QPushButton* button = new QPushButton;
+    button->setIcon(QIcon("../../assets/" + name.toLower() + ".png"));
+    button->setToolTip(name);
+    button->setShortcut(key);
+    // TODO: Verificar tamanhos depois de trocar os ícones
+    button->setIconSize(QSize(64, 64));
+    button->setFixedSize(64, 64);
+    connect(button, SIGNAL(clicked()), m_ui->map, slot);
+    return button;
 }
 
 void MainWindow::on_actionSaveAs_triggered()

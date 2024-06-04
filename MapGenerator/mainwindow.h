@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPainter>
+#include <QPushButton>
 #include "map.h"
 
 QT_BEGIN_NAMESPACE
@@ -27,6 +28,7 @@ private slots:
     void on_actionOpen_triggered();
 
 private:
+    QPushButton* makeButton(QString name, const char* slot, QKeySequence key);
     Map *m_map;
     Ui::MainWindow *m_ui;
 };
