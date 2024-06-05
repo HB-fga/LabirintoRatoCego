@@ -27,8 +27,12 @@ public slots:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_actionSave_triggered();
+
 private:
+    QString mapName;
     QPushButton* makeButton(QString name, const char* slot, QKeySequence key);
+    void saveMap();
     Map *m_map;
     Ui::MainWindow *m_ui;
 };

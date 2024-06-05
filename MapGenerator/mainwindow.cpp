@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbarWidget->setLayout(toolbarLayout);
     m_ui->toolBar->addWidget(toolbarWidget);
 
+    this->mapName = "";
+
 }
 
 MainWindow::~MainWindow()
@@ -42,8 +44,8 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
 {
     QPushButton* button = new QPushButton;
     button->setIcon(QIcon("../../assets/" + name.toLower() + ".png"));
-    button->setToolTip(name);
     button->setShortcut(key);
+    button->setToolTip(name + " (" + button->shortcut().toString() + ")");
     // TODO: Verificar tamanhos depois de trocar os ícones
     button->setIconSize(QSize(64, 64));
     button->setFixedSize(64, 64);
@@ -51,33 +53,37 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
     return button;
 }
 
-void MainWindow::on_actionSaveAs_triggered()
-{
-    QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
-
-    QFile file(name);
+void MainWindow::saveMap(){
+    QFile file(this->mapName);
     // TODO: Tratamento de erro
     if(!file.open(QIODevice::WriteOnly)) {
         qDebug() << "File open error";
         return;
     }
 
-    //QJsonDocument map = ;
-
     file.write(QJsonDocument(m_ui->map->getJSON()).toJson());
     file.close();
 }
 
-
-
+void MainWindow::on_actionSaveAs_triggered()
+{
+    QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
+    if(name.isEmpty() or name.isNull()) return;
+    this->mapName = name;
+    this->saveMap();
+    this->setWindowTitle(this->mapName);
+}
 
 void MainWindow::on_actionOpen_triggered()
 {
 
     QFile file;
     QString name = QFileDialog::getOpenFileName(this, "Open File", "../../../assets/maps", "JSON Files (*.json)");
+    if(name.isEmpty() or name.isNull()) return;
+    this->mapName = name;
+    this->setWindowTitle(this->mapName);
 
-    file.setFileName(name);
+    file.setFileName(this->mapName);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QString text = file.readAll();
     file.close();
@@ -97,5 +103,12 @@ void MainWindow::on_actionOpen_triggered()
             m_ui->map->setCellAtGrid(row, col, cellType(map[row][col].toInt()));
 
     repaint();
+}
+
+
+void MainWindow::on_actionSave_triggered()
+{
+    if(this->mapName.size() > 0) this->saveMap();
+    else this->on_actionSaveAs_triggered();
 }
 
