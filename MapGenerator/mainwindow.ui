@@ -44,23 +44,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
    </widget>
-   <widget class="QMenu" name="menuMap">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="tearOffEnabled">
-     <bool>false</bool>
-    </property>
-    <property name="title">
-     <string>Map</string>
-    </property>
-    <addaction name="actionIncreaseRows"/>
-    <addaction name="actionDecreaseRows"/>
-    <addaction name="actionIncrease_Cols"/>
-    <addaction name="actionDecrease_Cols"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuMap"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">

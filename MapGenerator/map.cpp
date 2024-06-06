@@ -118,23 +118,6 @@ void Map::setGridCellType(Cell* cell)
     }
 }
 
-// void Map::keyPressEvent( QKeyEvent* event ) {
-//     std::cout << "KeyEvent Enter\n";
-//     switch ( event->key() ) {
-//     case Qt::Key_Right:
-//         std::cout << "KeyEvent Right\n";
-//         size++;
-//         break;
-//     case Qt::Key_Left:
-//         std::cout << "KeyEvent Left\n";
-//         size--;
-//         break;
-//     default:
-//         event->ignore();
-//         break;
-//     }
-// }
-
 void Map::increaseRows(){
     if(visibleRows+1 > rows) return;
     for(int j=0;j<visibleCols;j++){

@@ -35,6 +35,7 @@ void Cell::setCellType(cellType newType)
             break;
     }
 
+    this->img = this->img.scaled(QSize(30, 30),  Qt::KeepAspectRatio);
     this->type = newType;
 }
 

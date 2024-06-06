@@ -3,8 +3,8 @@
 
 #include <QColorDialog>
 #include <QLayout>
-#include <iostream>
 #include <QFileDialog>
+#include <QFrame>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_ui->setupUi(this);
     m_ui->centralwidget->setLayout(new QVBoxLayout(this));
+    this->setWindowTitle("Criador de Labirinto");
 
     // ToolBar
     QWidget* toolbarWidget = new QWidget();
@@ -28,11 +29,27 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbarLayout->addWidget(makeButton("Start", SLOT(changeCellTypeStart()), QKeySequence(Qt::Key_S)), 1, 0);
     toolbarLayout->addWidget(makeButton("End", SLOT(changeCellTypeEnd()), QKeySequence(Qt::Key_E)), 1, 1);
     toolbarLayout->addWidget(makeButton("Wall", SLOT(changeCellTypeWall()), QKeySequence(Qt::Key_W)), 2, 0);
+
+    // QSpacerItem *spacer;
+    // spacer = new QSpacerItem(0, 50);
+    // toolbarLayout->addItem(spacer, 3, 0);
+
+    toolbarLayout->addItem(new QSpacerItem(0, 50), 3, 0);
+
+    QFrame *line;
+    line = new QFrame();
+    line->setFrameShape(QFrame::HLine);
+    toolbarLayout->addWidget(line, 3, 0, 1, 2);
+
+    toolbarLayout->addWidget(makeButton("Expand-Vertical", SLOT(increaseRows()), QKeySequence(Qt::Key_Up)), 4, 0);
+    toolbarLayout->addWidget(makeButton("Collapse-Vertical", SLOT(decreaseRows()), QKeySequence(Qt::Key_Down)), 4, 1);
+    toolbarLayout->addWidget(makeButton("Expand-Horizontal", SLOT(increaseCols()), QKeySequence(Qt::Key_Right)), 5, 0);
+    toolbarLayout->addWidget(makeButton("Collapse-Horizontal", SLOT(decreaseCols()), QKeySequence(Qt::Key_Left)), 5, 1);
+
     toolbarWidget->setLayout(toolbarLayout);
     m_ui->toolBar->addWidget(toolbarWidget);
 
     this->mapName = "";
-
 }
 
 MainWindow::~MainWindow()
@@ -43,11 +60,16 @@ MainWindow::~MainWindow()
 QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence key)
 {
     QPushButton* button = new QPushButton;
-    button->setIcon(QIcon("../../assets/" + name.toLower() + ".png"));
+
+    QPalette pal = button->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::white));
+    button->setPalette(pal);
+
+    button->setIcon(QIcon("../../assets/buttons/" + name.toLower() + ".png"));
     button->setShortcut(key);
     button->setToolTip(name + " (" + button->shortcut().toString() + ")");
     // TODO: Verificar tamanhos depois de trocar os ícones
-    button->setIconSize(QSize(64, 64));
+    button->setIconSize(QSize(52, 52));
     button->setFixedSize(64, 64);
     connect(button, SIGNAL(clicked()), m_ui->map, slot);
     return button;
