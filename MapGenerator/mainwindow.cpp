@@ -86,15 +86,18 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
 }
 
 
-void MainWindow::helpWindow(){
+void MainWindow::helpWindow()
+{
     HelpWindow *helpWindow = new HelpWindow();
     helpWindow->showMaximized();
 }
 
-void MainWindow::saveMap(){
+void MainWindow::saveMap()
+{
     QFile file(this->mapName);
     // TODO: Tratamento de erro
-    if(!file.open(QIODevice::WriteOnly)) {
+    if(!file.open(QIODevice::WriteOnly))
+    {
         qDebug() << "File open error";
         return;
     }
@@ -103,7 +106,7 @@ void MainWindow::saveMap(){
     file.close();
 }
 
-void MainWindow::actionSaveAs()
+void MainWindow::on_actionSaveAs_triggered()
 {
     QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
     if(name.isEmpty() or name.isNull()) return;
@@ -112,7 +115,7 @@ void MainWindow::actionSaveAs()
     this->setWindowTitle(this->mapName);
 }
 
-void MainWindow::actionOpen()
+void MainWindow::on_actionOpen_triggered()
 {
 
     QFile file;
@@ -144,9 +147,9 @@ void MainWindow::actionOpen()
 }
 
 
-void MainWindow::actionSave()
+void MainWindow::on_actionSave_triggered()
 {
     if(this->mapName.size() > 0) this->saveMap();
-    else this->actionSaveAs();
+    else this->on_actionSaveAs_triggered();
 }
 
