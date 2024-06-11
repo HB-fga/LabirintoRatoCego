@@ -17,15 +17,17 @@ Map::Map(QWidget *parent) : QWidget(parent)
     this->visibleCols = 10;
     this->startPos = QPoint(0, 0);
     this->endPos = QPoint(9, 9);
-    this->selectedCellType = cellType::Wall;
+    changeCellTypeWall();
 
     for(int i=0; i<this->rows; i++)
     {
-        for(int j=0; j<this->columns; j++){
+        for(int j=0; j<this->columns; j++)
+        {
             Cell* cell = new Cell;
             if(i >= this->visibleRows || j >= this->visibleCols)
                 cell->setVisible(false);
-            cellGrid.addWidget(cell, i, j);
+
+            this->cellGrid.addWidget(cell, i, j);
         }
     }
 
@@ -43,42 +45,47 @@ Map::~Map()
 
 }
 
-void Map::changeCursor(QString asset){
+void Map::changeCursor(QString asset)
+{
     QPixmap p = QPixmap(asset);
     p = p.scaled(QSize(20, 20),  Qt::KeepAspectRatio);
     QCursor c = QCursor(p, 0, 0);
     setCursor(c);
 }
 
-void Map::changeCellTypeWall(){
+void Map::changeCellTypeWall()
+{
     this->selectedCellType = cellType::Wall;
     // this->changeCursor("../../assets/wall.png");
 }
 
-void Map::changeCellTypeStart(){
+void Map::changeCellTypeStart()
+{
     this->selectedCellType = cellType::Start;
     // this->changeCursor("../../assets/start.png");
 }
 
-void Map::changeCellTypeEnd(){
+void Map::changeCellTypeEnd()
+{
     this->selectedCellType = cellType::End;
     // this->changeCursor("../../assets/end.png");
-
 }
 
-void Map::changeCellTypeDecision(){
+void Map::changeCellTypeDecision()
+{
     this->selectedCellType = cellType::Decision;
     // this->changeCursor("../../assets/decision.png");
 }
 
-void Map::changeCellTypePath(){
+void Map::changeCellTypePath()
+{
     this->selectedCellType = cellType::Path;
     // this->changeCursor("../../assets/path.png");
 }
 
 Cell* Map::getCell(int x, int y)
 {
-    return qobject_cast<Cell*>(cellGrid.itemAtPosition(x, y)->widget());
+    return qobject_cast<Cell*>(this->cellGrid.itemAtPosition(x, y)->widget());
 }
 
 Cell* Map::getCell(QMouseEvent *event)
@@ -95,8 +102,10 @@ void Map::mousePressEvent(QMouseEvent *event)
     else if(event->buttons() & Qt::RightButton) this->selectedCellType = cell->getCellType(); // Pick Cell
 }
 
-void Map::mouseMoveEvent(QMouseEvent *event){
-    if(event->buttons() & Qt::LeftButton){
+void Map::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons() & Qt::LeftButton)
+    {
         Cell* cell = getCell(event);
         setGridCellType(cell);
     }
@@ -104,28 +113,31 @@ void Map::mouseMoveEvent(QMouseEvent *event){
 
 void Map::setGridCellType(Cell* cell)
 {
-    if (cell != NULL) {
+    if (cell != NULL)
+    {
         if(cell->getCellType() == this->selectedCellType) return;
 
         cell->setCellType(this->selectedCellType);
+
+        // Garante que existam apenas uma de cada celula do tipo Start e End
         if(this->selectedCellType == cellType::Start)
         {
-            Cell* oldStartCell = getCell(startPos.x(), startPos.y());
+            Cell* oldStartCell = getCell(this->startPos.x(), this->startPos.y());
             if(oldStartCell->getCellType()==cellType::Start) oldStartCell->setCellType(cellType::Path);
 
-            int newCellRow = cellGrid.indexOf(cell)/rows;
-            int newCellCol = cellGrid.indexOf(cell)%rows;
+            int newCellRow = this->cellGrid.indexOf(cell)/this->rows;
+            int newCellCol = this->cellGrid.indexOf(cell)%this->rows;
 
             this->startPos.setX(newCellRow);
             this->startPos.setY(newCellCol);
         }
         else if(selectedCellType == cellType::End)
         {
-            Cell* oldEndCell = getCell(endPos.x(), endPos.y());
+            Cell* oldEndCell = getCell(this->endPos.x(), this->endPos.y());
             if(oldEndCell->getCellType()==cellType::End) oldEndCell->setCellType(cellType::Path);
 
-            int newCellRow = cellGrid.indexOf(cell)/rows;
-            int newCellCol = cellGrid.indexOf(cell)%rows;
+            int newCellRow = this->cellGrid.indexOf(cell)/this->rows;
+            int newCellCol = this->cellGrid.indexOf(cell)%this->rows;
 
             this->endPos.setX(newCellRow);
             this->endPos.setY(newCellCol);
@@ -134,9 +146,11 @@ void Map::setGridCellType(Cell* cell)
     }
 }
 
-void Map::increaseRows(){
+void Map::increaseRows()
+{
     if(this->visibleRows+1 > this->rows) return;
-    for(int j=0; j<this->visibleCols; j++){
+    for(int j=0; j<this->visibleCols; j++)
+    {
         Cell* cell = getCell(this->visibleRows, j);
         cell->setVisible(true);
     }
@@ -145,9 +159,11 @@ void Map::increaseRows(){
     repaint();
 }
 
-void Map::increaseCols(){
+void Map::increaseCols()
+{
     if(this->visibleCols+1 > this->columns) return;
-    for(int i=0; i<this->visibleRows; i++){
+    for(int i=0; i<this->visibleRows; i++)
+    {
         Cell* cell = getCell(i, this->visibleCols);
         cell->setVisible(true);
     }
@@ -156,9 +172,11 @@ void Map::increaseCols(){
     repaint();
 }
 
-void Map::decreaseRows(){
+void Map::decreaseRows()
+{
     if(this->visibleRows-1 < 2) return;
-    for(int j=0; j<this->visibleCols; j++){
+    for(int j=0; j<this->visibleCols; j++)
+    {
         Cell* cell = getCell(this->visibleRows-1, j);
         cell->setVisible(false);
     }
@@ -167,9 +185,11 @@ void Map::decreaseRows(){
     repaint();
 }
 
-void Map::decreaseCols(){
+void Map::decreaseCols()
+{
     if(visibleCols-1 < 2) return;
-    for(int i=0; i<this->visibleRows; i++){
+    for(int i=0; i<this->visibleRows; i++)
+    {
         Cell* cell = getCell(i, this->visibleCols-1);
         cell->setVisible(false);
     }
@@ -187,30 +207,36 @@ void Map::paintEvent(QPaintEvent *event)
 
 }
 
-void Map::paintGrid(QPainter* painter){
-    for(int i=0; i<this->rows; i++){
-        for(int j=0; j<this->columns; j++){
+void Map::paintGrid(QPainter* painter)
+{
+    for(int i=0; i<this->visibleRows; i++)
+    {
+        for(int j=0; j<this->visibleCols; j++)
+        {
             Cell* cell = getCell(i, j);
-            if(cell->isVisible())
-                painter->drawPixmap(cell->pos(), cell->getCellImage());
+            painter->drawPixmap(cell->pos(), cell->getCellImage());
         }
     }
 }
 
-void Map::setVisibleCols(int w){
+void Map::setVisibleCols(int w)
+{
     while(w > this->visibleCols)increaseCols();
     while(w < this->visibleCols) decreaseCols();
 }
 
-void Map::setVisibleRows(int h){
+void Map::setVisibleRows(int h)
+{
     while(h > this->visibleRows) increaseRows();
     while(h < this->visibleRows) decreaseRows();
 }
 
-void Map::setCellAtGrid(int i, int j, cellType type){
-    Cell* cell = qobject_cast<Cell*>(cellGrid.itemAtPosition(i, j)->widget());
+void Map::setCellAtGrid(int i, int j, cellType type)
+{
+    Cell* cell = qobject_cast<Cell*>(this->cellGrid.itemAtPosition(i, j)->widget());
 
-    if(type == cellType::Start){
+    if(type == cellType::Start)
+    {
         this->startPos.setX(i);
         this->startPos.setY(j);
     }
@@ -222,10 +248,12 @@ void Map::setCellAtGrid(int i, int j, cellType type){
     cell->setCellType(type);
 }
 
-QString Map::findMoves(int row, int col){
+QString Map::findMoves(int row, int col)
+{
     QString moves = "";
 
-    for (int i = row - 1; i >= 0; --i) {
+    for (int i = row - 1; i >= 0; --i)
+    {
         Cell* cell = getCell(i, col);
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
@@ -235,7 +263,8 @@ QString Map::findMoves(int row, int col){
         }
     }
 
-    for (int i = row + 1; i < this->visibleRows; ++i) {
+    for (int i = row + 1; i < this->visibleRows; ++i)
+    {
         Cell* cell = getCell(i, col);
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
@@ -245,7 +274,8 @@ QString Map::findMoves(int row, int col){
         }
     }
 
-    for (int j = col + 1; j < this->visibleCols; ++j) {
+    for (int j = col + 1; j < this->visibleCols; ++j)
+    {
         Cell* cell = getCell(row, j);
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
@@ -255,7 +285,8 @@ QString Map::findMoves(int row, int col){
         }
     }
 
-    for (int j = col - 1; j >= 0; --j) {
+    for (int j = col - 1; j >= 0; --j)
+    {
         Cell* cell = getCell(row, j);
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
@@ -268,7 +299,13 @@ QString Map::findMoves(int row, int col){
     return moves;
 }
 
-QJsonObject Map::getJSON(){
+QJsonObject Map::getJSON()
+{
+    // QErrorMessage().showMessage("Testando Erro");
+
+    // if(this->startPos.x() > this->visibleCols || this->startPos.y() > this->visibleRows)
+    //     qErrnoWarning("asda");
+
     QJsonObject json;
 
     json.insert("cellSize", 60);
@@ -283,12 +320,15 @@ QJsonObject Map::getJSON(){
     QJsonArray map;
     QJsonArray decisions;
     int dCount = 0;
-    for(int i=0;i<visibleRows;i++){
+    for(int i=0; i < this->visibleRows; i++)
+    {
         QJsonArray line;
-        for(int j=0;j<visibleCols;j++){
+        for(int j=0; j < this->visibleCols; j++)
+        {
             Cell* cell = getCell(i, j);
             line.push_back(static_cast<int>(cell->getCellType()));
-            if(cell->getCellType() == cellType::Decision or cell->getCellType() == cellType::Start){
+            if(cell->getCellType() == cellType::Decision or cell->getCellType() == cellType::Start)
+            {
                 QJsonObject decision;
                 decision.insert("row", i);
                 decision.insert("col", j);

@@ -5,7 +5,8 @@
 #include <QObject>
 #include <QPixmap>
 
-enum class cellType{
+enum class cellType
+{
     Wall,
     Path,
     Decision,
@@ -28,6 +29,5 @@ private:
 
 signals:
 };
-
 
 #endif // CELL_H

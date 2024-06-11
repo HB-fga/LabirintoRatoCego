@@ -86,15 +86,18 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
 }
 
 
-void MainWindow::helpWindow(){
+void MainWindow::helpWindow()
+{
     HelpWindow *helpWindow = new HelpWindow();
     helpWindow->showMaximized();
 }
 
-void MainWindow::saveMap(){
+void MainWindow::saveMap()
+{
     QFile file(this->mapName);
     // TODO: Tratamento de erro
-    if(!file.open(QIODevice::WriteOnly)) {
+    if(!file.open(QIODevice::WriteOnly))
+    {
         qDebug() << "File open error";
         return;
     }
@@ -149,4 +152,3 @@ void MainWindow::actionSave()
     if(this->mapName.size() > 0) this->saveMap();
     else this->actionSaveAs();
 }
-
