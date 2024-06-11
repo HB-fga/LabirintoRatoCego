@@ -42,7 +42,6 @@ protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
-    // void keyPressEvent(QKeyEvent *) override;
     void paintGrid(QPainter* painter);
 
 
@@ -51,7 +50,7 @@ private:
     QString findMoves(int row, int col);
     void changeCursor(QString asset);
     QGridLayout cellGrid;
-    cellType selectedCell;
+    cellType selectedCellType;
     QPoint startPos;
     QPoint endPos;
     int rows;

@@ -17,7 +17,7 @@ Map::Map(QWidget *parent) : QWidget(parent)
     this->visibleCols = 10;
     this->startPos = QPoint(0, 0);
     this->endPos = QPoint(9, 9);
-    this->selectedCell = cellType::Wall;
+    this->selectedCellType = cellType::Wall;
 
     for(int i=0; i<this->rows; i++)
     {
@@ -51,28 +51,28 @@ void Map::changeCursor(QString asset){
 }
 
 void Map::changeCellTypeWall(){
-    this->selectedCell = cellType::Wall;
+    this->selectedCellType = cellType::Wall;
     // this->changeCursor("../../assets/wall.png");
 }
 
 void Map::changeCellTypeStart(){
-    this->selectedCell = cellType::Start;
+    this->selectedCellType = cellType::Start;
     // this->changeCursor("../../assets/start.png");
 }
 
 void Map::changeCellTypeEnd(){
-    this->selectedCell = cellType::End;
+    this->selectedCellType = cellType::End;
     // this->changeCursor("../../assets/end.png");
 
 }
 
 void Map::changeCellTypeDecision(){
-    this->selectedCell = cellType::Decision;
+    this->selectedCellType = cellType::Decision;
     // this->changeCursor("../../assets/decision.png");
 }
 
 void Map::changeCellTypePath(){
-    this->selectedCell = cellType::Path;
+    this->selectedCellType = cellType::Path;
     // this->changeCursor("../../assets/path.png");
 }
 
@@ -92,7 +92,7 @@ void Map::mousePressEvent(QMouseEvent *event)
 {
     Cell* cell = getCell(event);
     if(event->buttons() & Qt::LeftButton) setGridCellType(cell); // Paint
-    else if(event->buttons() & Qt::RightButton) this->selectedCell = cell->getCellType(); // Pick Cell
+    else if(event->buttons() & Qt::RightButton) this->selectedCellType = cell->getCellType(); // Pick Cell
 }
 
 void Map::mouseMoveEvent(QMouseEvent *event){
@@ -105,11 +105,13 @@ void Map::mouseMoveEvent(QMouseEvent *event){
 void Map::setGridCellType(Cell* cell)
 {
     if (cell != NULL) {
-        cell->setCellType(selectedCell);
-        if(selectedCell == cellType::Start)
+        if(cell->getCellType() == this->selectedCellType) return;
+
+        cell->setCellType(this->selectedCellType);
+        if(this->selectedCellType == cellType::Start)
         {
             Cell* oldStartCell = getCell(startPos.x(), startPos.y());
-            oldStartCell->setCellType(cellType::Path);
+            if(oldStartCell->getCellType()==cellType::Start) oldStartCell->setCellType(cellType::Path);
 
             int newCellRow = cellGrid.indexOf(cell)/rows;
             int newCellCol = cellGrid.indexOf(cell)%rows;
@@ -117,10 +119,10 @@ void Map::setGridCellType(Cell* cell)
             this->startPos.setX(newCellRow);
             this->startPos.setY(newCellCol);
         }
-        else if(selectedCell == cellType::End)
+        else if(selectedCellType == cellType::End)
         {
             Cell* oldEndCell = getCell(endPos.x(), endPos.y());
-            oldEndCell->setCellType(cellType::Path);
+            if(oldEndCell->getCellType()==cellType::End) oldEndCell->setCellType(cellType::Path);
 
             int newCellRow = cellGrid.indexOf(cell)/rows;
             int newCellCol = cellGrid.indexOf(cell)%rows;
