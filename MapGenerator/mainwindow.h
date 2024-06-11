@@ -23,10 +23,10 @@ public:
     ~MainWindow();
 
 private slots:
-    void actionSaveAs();
-    void actionOpen();
+    void on_actionSaveAs_triggered();
+    void on_actionOpen_triggered();
     void helpWindow();
-    void actionSave();
+    void on_actionSave_triggered();
 
 private:
     QString mapName;

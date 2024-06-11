@@ -159,7 +159,7 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>182</x>
+     <x>346</x>
      <y>304</y>
     </hint>
    </hints>
@@ -175,7 +175,7 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>182</x>
+     <x>346</x>
      <y>304</y>
     </hint>
    </hints>
@@ -191,8 +191,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>177</x>
-     <y>299</y>
+     <x>346</x>
+     <y>304</y>
     </hint>
    </hints>
   </connection>
@@ -207,10 +207,13 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>177</x>
-     <y>299</y>
+     <x>346</x>
+     <y>304</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>actionSave()</slot>
+ </slots>
 </ui>
