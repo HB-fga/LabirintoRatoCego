@@ -4,8 +4,8 @@
 #include <QLabel>
 #include <QTextBrowser>
 
-HelpWindow::HelpWindow(QWidget *parent)
-    : QWidget{parent}
+HelpWindow::HelpWindow(QDialog *parent)
+    : QDialog{parent}
 {
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowTitle("Help");

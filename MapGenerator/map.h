@@ -21,6 +21,10 @@ public:
     Cell* getCell(QMouseEvent *event);
     void setVisibleCols(int w);
     void setVisibleRows(int h);
+    int getVisibleCols();
+    int getVisibleRows();
+    QPoint getStartPos();
+    QPoint getEndPos();
     void setCellAtGrid(int i, int j, cellType type);
     QJsonObject getJSON();
 
@@ -35,7 +39,6 @@ public slots:
     void changeCellTypeDecision();
     void changeCellTypePath();
 
-
 signals:
 
 protected:
@@ -43,7 +46,6 @@ protected:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void paintGrid(QPainter* painter);
-
 
 private:
     void setGridCellType(Cell* cell);

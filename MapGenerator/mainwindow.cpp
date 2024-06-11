@@ -10,7 +10,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QLabel>
-
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->toolBar->addWidget(toolbarWidget);
 
     // Menu Help
-    QAction *helpAction = new QAction("Help");
+    QAction *helpAction = new QAction("&Help");
     helpAction->setShortcut(QKeySequence(Qt::Key_H));
     // helpAction->setToolTip("Help (H)");
     connect(helpAction, SIGNAL(triggered()), this, SLOT(helpWindow()));
@@ -89,7 +89,7 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
 void MainWindow::helpWindow()
 {
     HelpWindow *helpWindow = new HelpWindow();
-    helpWindow->showMaximized();
+    helpWindow->exec();
 }
 
 void MainWindow::saveMap()
@@ -108,6 +108,7 @@ void MainWindow::saveMap()
 
 void MainWindow::on_actionSaveAs_triggered()
 {
+    if(!this->checkSave()) return;
     QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
     if(name.isEmpty() or name.isNull()) return;
     this->mapName = name;
@@ -117,7 +118,6 @@ void MainWindow::on_actionSaveAs_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
-
     QFile file;
     QString name = QFileDialog::getOpenFileName(this, "Open File", "../../../assets/maps", "JSON Files (*.json)");
     if(name.isEmpty() or name.isNull()) return;
@@ -146,9 +146,53 @@ void MainWindow::on_actionOpen_triggered()
     repaint();
 }
 
-
 void MainWindow::on_actionSave_triggered()
 {
-    if(this->mapName.size() > 0) this->saveMap();
-    else this->on_actionSaveAs_triggered();
+
+    if(this->mapName.size() > 0)
+    {
+        if(!this->checkSave()) return;
+        this->saveMap();
+    }
+    else
+    {
+        this->on_actionSaveAs_triggered();
+    }
+}
+bool MainWindow::checkSave()
+{
+    bool canSave = true;
+    QPoint start = m_ui->map->getStartPos();
+    QPoint end = m_ui->map->getEndPos();
+    int visibleCols = m_ui->map->getVisibleCols();
+    int visibleRows = m_ui->map->getVisibleRows();
+
+    QMessageBox messageBox;
+    messageBox.setFixedSize(500,200);
+
+    if(m_ui->map->getCell(start.x(), start.y())->getCellType() != cellType::Start)
+    {
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada");
+        canSave = false;
+    }
+
+    if(start.x() >= visibleCols || start.y() >= visibleRows)
+    {
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada");
+        canSave = false;
+    }
+
+    if(m_ui->map->getCell(end.x(), end.y())->getCellType() != cellType::End)
+    {
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída");
+        canSave = false;
+    }
+
+    if(end.x() >= visibleCols || end.y() >= visibleRows)
+    {
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída");
+        canSave = false;
+    }
+
+    return canSave;
 }

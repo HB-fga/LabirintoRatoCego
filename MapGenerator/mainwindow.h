@@ -31,6 +31,7 @@ private slots:
 private:
     QString mapName;
     QPushButton* makeButton(QString name, const char* slot, QKeySequence key);
+    bool checkSave();
     void saveMap();
     Map *m_map;
     Ui::MainWindow *m_ui;

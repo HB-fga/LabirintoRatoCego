@@ -8,6 +8,7 @@
 #include <QPainterPath>
 #include <QCursor>
 #include <QJsonArray>
+#include <QMessageBox>
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
@@ -221,7 +222,7 @@ void Map::paintGrid(QPainter* painter)
 
 void Map::setVisibleCols(int w)
 {
-    while(w > this->visibleCols)increaseCols();
+    while(w > this->visibleCols) increaseCols();
     while(w < this->visibleCols) decreaseCols();
 }
 
@@ -229,6 +230,26 @@ void Map::setVisibleRows(int h)
 {
     while(h > this->visibleRows) increaseRows();
     while(h < this->visibleRows) decreaseRows();
+}
+
+int Map::getVisibleCols()
+{
+    return this->visibleCols;
+}
+
+int Map::getVisibleRows()
+{
+    return this->visibleRows;
+}
+
+QPoint Map::getStartPos()
+{
+    return this->startPos;
+}
+
+QPoint Map::getEndPos()
+{
+    return this->endPos;
 }
 
 void Map::setCellAtGrid(int i, int j, cellType type)
@@ -301,11 +322,6 @@ QString Map::findMoves(int row, int col)
 
 QJsonObject Map::getJSON()
 {
-    // QErrorMessage().showMessage("Testando Erro");
-
-    // if(this->startPos.x() > this->visibleCols || this->startPos.y() > this->visibleRows)
-    //     qErrnoWarning("asda");
-
     QJsonObject json;
 
     json.insert("cellSize", 60);
