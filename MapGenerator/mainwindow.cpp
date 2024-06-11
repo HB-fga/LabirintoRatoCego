@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "helpwindow.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -8,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QLabel>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -49,6 +51,14 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbarWidget->setLayout(toolbarLayout);
     m_ui->toolBar->addWidget(toolbarWidget);
 
+    // Menu Help
+    QAction *helpAction = new QAction("Help");
+    helpAction->setShortcut(QKeySequence(Qt::Key_H));
+    // helpAction->setToolTip("Help (H)");
+    connect(helpAction, SIGNAL(triggered()), this, SLOT(helpWindow()));
+
+    m_ui->menubar->addAction(helpAction);
+
     this->mapName = "";
 }
 
@@ -68,11 +78,17 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
     button->setIcon(QIcon("../../assets/buttons/" + name.toLower() + ".png"));
     button->setShortcut(key);
     button->setToolTip(name + " (" + button->shortcut().toString() + ")");
-    // TODO: Verificar tamanhos depois de trocar os ícones
+
     button->setIconSize(QSize(52, 52));
     button->setFixedSize(64, 64);
     connect(button, SIGNAL(clicked()), m_ui->map, slot);
     return button;
+}
+
+
+void MainWindow::helpWindow(){
+    HelpWindow *helpWindow = new HelpWindow();
+    helpWindow->showMaximized();
 }
 
 void MainWindow::saveMap(){
@@ -87,7 +103,7 @@ void MainWindow::saveMap(){
     file.close();
 }
 
-void MainWindow::on_actionSaveAs_triggered()
+void MainWindow::actionSaveAs()
 {
     QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
     if(name.isEmpty() or name.isNull()) return;
@@ -96,7 +112,7 @@ void MainWindow::on_actionSaveAs_triggered()
     this->setWindowTitle(this->mapName);
 }
 
-void MainWindow::on_actionOpen_triggered()
+void MainWindow::actionOpen()
 {
 
     QFile file;
@@ -128,9 +144,9 @@ void MainWindow::on_actionOpen_triggered()
 }
 
 
-void MainWindow::on_actionSave_triggered()
+void MainWindow::actionSave()
 {
     if(this->mapName.size() > 0) this->saveMap();
-    else this->on_actionSaveAs_triggered();
+    else this->actionSaveAs();
 }
 

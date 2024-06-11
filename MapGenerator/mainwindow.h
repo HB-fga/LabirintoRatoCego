@@ -20,14 +20,11 @@ public:
 
     ~MainWindow();
 
-public slots:
-    void on_actionSaveAs_triggered();
-    //void keyPressEvent(QKeyEvent *) override;
-
 private slots:
-    void on_actionOpen_triggered();
-
-    void on_actionSave_triggered();
+    void actionSaveAs();
+    void actionOpen();
+    void helpWindow();
+    void actionSave();
 
 private:
     QString mapName;
