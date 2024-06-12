@@ -118,8 +118,6 @@ void Map::setGridCellType(Cell* cell)
     {
         if(cell->getCellType() == this->selectedCellType) return;
 
-        cell->setCellType(this->selectedCellType);
-
         // Garante que existam apenas uma de cada celula do tipo Start e End
         if(this->selectedCellType == cellType::Start)
         {
@@ -143,6 +141,7 @@ void Map::setGridCellType(Cell* cell)
             this->endPos.setX(newCellRow);
             this->endPos.setY(newCellCol);
         }
+        cell->setCellType(this->selectedCellType);
         repaint();
     }
 }
