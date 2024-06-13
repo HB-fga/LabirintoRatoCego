@@ -25,6 +25,8 @@ public:
     int getVisibleRows();
     QPoint getStartPos();
     QPoint getEndPos();
+    void setStartPos(int x, int y);
+    void setEndPos(int x, int y);
     void setCellAtGrid(int i, int j, cellType type);
     QJsonObject getJSON();
 

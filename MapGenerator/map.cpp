@@ -32,9 +32,9 @@ Map::Map(QWidget *parent) : QWidget(parent)
         }
     }
 
-    Cell* startCell = getCell(this->startPos.x(), this->startPos.y());
+    Cell* startCell = getCell(this->startPos.y(), this->startPos.x());
     startCell->setCellType(cellType::Start);
-    Cell* endCell = getCell(this->endPos.x(), this->endPos.y());
+    Cell* endCell = getCell(this->endPos.y(), this->endPos.x());
     endCell->setCellType(cellType::End);
 
     this->cellGrid.setSpacing(0);
@@ -84,9 +84,9 @@ void Map::changeCellTypePath()
     // this->changeCursor("../../assets/path.png");
 }
 
-Cell* Map::getCell(int x, int y)
+Cell* Map::getCell(int row, int col)
 {
-    return qobject_cast<Cell*>(this->cellGrid.itemAtPosition(x, y)->widget());
+    return qobject_cast<Cell*>(this->cellGrid.itemAtPosition(row, col)->widget());
 }
 
 Cell* Map::getCell(QMouseEvent *event)
@@ -121,25 +121,25 @@ void Map::setGridCellType(Cell* cell)
         // Garante que existam apenas uma de cada celula do tipo Start e End
         if(this->selectedCellType == cellType::Start)
         {
-            Cell* oldStartCell = getCell(this->startPos.x(), this->startPos.y());
+            Cell* oldStartCell = getCell(this->startPos.y(), this->startPos.x());
             if(oldStartCell->getCellType()==cellType::Start) oldStartCell->setCellType(cellType::Path);
 
             int newCellRow = this->cellGrid.indexOf(cell)/this->rows;
             int newCellCol = this->cellGrid.indexOf(cell)%this->rows;
 
-            this->startPos.setX(newCellRow);
-            this->startPos.setY(newCellCol);
+            this->startPos.setX(newCellCol);
+            this->startPos.setY(newCellRow);
         }
         else if(selectedCellType == cellType::End)
         {
-            Cell* oldEndCell = getCell(this->endPos.x(), this->endPos.y());
+            Cell* oldEndCell = getCell(this->endPos.y(), this->endPos.x());
             if(oldEndCell->getCellType()==cellType::End) oldEndCell->setCellType(cellType::Path);
 
             int newCellRow = this->cellGrid.indexOf(cell)/this->rows;
             int newCellCol = this->cellGrid.indexOf(cell)%this->rows;
 
-            this->endPos.setX(newCellRow);
-            this->endPos.setY(newCellCol);
+            this->endPos.setX(newCellCol);
+            this->endPos.setY(newCellRow);
         }
         cell->setCellType(this->selectedCellType);
         repaint();
@@ -249,6 +249,16 @@ QPoint Map::getStartPos()
 QPoint Map::getEndPos()
 {
     return this->endPos;
+}
+
+void Map::setStartPos(int x, int y)
+{
+    this->startPos = QPoint(x, y);
+}
+
+void Map::setEndPos(int x, int y)
+{
+    this->endPos = QPoint(x, y);
 }
 
 void Map::setCellAtGrid(int i, int j, cellType type)

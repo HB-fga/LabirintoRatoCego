@@ -140,8 +140,18 @@ void MainWindow::on_actionOpen_triggered()
     m_ui->map->setVisibleRows(h); // Maze Height
 
     for (int row = 0; row < h; ++row)
+    {
         for (int col = 0; col < w; ++col)
+        {
             m_ui->map->setCellAtGrid(row, col, cellType(map[row][col].toInt()));
+
+            if( cellType( map[row][col].toInt() ) == cellType::Start )
+                m_ui->map->setStartPos(col, row);
+
+            if( cellType( map[row][col].toInt() ) == cellType::End )
+                m_ui->map->setEndPos(col, row);
+        }
+    }
 
     repaint();
 }
@@ -170,27 +180,31 @@ bool MainWindow::checkSave()
     QMessageBox messageBox;
     messageBox.setFixedSize(500,200);
 
-    if(m_ui->map->getCell(start.x(), start.y())->getCellType() != cellType::Start)
+    qDebug() << "##### CHECK SAVE DEBUG #####";
+    qDebug() << "START CELL TYPE: " << (int)m_ui->map->getCell(start.y(), start.x())->getCellType();
+    qDebug() << "START POS: " << start.x() << start.y();
+    qDebug() << "END CELL TYPE: " << (int)m_ui->map->getCell(end.y(), end.x())->getCellType();
+    qDebug() << "END POS: " << end.x() << end.y();
+    qDebug() << "COLS + ROWS: " << visibleCols << visibleRows;
+
+    if(m_ui->map->getCell(start.y(), start.x())->getCellType() != cellType::Start)
     {
-        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada");
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada (1)");
         canSave = false;
     }
-
-    if(start.x() >= visibleCols || start.y() >= visibleRows)
+    else if(start.x() >= visibleCols || start.y() >= visibleRows)
     {
-        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada");
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de entrada (2)");
         canSave = false;
     }
-
-    if(m_ui->map->getCell(end.x(), end.y())->getCellType() != cellType::End)
+    else if(m_ui->map->getCell(end.y(), end.x())->getCellType() != cellType::End)
     {
-        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída");
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída (3)");
         canSave = false;
     }
-
-    if(end.x() >= visibleCols || end.y() >= visibleRows)
+    else if(end.x() >= visibleCols || end.y() >= visibleRows)
     {
-        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída");
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui célula de saída (4)");
         canSave = false;
     }
 
