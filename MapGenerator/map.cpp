@@ -278,6 +278,16 @@ void Map::setCellAtGrid(int i, int j, cellType type)
     cell->setCellType(type);
 }
 
+void Map::clearGrid(){
+    for(int i=0; i<this->rows; i++)
+    {
+        for(int j=0; j<this->columns; j++)
+        {
+            setCellAtGrid(i, j, cellType::Path);
+        }
+    }
+}
+
 QString Map::findMoves(int row, int col)
 {
     QString moves = "";

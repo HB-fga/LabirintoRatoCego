@@ -19,6 +19,7 @@ public:
 
     Cell* getCell(int x, int y);
     Cell* getCell(QMouseEvent *event);
+    void clearGrid();
     void setVisibleCols(int w);
     void setVisibleRows(int h);
     int getVisibleCols();

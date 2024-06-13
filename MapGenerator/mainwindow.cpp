@@ -14,27 +14,20 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    // m_map(new Map(this)),
     m_ui(new Ui::MainWindow)
 {
     m_ui->setupUi(this);
-    m_ui->centralwidget->setLayout(new QVBoxLayout(this));
     this->setWindowTitle("Criador de Labirinto");
 
     // ToolBar
     QWidget* toolbarWidget = new QWidget();
     QGridLayout* toolbarLayout = new QGridLayout(toolbarWidget);
 
-    // TODO: Verificar se é possível fazer de outra forma
     toolbarLayout->addWidget(makeButton("Path", SLOT(changeCellTypePath()), QKeySequence(Qt::Key_P)), 0, 0);
     toolbarLayout->addWidget(makeButton("Decision", SLOT(changeCellTypeDecision()), QKeySequence(Qt::Key_D)), 0, 1);
     toolbarLayout->addWidget(makeButton("Start", SLOT(changeCellTypeStart()), QKeySequence(Qt::Key_S)), 1, 0);
     toolbarLayout->addWidget(makeButton("End", SLOT(changeCellTypeEnd()), QKeySequence(Qt::Key_E)), 1, 1);
     toolbarLayout->addWidget(makeButton("Wall", SLOT(changeCellTypeWall()), QKeySequence(Qt::Key_W)), 2, 0);
-
-    // QSpacerItem *spacer;
-    // spacer = new QSpacerItem(0, 50);
-    // toolbarLayout->addItem(spacer, 3, 0);
 
     toolbarLayout->addItem(new QSpacerItem(0, 50), 3, 0);
 
@@ -54,7 +47,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Menu Help
     QAction *helpAction = new QAction("&Help");
     helpAction->setShortcut(QKeySequence(Qt::Key_H));
-    // helpAction->setToolTip("Help (H)");
     connect(helpAction, SIGNAL(triggered()), this, SLOT(helpWindow()));
 
     m_ui->menubar->addAction(helpAction);
@@ -134,14 +126,17 @@ void MainWindow::on_actionOpen_triggered()
 
     int w = obj.value(QString("width")).toInt();
     int h = obj.value(QString("height")).toInt();
+
     QJsonArray map = obj.value(QString("map")).toArray();
 
     m_ui->map->setVisibleCols(w); // Maze Width
     m_ui->map->setVisibleRows(h); // Maze Height
 
-    for (int row = 0; row < h; ++row)
+    m_ui->map->clearGrid();
+
+    for(int row = 0; row < h; row++)
     {
-        for (int col = 0; col < w; ++col)
+        for (int col = 0; col < w; col++)
         {
             m_ui->map->setCellAtGrid(row, col, cellType(map[row][col].toInt()));
 
