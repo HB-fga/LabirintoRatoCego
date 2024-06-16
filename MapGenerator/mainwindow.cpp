@@ -11,6 +11,7 @@
 #include <QJsonArray>
 #include <QLabel>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -93,15 +94,33 @@ void MainWindow::saveMap()
         qDebug() << "File open error";
         return;
     }
+    QByteArray json = QJsonDocument(m_ui->map->getJSON()).toJson();
 
-    file.write(QJsonDocument(m_ui->map->getJSON()).toJson());
+    QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
+    hash.addData(json);
+    QByteArray hashResult = hash.result().toHex();
+
+    file.write(QString::number(hashResult.size()).toUtf8());
+    file.write("\n");
+
+    file.write(hashResult);
+    file.write("\n");
+
+    file.write(json);
+
     file.close();
 }
 
 void MainWindow::on_actionSaveAs_triggered()
 {
     if(!this->checkSave()) return;
-    QString name = QFileDialog::getSaveFileName(this, "Save File as", "../../../assets/maps", "JSON Files (*.json)");
+    QFileDialog saveDialog = QFileDialog (this, "Save File as", "../../../assets/maps", "RCMAP Files (*.rcmap)");
+    saveDialog.setDefaultSuffix(".rcmap");
+    saveDialog.setAcceptMode(QFileDialog::AcceptSave);
+    saveDialog.exec();
+
+    QString name = saveDialog.selectedFiles().front();
+
     if(name.isEmpty() or name.isNull()) return;
     this->mapName = name;
     this->saveMap();
@@ -111,15 +130,39 @@ void MainWindow::on_actionSaveAs_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     QFile file;
-    QString name = QFileDialog::getOpenFileName(this, "Open File", "../../../assets/maps", "JSON Files (*.json)");
+    QString name = QFileDialog::getOpenFileName(this, "Open File", "../../../assets/maps", "RCMAP Files (*.rcmap)");
     if(name.isEmpty() or name.isNull()) return;
+
+    file.setFileName(name);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    // Le o hash
+    QByteArray hashSize = file.readLine();
+    hashSize.chop(1);
+    qint64 size = static_cast<qint64>(hashSize.toInt());
+    QByteArray checksum = file.read(size);
+
+    // Le o json
+    QString text = file.readLine(); // Descarta a quebra de linha
+    text = file.readAll();
+    file.close();
+
+    // Calcula o hash do json
+    QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
+    hash.addData(text.toUtf8());
+
+
+    // Check Sum
+    if(checksum != hash.result().toHex())
+    {
+        QMessageBox messageBox;
+        messageBox.setFixedSize(500,200);
+        messageBox.critical(0, "Não é possível carregar este labirinto", "O arquivo está corrompido");
+        return;
+    }
+
     this->mapName = name;
     this->setWindowTitle(this->mapName);
-
-    file.setFileName(this->mapName);
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString text = file.readAll();
-    file.close();
 
     QJsonDocument doc = QJsonDocument::fromJson(text.toUtf8());
     QJsonObject obj = doc.object();
