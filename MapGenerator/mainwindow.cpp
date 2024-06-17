@@ -100,9 +100,6 @@ void MainWindow::saveMap()
     hash.addData(json);
     QByteArray hashResult = hash.result().toHex();
 
-    file.write(QString::number(hashResult.size()).toUtf8());
-    file.write("\n");
-
     file.write(hashResult);
     file.write("\n");
 
@@ -119,9 +116,12 @@ void MainWindow::on_actionSaveAs_triggered()
     saveDialog.setAcceptMode(QFileDialog::AcceptSave);
     saveDialog.exec();
 
-    QString name = saveDialog.selectedFiles().front();
+    QStringList result = saveDialog.selectedFiles();
 
-    if(name.isEmpty() or name.isNull()) return;
+    if(result.isEmpty()) return;
+
+    QString name = result.front();
+
     this->mapName = name;
     this->saveMap();
     this->setWindowTitle(this->mapName);
@@ -136,28 +136,24 @@ void MainWindow::on_actionOpen_triggered()
     file.setFileName(name);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    // Le o hash
-    QByteArray hashSize = file.readLine();
-    hashSize.chop(1);
-    qint64 size = static_cast<qint64>(hashSize.toInt());
-    QByteArray checksum = file.read(size);
+    QByteArray checksum = file.readLine();
+    checksum.chop(1);
 
     // Le o json
-    QString text = file.readLine(); // Descarta a quebra de linha
-    text = file.readAll();
+    QString text = file.readAll();
     file.close();
 
     // Calcula o hash do json
     QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
     hash.addData(text.toUtf8());
 
-
+    qDebug() << checksum << hash.result().toHex();
     // Check Sum
     if(checksum != hash.result().toHex())
     {
         QMessageBox messageBox;
         messageBox.setFixedSize(500,200);
-        messageBox.critical(0, "Não é possível carregar este labirinto", "O arquivo está corrompido");
+        messageBox.critical(0, "Arquivo Corrompido", "Não é possivel carregar o labirinto. O arquivo está corrompido");
         return;
     }
 
