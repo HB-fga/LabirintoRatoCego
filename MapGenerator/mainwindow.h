@@ -27,14 +27,16 @@ private slots:
     void on_actionOpen_triggered();
     void helpWindow();
     void on_actionSave_triggered();
+    void changeCell();
 
 private:
     QString mapName;
-    QPushButton* makeButton(QString name, const char* slot, QKeySequence key);
+    QPushButton* makeButton(QString name, const char* slot, QKeySequence key, bool selectable);
     bool checkSave();
     void saveMap();
     Map *m_map;
     Ui::MainWindow *m_ui;
+    QPushButton* selectedButton;
 };
 
 #endif // MAINWINDOW_H

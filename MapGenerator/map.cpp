@@ -46,42 +46,29 @@ Map::~Map()
 
 }
 
-void Map::changeCursor(QString asset)
-{
-    QPixmap p = QPixmap(asset);
-    p = p.scaled(QSize(20, 20),  Qt::KeepAspectRatio);
-    QCursor c = QCursor(p, 0, 0);
-    setCursor(c);
-}
-
 void Map::changeCellTypeWall()
 {
     this->selectedCellType = cellType::Wall;
-    // this->changeCursor("../../assets/wall.png");
 }
 
 void Map::changeCellTypeStart()
 {
     this->selectedCellType = cellType::Start;
-    // this->changeCursor("../../assets/start.png");
 }
 
 void Map::changeCellTypeEnd()
 {
     this->selectedCellType = cellType::End;
-    // this->changeCursor("../../assets/end.png");
 }
 
 void Map::changeCellTypeDecision()
 {
     this->selectedCellType = cellType::Decision;
-    // this->changeCursor("../../assets/decision.png");
 }
 
 void Map::changeCellTypePath()
 {
     this->selectedCellType = cellType::Path;
-    // this->changeCursor("../../assets/path.png");
 }
 
 Cell* Map::getCell(int row, int col)
@@ -204,7 +191,6 @@ void Map::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     paintGrid(&painter);
-
 }
 
 void Map::paintGrid(QPainter* painter)

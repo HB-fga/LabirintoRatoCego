@@ -53,7 +53,6 @@ protected:
 private:
     void setGridCellType(Cell* cell);
     QString findMoves(int row, int col);
-    void changeCursor(QString asset);
     QGridLayout cellGrid;
     cellType selectedCellType;
     QPoint startPos;

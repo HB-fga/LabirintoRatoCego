@@ -24,11 +24,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget* toolbarWidget = new QWidget();
     QGridLayout* toolbarLayout = new QGridLayout(toolbarWidget);
 
-    toolbarLayout->addWidget(makeButton("Path", SLOT(changeCellTypePath()), QKeySequence(Qt::Key_P)), 0, 0);
-    toolbarLayout->addWidget(makeButton("Decision", SLOT(changeCellTypeDecision()), QKeySequence(Qt::Key_D)), 0, 1);
-    toolbarLayout->addWidget(makeButton("Start", SLOT(changeCellTypeStart()), QKeySequence(Qt::Key_S)), 1, 0);
-    toolbarLayout->addWidget(makeButton("End", SLOT(changeCellTypeEnd()), QKeySequence(Qt::Key_E)), 1, 1);
-    toolbarLayout->addWidget(makeButton("Wall", SLOT(changeCellTypeWall()), QKeySequence(Qt::Key_W)), 2, 0);
+    toolbarLayout->addWidget(makeButton("Path", SLOT(changeCellTypePath()), QKeySequence(Qt::Key_P), true), 0, 0);
+    toolbarLayout->addWidget(makeButton("Decision", SLOT(changeCellTypeDecision()), QKeySequence(Qt::Key_D), true), 0, 1);
+    toolbarLayout->addWidget(makeButton("Start", SLOT(changeCellTypeStart()), QKeySequence(Qt::Key_S), true), 1, 0);
+    toolbarLayout->addWidget(makeButton("End", SLOT(changeCellTypeEnd()), QKeySequence(Qt::Key_E), true), 1, 1);
+
+    QPushButton* selectedButton = makeButton("Wall", SLOT(changeCellTypeWall()), QKeySequence(Qt::Key_W), true);
+    QPalette pal = selectedButton->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::blue));
+    selectedButton->setPalette(pal);
+    toolbarLayout->addWidget(selectedButton, 2, 0);
+    this->selectedButton = selectedButton;
 
     toolbarLayout->addItem(new QSpacerItem(0, 50), 3, 0);
 
@@ -37,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
     line->setFrameShape(QFrame::HLine);
     toolbarLayout->addWidget(line, 3, 0, 1, 2);
 
-    toolbarLayout->addWidget(makeButton("Expand-Vertical", SLOT(increaseRows()), QKeySequence(Qt::Key_Up)), 4, 0);
-    toolbarLayout->addWidget(makeButton("Collapse-Vertical", SLOT(decreaseRows()), QKeySequence(Qt::Key_Down)), 4, 1);
-    toolbarLayout->addWidget(makeButton("Expand-Horizontal", SLOT(increaseCols()), QKeySequence(Qt::Key_Right)), 5, 0);
-    toolbarLayout->addWidget(makeButton("Collapse-Horizontal", SLOT(decreaseCols()), QKeySequence(Qt::Key_Left)), 5, 1);
+    toolbarLayout->addWidget(makeButton("Expand-Vertical", SLOT(increaseRows()), QKeySequence(Qt::Key_Up), false), 4, 0);
+    toolbarLayout->addWidget(makeButton("Collapse-Vertical", SLOT(decreaseRows()), QKeySequence(Qt::Key_Down), false), 4, 1);
+    toolbarLayout->addWidget(makeButton("Expand-Horizontal", SLOT(increaseCols()), QKeySequence(Qt::Key_Right), false), 5, 0);
+    toolbarLayout->addWidget(makeButton("Collapse-Horizontal", SLOT(decreaseCols()), QKeySequence(Qt::Key_Left), false), 5, 1);
 
     toolbarWidget->setLayout(toolbarLayout);
     m_ui->toolBar->addWidget(toolbarWidget);
@@ -60,14 +66,13 @@ MainWindow::~MainWindow()
 
 }
 
-QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence key)
+QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence key, bool selectable)
 {
     QPushButton* button = new QPushButton;
 
     QPalette pal = button->palette();
     pal.setColor(QPalette::Button, QColor(Qt::white));
     button->setPalette(pal);
-
     button->setIcon(QIcon("../../assets/buttons/" + name.toLower() + ".png"));
     button->setShortcut(key);
     button->setToolTip(name + " (" + button->shortcut().toString() + ")");
@@ -75,7 +80,28 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
     button->setIconSize(QSize(52, 52));
     button->setFixedSize(64, 64);
     connect(button, SIGNAL(clicked()), m_ui->map, slot);
+
+    if(selectable)
+    {
+        connect(button, SIGNAL(clicked()), this, SLOT(changeCell()));
+    }
     return button;
+}
+
+void MainWindow::changeCell()
+{
+    QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
+
+    QPalette oldPal = this->selectedButton->palette();
+    oldPal.setColor(QPalette::Button, QColor(Qt::white));
+    this->selectedButton->setPalette(oldPal);
+
+    QPalette pal = clickedButton->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::blue));
+    clickedButton->setPalette(pal);
+
+    this->selectedButton = clickedButton;
+    repaint();
 }
 
 
