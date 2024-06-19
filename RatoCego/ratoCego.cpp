@@ -160,7 +160,9 @@ int main(int argc, char* argv[]) {
                 }
 
                 // Adiciona as coordenadas atuais ao pathRat
+                cerr << "antes push" << endl;
                 pathRat.push_back({xCurrent, yCurrent});
+                cerr << "depois push" << endl;
             }
             else {
                 cerr << "FALHA - Direcao invalida. Tente novamente." << endl;
