@@ -1,4 +1,4 @@
-ac6b84a1ba3f8b69009c0a0dba0fd828
+6abf18e861789ed6a75fada06116830d
 {
     "cellSize": 60,
     "decisionCount": 8,
@@ -45,8 +45,8 @@ ac6b84a1ba3f8b69009c0a0dba0fd828
         }
     ],
     "exit": {
-        "col": 4,
-        "row": 0
+        "col": 0,
+        "row": 4
     },
     "height": 5,
     "map": [

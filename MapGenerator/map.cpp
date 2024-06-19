@@ -6,12 +6,13 @@
 #include <QRgb>
 #include <QDebug>
 #include <QPainterPath>
-#include <QCursor>
 #include <QJsonArray>
 #include <QMessageBox>
+#include <QQueue>
 
 Map::Map(QWidget *parent) : QWidget(parent)
 {
+    this->connected = false;
     this->rows = 30;
     this->columns = 30;
     this->visibleRows = 10;
@@ -274,9 +275,38 @@ void Map::clearGrid(){
     }
 }
 
-QString Map::findMoves(int row, int col)
+// BFS
+bool Map::checkConectivity(const Graph& graph)
+{
+    QPair<int, int> node = graph.firstKey();
+    QMap<QPair<int, int>, bool> visited;
+    QQueue<QPair<int, int>> queue;
+
+    queue.enqueue(node);
+    while(!queue.empty())
+    {
+        node = queue.dequeue();
+
+        for (const QPair<int, int>& p : graph[node])
+        {
+            if(!visited.contains(node)) queue.enqueue(p);
+        }
+
+        visited.insert(node, true);
+    }
+
+    if(visited.size() == graph.size())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+QString Map::findMoves(int row, int col, Graph& graph)
 {
     QString moves = "";
+    QList<QPair<int, int>> adj;
 
     for (int i = row - 1; i >= 0; --i)
     {
@@ -284,6 +314,7 @@ QString Map::findMoves(int row, int col)
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
         {
+            adj.append(QPair<int, int>(i, col));
             moves.append("N");
             break;
         }
@@ -295,6 +326,7 @@ QString Map::findMoves(int row, int col)
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
         {
+            adj.append(QPair<int, int>(i, col));
             moves.append("S");
             break;
         }
@@ -306,6 +338,7 @@ QString Map::findMoves(int row, int col)
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
         {
+            adj.append(QPair<int, int>(row, j));
             moves.append("E");
             break;
         }
@@ -317,12 +350,20 @@ QString Map::findMoves(int row, int col)
         if (cell->getCellType() == cellType::Wall) break;
         if (cell->getCellType() == cellType::Decision || cell->getCellType() == cellType::End || cell->getCellType() == cellType::Start)
         {
+            adj.append(QPair<int, int>(row, j));
             moves.append("W");
             break;
         }
     }
 
+    graph.insert(QPair<int, int>(row, col), adj);
+
     return moves;
+}
+
+bool Map::isConnected()
+{
+    return this->connected;
 }
 
 QJsonObject Map::getJSON()
@@ -334,13 +375,16 @@ QJsonObject Map::getJSON()
     json.insert("width", this->visibleCols);
 
     QJsonObject exit;
-    exit.insert("row", this->endPos.x());
-    exit.insert("col", this->endPos.y());
+    exit.insert("row", this->endPos.y());
+    exit.insert("col", this->endPos.x());
     json.insert("exit", exit);
 
     QJsonArray map;
     QJsonArray decisions;
     int dCount = 0;
+
+    Graph graph;
+
     for(int i=0; i < this->visibleRows; i++)
     {
         QJsonArray line;
@@ -353,16 +397,21 @@ QJsonObject Map::getJSON()
                 QJsonObject decision;
                 decision.insert("row", i);
                 decision.insert("col", j);
-                decision.insert("moves", findMoves(i, j));
+                decision.insert("moves", findMoves(i, j, graph));
                 dCount++;
                 decisions.push_back(decision);
             }
         }
         map.append(line);
     }
+
+    graph.insert(QPair<int, int>(this->endPos.y(), this->endPos.x()), QList<QPair<int, int>>());
+
     json.insert("map", map);
     json.insert("decisionCount", dCount);
     json.insert("decisions", decisions);
+
+    this->connected = checkConectivity(graph);
 
     return json;
 }

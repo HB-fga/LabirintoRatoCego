@@ -8,6 +8,8 @@
 #include <QGridLayout>
 #include <QJsonObject>
 
+using Graph = QMap<QPair<int, int>, QList<QPair<int, int>>>;
+
 class QPaintEvent;
 class QMouseEvent;
 class Map : public QWidget
@@ -30,6 +32,8 @@ public:
     void setEndPos(int x, int y);
     void setCellAtGrid(int i, int j, cellType type);
     QJsonObject getJSON();
+    bool checkConectivity(const Graph& graph);
+    bool isConnected();
 
 public slots:
     void increaseRows();
@@ -52,7 +56,7 @@ protected:
 
 private:
     void setGridCellType(Cell* cell);
-    QString findMoves(int row, int col);
+    QString findMoves(int row, int col, Graph& graph);
     QGridLayout cellGrid;
     cellType selectedCellType;
     QPoint startPos;
@@ -61,6 +65,7 @@ private:
     int columns;
     int visibleRows;
     int visibleCols;
+    bool connected;
 };
 
 #endif // MAP_H

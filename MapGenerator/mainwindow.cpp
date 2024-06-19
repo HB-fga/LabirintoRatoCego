@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->menubar->addAction(helpAction);
 
     this->mapName = "";
+    //qDebug() << qgetenv("HOME");
 }
 
 MainWindow::~MainWindow()
@@ -113,25 +114,34 @@ void MainWindow::helpWindow()
 
 void MainWindow::saveMap()
 {
-    QFile file(this->mapName);
-    // TODO: Tratamento de erro
-    if(!file.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "File open error";
-        return;
-    }
     QByteArray json = QJsonDocument(m_ui->map->getJSON()).toJson();
 
-    QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
-    hash.addData(json);
-    QByteArray hashResult = hash.result().toHex();
+    if(m_ui->map->isConnected())
+    {
+        QFile file(this->mapName);
+        // TODO: Tratamento de erro
+        if(!file.open(QIODevice::WriteOnly))
+        {
+            qDebug() << "File open error";
+            return;
+        }
 
-    file.write(hashResult);
-    file.write("\n");
+        QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
+        hash.addData(json);
+        QByteArray hashResult = hash.result().toHex();
 
-    file.write(json);
+        file.write(hashResult);
+        file.write("\n");
 
-    file.close();
+        file.write(json);
+        file.close();
+    }
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.setFixedSize(500,200);
+        messageBox.critical(0, "Não é possível salvar este labirinto", "O Labirinto não possui todos os pontos de decisão conectados");
+    }
 }
 
 void MainWindow::on_actionSaveAs_triggered()
@@ -173,7 +183,6 @@ void MainWindow::on_actionOpen_triggered()
     QCryptographicHash hash = QCryptographicHash(QCryptographicHash::Md5);
     hash.addData(text.toUtf8());
 
-    qDebug() << checksum << hash.result().toHex();
     // Check Sum
     if(checksum != hash.result().toHex())
     {
@@ -229,6 +238,7 @@ void MainWindow::on_actionSave_triggered()
         this->on_actionSaveAs_triggered();
     }
 }
+
 bool MainWindow::checkSave()
 {
     bool canSave = true;
@@ -240,12 +250,12 @@ bool MainWindow::checkSave()
     QMessageBox messageBox;
     messageBox.setFixedSize(500,200);
 
-    qDebug() << "##### CHECK SAVE DEBUG #####";
-    qDebug() << "START CELL TYPE: " << (int)m_ui->map->getCell(start.y(), start.x())->getCellType();
-    qDebug() << "START POS: " << start.x() << start.y();
-    qDebug() << "END CELL TYPE: " << (int)m_ui->map->getCell(end.y(), end.x())->getCellType();
-    qDebug() << "END POS: " << end.x() << end.y();
-    qDebug() << "COLS + ROWS: " << visibleCols << visibleRows;
+    // qDebug() << "##### CHECK SAVE DEBUG #####";
+    // qDebug() << "START CELL TYPE: " << (int)m_ui->map->getCell(start.y(), start.x())->getCellType();
+    // qDebug() << "START POS: " << start.x() << start.y();
+    // qDebug() << "END CELL TYPE: " << (int)m_ui->map->getCell(end.y(), end.x())->getCellType();
+    // qDebug() << "END POS: " << end.x() << end.y();
+    // qDebug() << "COLS + ROWS: " << visibleCols << visibleRows;
 
     if(m_ui->map->getCell(start.y(), start.x())->getCellType() != cellType::Start)
     {
