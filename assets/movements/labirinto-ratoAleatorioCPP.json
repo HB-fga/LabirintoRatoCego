@@ -1,13 +1,101 @@
 {
-    "mapName": "labirinto.json",
-    "movements": 28,
+    "mapHash": "e688a6bbba57ac67450bd33ba4fbfd80",
+    "movements": 36,
     "path": [
         {
             "col": 3,
             "row": 6
         },
         {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 1,
+            "row": 6
+        },
+        {
+            "col": 0,
+            "row": 6
+        },
+        {
+            "col": 1,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
             "col": 4,
+            "row": 6
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 5
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 5
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 5
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 5
+        },
+        {
+            "col": 2,
             "row": 6
         },
         {
@@ -35,79 +123,23 @@
             "row": 6
         },
         {
-            "col": 5,
-            "row": 6
-        },
-        {
-            "col": 4,
-            "row": 6
-        },
-        {
-            "col": 3,
-            "row": 6
-        },
-        {
-            "col": 2,
-            "row": 6
-        },
-        {
-            "col": 2,
+            "col": 6,
             "row": 5
         },
         {
-            "col": 2,
-            "row": 6
-        },
-        {
-            "col": 1,
-            "row": 6
-        },
-        {
-            "col": 0,
-            "row": 6
-        },
-        {
-            "col": 0,
-            "row": 5
-        },
-        {
-            "col": 0,
+            "col": 6,
             "row": 4
         },
         {
-            "col": 0,
+            "col": 6,
             "row": 3
         },
         {
-            "col": 0,
-            "row": 2
-        },
-        {
-            "col": 0,
-            "row": 1
-        },
-        {
-            "col": 0,
-            "row": 0
-        },
-        {
-            "col": 0,
-            "row": 1
-        },
-        {
-            "col": 0,
-            "row": 2
-        },
-        {
-            "col": 0,
+            "col": 5,
             "row": 3
         },
         {
-            "col": 1,
-            "row": 3
-        },
-        {
-            "col": 2,
+            "col": 4,
             "row": 3
         },
         {

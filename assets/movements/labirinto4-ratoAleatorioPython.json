@@ -1,6 +1,6 @@
 {
     "mapHash": "6abf18e861789ed6a75fada06116830d",
-    "movements": 45,
+    "movements": 29,
     "path": [
         {
             "col": 0,
@@ -31,96 +31,32 @@
             "row": 0
         },
         {
-            "col": 1,
+            "col": 3,
             "row": 0
         },
         {
-            "col": 0,
+            "col": 4,
             "row": 0
         },
         {
-            "col": 1,
-            "row": 0
+            "col": 4,
+            "row": 1
+        },
+        {
+            "col": 4,
+            "row": 2
+        },
+        {
+            "col": 3,
+            "row": 2
         },
         {
             "col": 2,
-            "row": 0
-        },
-        {
-            "col": 3,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 1
-        },
-        {
-            "col": 4,
             "row": 2
         },
         {
-            "col": 4,
-            "row": 1
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
             "col": 3,
-            "row": 0
-        },
-        {
-            "col": 2,
-            "row": 0
-        },
-        {
-            "col": 3,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 1
-        },
-        {
-            "col": 4,
             "row": 2
-        },
-        {
-            "col": 4,
-            "row": 1
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 1
-        },
-        {
-            "col": 4,
-            "row": 2
-        },
-        {
-            "col": 4,
-            "row": 3
-        },
-        {
-            "col": 4,
-            "row": 4
-        },
-        {
-            "col": 4,
-            "row": 3
         },
         {
             "col": 4,
@@ -151,16 +87,16 @@
             "row": 4
         },
         {
-            "col": 4,
-            "row": 3
+            "col": 3,
+            "row": 4
         },
         {
-            "col": 4,
-            "row": 2
+            "col": 2,
+            "row": 4
         },
         {
-            "col": 4,
-            "row": 3
+            "col": 3,
+            "row": 4
         },
         {
             "col": 4,
@@ -183,5 +119,5 @@
             "row": 4
         }
     ],
-    "ratName": "ratoAleatorioCPP"
+    "ratName": "ratoAleatorioPython"
 }
