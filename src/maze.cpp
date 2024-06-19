@@ -31,7 +31,14 @@ namespace game
             throw std::invalid_argument("Failed to open file: " + filename);
         }
 
-        pJSON jsonFile = pJSON::parse(file);
+        std::string rcmapHash;
+        getline(file, rcmapHash);
+
+        std::string rcmapJson = "";
+        for(std::string line; getline(file, line);)
+            rcmapJson = rcmapJson + line + "\n";
+
+        pJSON jsonFile = pJSON::parse(rcmapJson);
 
         int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
         Maze maze(rows, cols);
@@ -144,7 +151,14 @@ namespace game
             throw std::invalid_argument("Failed to open file: " + mapFilename);
         }
 
-        pJSON jsonFile = pJSON::parse(mapF);
+        std::string rcmapHash;
+        getline(mapF, rcmapHash);
+
+        std::string rcmapJson = "";
+        for(std::string line; getline(mapF, line);)
+            rcmapJson = rcmapJson + line + "\n";
+
+        pJSON jsonFile = pJSON::parse(rcmapJson);
         int rows = jsonFile["height"], cols = jsonFile["width"];
         
         auto mazeV = jsonFile["map"];

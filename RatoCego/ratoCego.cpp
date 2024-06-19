@@ -39,16 +39,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::string line;
     std::string rcmapHash;
-    std::string rcmapJson = "";
-
     getline(inputFile, rcmapHash);
 
-    while(getline(inputFile, line))
-    {
+    std::string rcmapJson = "";
+    for(std::string line; getline(inputFile, line);)
         rcmapJson = rcmapJson + line + "\n";
-    }
 
     if (rcmapHash != md5(rcmapJson)) {
         cerr << "Nao foi possivel abrir o arquivo do mapa: " << mapFilePath << "\nO arquivo está corrompido ou não é suportado" << endl;

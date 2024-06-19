@@ -126,7 +126,20 @@ int main(int, char* [])
     std::vector<std::string> movementFiles;
     for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i) {
         // TODO: Não tem necessidade de reconstruir a lista de movimentos a cada seleção de movimento
-        game::ConfigSelection movementSelection("./assets/movements", mapSelection.getSelectedMapPretty());
+
+        std::ifstream selectedMapFile(mapSelection.getSelectedMap());
+
+        if (!selectedMapFile.is_open())
+        {
+            throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
+        }
+
+        std::string rcmapHash;
+        getline(selectedMapFile, rcmapHash);
+
+        selectedMapFile.close();        
+
+        game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
         quitSelection = false;
 
         while (!quitSelection) {
@@ -168,7 +181,6 @@ int main(int, char* [])
         movementFiles.push_back(movementSelection.getSelectedMap());
     }
     
-
     // Inicia o jogo com o mapa selecionado
     game::Maze maze;
     try
@@ -180,7 +192,6 @@ int main(int, char* [])
         std::cerr << e.what() << '\n';
         return -1;
     }
-
 
     std::vector<RatInstance> rats;
 
@@ -200,7 +211,6 @@ int main(int, char* [])
     for (size_t i = 0; i < movementFiles.size(); ++i) {
 
         std::ifstream movementsFile(movementFiles[i]);
-
 
         // TODO: Tem no ratInstance, verificar se pode ser retirado de lá
         pJSON jsonFile = pJSON::parse(movementsFile);

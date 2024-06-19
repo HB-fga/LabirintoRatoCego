@@ -26,7 +26,7 @@ int main(int argc, char* args[]) {
     }
 
     MapRenderer mapRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, MAZE_WIDTH, MAZE_HEIGHT);
-    mapRenderer.loadMapfromFile("../assets/maps/" + mapName + ".json");
+    mapRenderer.loadMapfromFile("../assets/maps/" + mapName + ".rcmap");
     SDL_Event e;
     bool quit = false;
 

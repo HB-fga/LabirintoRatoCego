@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 // TODO: Essa classe não é utilizada apenas para mapas, renomear de acordo
 namespace game
 {
-    ConfigSelection::ConfigSelection(const std::string &mapsDirectory, std::string filter)
+    ConfigSelection::ConfigSelection(const std::string &filesDirectory, std::string hash)
     {
         font25p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 25);
         if (font25p == nullptr) {
@@ -20,18 +20,19 @@ namespace game
         }
 
         // Percorre os arquivos no diretório de mapas e os adiciona à lista de mapFiles
-        for (const auto &entry : fs::directory_iterator(mapsDirectory))
+        for (const auto &entry : fs::directory_iterator(filesDirectory))
         {
             if (entry.is_regular_file())
             {
-                if(filter != "")
+                if(hash != "")
                 {
                     std::ifstream inputFile(entry.path().string());
+
                     pJSON movementFile = pJSON::parse(inputFile);
-                    std::string mapName = movementFile["mapName"];
+                    std::string movementMapHash = movementFile["mapHash"];
                     inputFile.close();
 
-                    if(mapName == filter)
+                    if(movementMapHash == hash)
                     {
                         mapFiles.push_back(entry.path().string());
                     }
@@ -87,7 +88,11 @@ namespace game
 
         size_t lastSlashPos = mapsDirectory.find_last_of("/\\");
         std::string mapFileName = mapsDirectory.substr(lastSlashPos + 1);
-        size_t extensionPos = mapFileName.find(".json");
+
+        size_t extensionPos;
+        extensionPos = mapFileName.find(".rcmap");
+        mapFileName = mapFileName.substr(0, extensionPos);
+        extensionPos = mapFileName.find(".json");
         mapFileName = mapFileName.substr(0, extensionPos);
 
         engine::renderText(mapFileName, 1920 / 2 - 100, height, font25p, blueColor);
