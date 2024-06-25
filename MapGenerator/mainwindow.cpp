@@ -74,7 +74,7 @@ QPushButton* MainWindow::makeButton(QString name, const char* slot, QKeySequence
     QPalette pal = button->palette();
     pal.setColor(QPalette::Button, QColor(Qt::white));
     button->setPalette(pal);
-    button->setIcon(QIcon("../../assets/buttons/" + name.toLower() + ".png"));
+    button->setIcon(QIcon(":/button/" + name.toLower()));
     button->setShortcut(key);
     button->setToolTip(name + " (" + button->shortcut().toString() + ")");
 

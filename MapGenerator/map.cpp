@@ -1,4 +1,5 @@
 #include "map.h"
+#include "pixmapstorage.h"
 
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -20,6 +21,13 @@ Map::Map(QWidget *parent) : QWidget(parent)
     this->startPos = QPoint(0, 0);
     this->endPos = QPoint(9, 9);
     changeCellTypeWall();
+
+    // Carrega os pixmaps das celulas
+    PixmapStorage::getGlobalStorage()["wall"] = QPixmap(":/cell/wall");
+    PixmapStorage::getGlobalStorage()["path"] = QPixmap(":/cell/path");
+    PixmapStorage::getGlobalStorage()["decision"] = QPixmap(":/cell/decision");
+    PixmapStorage::getGlobalStorage()["start"] = QPixmap(":/cell/start");
+    PixmapStorage::getGlobalStorage()["end"] = QPixmap(":/cell/end");
 
     for(int i=0; i<this->rows; i++)
     {

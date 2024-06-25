@@ -1,4 +1,5 @@
 #include "cell.h"
+#include "pixmapstorage.h"
 #include <QDebug>
 
 Cell::Cell()
@@ -19,19 +20,19 @@ void Cell::setCellType(cellType newType)
     switch(newType)
     {
         case cellType::Wall:
-            this->img.load("../../assets/wall.png");
+            this->img = PixmapStorage::getGlobalStorage().value("wall");
             break;
         case cellType::Path:
-            this->img.load("../../assets/path.png");
+            this->img = PixmapStorage::getGlobalStorage().value("path");
             break;
         case cellType::Decision:
-            this->img.load("../../assets/decision.png");
+            this->img = PixmapStorage::getGlobalStorage().value("decision");
             break;
         case cellType::Start:
-            this->img.load("../../assets/start.png");
+            this->img = PixmapStorage::getGlobalStorage().value("start");
             break;
         case cellType::End:
-            this->img.load("../../assets/end.png");
+            this->img = PixmapStorage::getGlobalStorage().value("end");
             break;
     }
 
