@@ -13,7 +13,7 @@ HelpWindow::HelpWindow(QDialog *parent)
 
     this->setLayout(helpLayout);
 
-    this->loadMarkdown("../../help.md");
+    this->loadMarkdown(":/help.md");
 
 }
 

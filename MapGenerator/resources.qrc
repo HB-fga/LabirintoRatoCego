@@ -17,4 +17,7 @@
         <file alias="decision">assets/buttons/decision.png</file>
         <file alias="start">assets/buttons/start.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>help.md</file>
+    </qresource>
 </RCC>

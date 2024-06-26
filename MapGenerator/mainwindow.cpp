@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -147,7 +148,9 @@ void MainWindow::saveMap()
 void MainWindow::on_actionSaveAs_triggered()
 {
     if(!this->checkSave()) return;
-    QFileDialog saveDialog = QFileDialog (this, "Save File as", "../../../assets/maps", "RCMAP Files (*.rcmap)");
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/RatoCego";
+    if (!QDir(path).exists()) QDir().mkdir(path);
+    QFileDialog saveDialog = QFileDialog (this, "Save File as", path, "RCMAP Files (*.rcmap)");
     saveDialog.setDefaultSuffix(".rcmap");
     saveDialog.setAcceptMode(QFileDialog::AcceptSave);
     saveDialog.exec();
@@ -166,7 +169,9 @@ void MainWindow::on_actionSaveAs_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     QFile file;
-    QString name = QFileDialog::getOpenFileName(this, "Open File", "../../../assets/maps", "RCMAP Files (*.rcmap)");
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/RatoCego";
+    if (!QDir(path).exists()) QDir().mkdir(path);
+    QString name = QFileDialog::getOpenFileName(this, "Open File", path, "RCMAP Files (*.rcmap)");
     if(name.isEmpty() or name.isNull()) return;
 
     file.setFileName(name);
