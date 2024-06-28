@@ -403,3 +403,6 @@ FodyWeavers.xsd
 # .o and .d
 *.o
 *.d
+
+# MapGenerator build
+MapGenerator/build/

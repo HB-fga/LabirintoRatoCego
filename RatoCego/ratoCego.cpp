@@ -4,13 +4,26 @@
 #include <fstream>
 #include <string>
 #include <nlohmann/json.hpp>
-
+#include <openssl/md5.h>
+#include <openssl/evp.h>
 
 using namespace std;
 using pJSON = nlohmann::json;
 
 const int P = 999; // Número máximo de movements permitidos
 
+std::string md5(const std::string &str){
+  unsigned char hash[MD5_DIGEST_LENGTH];
+
+  EVP_Q_digest(NULL, "MD5", NULL, str.c_str(), str.size(), hash, NULL);
+
+  std::stringstream ss;
+
+  for(int i = 0; i < MD5_DIGEST_LENGTH; i++)
+    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>( hash[i] );
+
+  return ss.str();
+}
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -26,11 +39,23 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::string rcmapHash;
+    getline(inputFile, rcmapHash);
+
+    std::string rcmapJson = "";
+    for(std::string line; getline(inputFile, line);)
+        rcmapJson = rcmapJson + line + "\n";
+
+    if (rcmapHash != md5(rcmapJson)) {
+        cerr << "Nao foi possivel abrir o arquivo do mapa: " << mapFilePath << "\nO arquivo está corrompido ou não é suportado" << endl;
+        return 1;
+    }
+
     cerr << "==============================================" << endl;
     cerr << "=           LABIRINTO DO RATO CEGO           =" << endl;
     cerr << "==============================================\n" << endl;
 
-    pJSON jsonFile = pJSON::parse(inputFile);
+    pJSON jsonFile = pJSON::parse(rcmapJson);
 
     int width = jsonFile["width"], height = jsonFile["height"];
     auto maze = jsonFile["map"];
@@ -163,30 +188,21 @@ int main(int argc, char* argv[]) {
     cin >> ratName;
     cerr << "Nome do rato: " << ratName << endl;
 
-    // limpando o nome e juntando tudo para ficar como nome do arquivo
-    string fileName = "";
+    // Construindo nome do arquivo de movimento
+    string fileName = mapFilePath;
+    fileName = fileName.substr(fileName.find_last_of("/") + 1);
+    fileName = fileName.substr(0, fileName.find_last_of(".")) + "-";
+
     for (int i = 0; i < ratName.size(); i++) {
         if (ratName[i] != ' ') {
             fileName += ratName[i];
         }
     }
 
-    // arquivo de saída para o movimento do rato
+    // Arquivo de saída para o movimento do rato
     pJSON jsonOutput;
 
-    // Descobrindo o nome do arquivo de mapa
-    char* mapName;
-    for(int i = strlen(argv[1]); i >= 0; i--)
-    {
-        // TODO: trocar por find_last_of("/\\");
-        if(argv[1][i] == '/')
-        {
-            mapName = &argv[1][i+1];
-            break;
-        }
-    }
-
-    jsonOutput["mapName"] = mapName;
+    jsonOutput["mapHash"] = rcmapHash;
     jsonOutput["ratName"] = ratName;
     jsonOutput["movements"] = movements;
     jsonOutput["path"] = pJSON::array();
@@ -194,9 +210,7 @@ int main(int argc, char* argv[]) {
     for(const auto& [row, col] : pathRat)
         jsonOutput["path"].push_back({{"row", row}, {"col", col}});
 
-    // TODO: trocar por find_last_of(".");
-    mapName[strlen(mapName) - 5] = '\0';
-    ofstream outputFile("../assets/movements/" + (string)mapName + "-" + fileName + ".json");
+    ofstream outputFile("../assets/movements/" + fileName + ".json");
     outputFile << jsonOutput.dump(4) << endl;
     inputFile.close(); // Fecha o arquivo após a leitura.
     outputFile.close(); // Fecha o arquivo após a escrita.

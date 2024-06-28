@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/cell">
+        <file alias="start">assets/start.png</file>
+        <file alias="path">assets/path.png</file>
+        <file alias="wall">assets/wall.png</file>
+        <file alias="end">assets/end.png</file>
+        <file alias="decision">assets/decision.png</file>
+    </qresource>
+    <qresource prefix="/button">
+        <file alias="wall">assets/buttons/wall.png</file>
+        <file alias="collapse-horizontal">assets/buttons/collapse-horizontal.png</file>
+        <file alias="end">assets/buttons/end.png</file>
+        <file alias="collapse-vertical">assets/buttons/collapse-vertical.png</file>
+        <file alias="expand-vertical">assets/buttons/expand-vertical.png</file>
+        <file alias="expand-horizontal">assets/buttons/expand-horizontal.png</file>
+        <file alias="path">assets/buttons/path.png</file>
+        <file alias="decision">assets/buttons/decision.png</file>
+        <file alias="start">assets/buttons/start.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>help.md</file>
+    </qresource>
+</RCC>

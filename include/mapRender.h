@@ -17,6 +17,7 @@ class MapRenderer {
         void updateCellColor(int x, int y);
         void generateMaze();
         void resetMap();
+        void loadMapfromFile(const std::string& filePath);
         void saveMapToFile(const std::string& filePath);
 
         int buttonWidth;

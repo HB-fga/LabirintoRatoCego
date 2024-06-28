@@ -19,7 +19,7 @@ namespace game
         TTF_Font* font15p;
 
     public:
-        ConfigSelection(const std::string &mapsDirectory, std::string filter = "");
+        ConfigSelection(const std::string &filesDirectory, std::string hash = "");
         std::string getSelectedMap() const;
         std::string getSelectedMapPretty() const;
         void navigateUp();

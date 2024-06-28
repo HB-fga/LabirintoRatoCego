@@ -1,6 +1,6 @@
 # Project variables
 PROJECT=RatoCegoBin
-MAP_GENERATOR=MapGenerator
+MAP_GENERATOR=MapGeneratorOld
 
 # Compiler and flags variables
 CXX=g++

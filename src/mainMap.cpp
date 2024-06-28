@@ -7,10 +7,18 @@ std::string outputFileName = "labirinto.json";
 
 
 int main(int argc, char* args[]) {
+    
+    if(argc != 2){
+        std::cerr << "Usage: \"../MapGenerator <mapName>\" without the filepath and the .json" << std::endl;
+        return -1;
+    }
+    std::string mapName = args[1];
+
     const int SCREEN_WIDTH = 1920;
     const int SCREEN_HEIGHT = 1080;
     const int MAZE_WIDTH = 30;
     const int MAZE_HEIGHT = 15;
+
 
     if (!engine::init(SCREEN_WIDTH, SCREEN_HEIGHT)) {
         std::cerr << "Failed to initialize the engine." << std::endl;
@@ -18,7 +26,7 @@ int main(int argc, char* args[]) {
     }
 
     MapRenderer mapRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, MAZE_WIDTH, MAZE_HEIGHT);
-
+    mapRenderer.loadMapfromFile("../assets/maps/" + mapName + ".rcmap");
     SDL_Event e;
     bool quit = false;
 
@@ -32,7 +40,7 @@ int main(int argc, char* args[]) {
 
                 if (mouseX >= mapRenderer.buttonXgererated && mouseX <= mapRenderer.buttonXgererated + mapRenderer.buttonWidth &&
                     mouseY >= mapRenderer.buttonYgererated && mouseY <= mapRenderer.buttonYgererated + mapRenderer.buttonHeight) {
-                    mapRenderer.saveMapToFile("../assets/maps/" + outputFileName);
+                    mapRenderer.saveMapToFile("../assets/maps/" + mapName + ".json");
                 } else if (mouseX >= mapRenderer.buttonXreset && mouseX <= mapRenderer.buttonXreset + mapRenderer.buttonWidth &&
                     mouseY >= mapRenderer.buttonYreset && mouseY <= mapRenderer.buttonYreset + mapRenderer.buttonHeight) {
                     mapRenderer.resetMap();
