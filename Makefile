@@ -1,6 +1,6 @@
 # Project variables
 PROJECT=RatoCegoBin
-MAP_GENERATOR=MapGeneratorOld
+# MAP_GENERATOR=MapGeneratorOld
 
 # Compiler and flags variables
 CXX=g++
@@ -108,7 +108,7 @@ format:
 	@-find $(INC_DIR) $(TESTS_DIR) $(SRC_DIR) -type f -name "*.cpp" -or -name "*.h" | xargs clang-format-10 -i
 
 
-build: $(LIBRARY) $(PROJECT) $(MAP_GENERATOR)
+build: $(LIBRARY) $(PROJECT) # $(MAP_GENERATOR)
 
 
 $(LIBRARY): $(OBJECTS)
@@ -118,8 +118,8 @@ $(LIBRARY): $(OBJECTS)
 $(PROJECT): $(LIBRARY) $(PROJECT_OBJECT)
 	$(LINKER) $(PROJECT_OBJECT) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
 
-$(MAP_GENERATOR): $(LIBRARY) $(MAP_OBJECT)
-	$(LINKER) $(MAP_OBJECT) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
+# $(MAP_GENERATOR): $(LIBRARY) $(MAP_OBJECT)
+# 	$(LINKER) $(MAP_OBJECT) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
 
 $(TEST_SUIT): $(LIBRARY) $(TEST_OBJECTS)
 	$(LINKER) $(TEST_OBJECTS) $(LIBRARY) $(OUTPUT_FLAG) $@ $(LDFLAGS)
