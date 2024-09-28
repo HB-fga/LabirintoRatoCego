@@ -113,7 +113,7 @@ namespace engine {
 
     void renderText(const std::string& text, int x, int y, TTF_Font* font, SDL_Color color)
     {
-        SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+        SDL_Surface* surface = TTF_RenderUTF8_Solid(font, text.c_str(), color);
         if (surface == nullptr) {
             // Trate o erro ao renderizar o texto
             return;

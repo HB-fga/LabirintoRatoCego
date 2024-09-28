@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "configSelection.h"
 #include "engine.h"
 #include <fstream>
 #include <iostream>
@@ -23,6 +24,11 @@ namespace game
         maze[xpos][ypos] = cell;
     }
 
+    void Maze::setHash(const std::string& hash)
+    {
+        this->hash = hash;
+    }
+
     Maze Maze::loadMapfromFile(const std::string &filename)
     {
         std::ifstream file(filename);
@@ -42,6 +48,8 @@ namespace game
 
         int rows = jsonFile["height"], cols = jsonFile["width"], cell_size = jsonFile["cellSize"];
         Maze maze(rows, cols);
+
+        maze.setHash(rcmapHash);
 
         for (int i = 0; i < rows; i++)
         {
@@ -200,6 +208,12 @@ namespace game
         mapF.close();
 
         return 0;
+    }
+
+    bool Maze::hasMovementFiles()
+    {
+        ConfigSelection movements("./assets/movements", hash);
+        return movements.getNumberOfFiles() > 0;
     }
 
 }

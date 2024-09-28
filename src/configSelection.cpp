@@ -101,5 +101,16 @@ namespace game
             engine::renderText("Selecione os arquivos de movimento com as setas (Cima/Baixo)", 60, 63*3, font15p, whiteColor);
             return;
         }
-    } 
+    }
+
+    void ConfigSelection::writeErrorMsg(const std::string &msg)
+    {
+        SDL_Color redColor{255, 0, 0, 255 };
+        engine::renderText(msg, 1920 / 2 - 300, 1080 - 20, font15p, redColor);
+    }
+
+    int ConfigSelection::getNumberOfFiles()
+    {
+        return mapFiles.size();
+    }
 }

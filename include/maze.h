@@ -19,14 +19,16 @@ namespace game {
         void drawSelection(int xpos, int ypos) const;
         void drawCentered(bool is_selection = false) const;
 		void setcell(int xpos, int ypos, Cell cell);
+        void setHash(const std::string& hash);
         static Maze loadMapfromFile(const std::string& filename);
         int validatorMovement(const std::string& movementsFilename, const std::string& mapFilename);
+        bool hasMovementFiles();
 
     private:
         int rows, cols;
         std::vector<std::vector<Cell>> maze;
         GameDesign gameDesign;
-
+        std::string hash;
     };
 }
 
