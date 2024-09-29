@@ -1,4 +1,4 @@
-f66f3d64b08b4e15d0e61e3d3a247752
+b7c6372d07a6e98c01df7da972edfa5c
 {
     "cellSize": 60,
     "decisionCount": 73,
@@ -300,12 +300,12 @@ f66f3d64b08b4e15d0e61e3d3a247752
         },
         {
             "col": 0,
-            "moves": "NS",
+            "moves": "NSE",
             "row": 12
         },
         {
             "col": 7,
-            "moves": "SE",
+            "moves": "SEW",
             "row": 12
         },
         {
@@ -761,12 +761,12 @@ f66f3d64b08b4e15d0e61e3d3a247752
         ],
         [
             2,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             2,
             1,
             1,

@@ -2,6 +2,7 @@
 #define RC_CELL_H
 
 #include "gameObject.h"
+#include <string>
 
 namespace game {
 
@@ -16,6 +17,7 @@ namespace game {
     private:
         bool not_valid, is_valid, is_decision, maze_exit, maze_start;
         int m_cell_size;
+        void renderTexture(int xpos, int ypos, const std::string &filename) const;
     };
 }
 

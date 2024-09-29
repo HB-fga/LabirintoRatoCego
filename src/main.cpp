@@ -126,7 +126,6 @@ int main(int, char* [])
         quitSelection = false;
 
         GameDesign movementScreen(1920,1080);
-
     
         while (!quitSelection) {
             SDL_Event e;
@@ -154,17 +153,15 @@ int main(int, char* [])
             ratSelection.writeQuantitySelection();
             engine::screen::show();
 
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) {
+            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
+            {
                 break;
             }
         }
 
-        // TODO: tratar caso de zero arquivos de movimento
         // Seleção dos arquivos de movimento
-        
-        for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i) {
-            // TODO: Não tem necessidade de reconstruir a lista de movimentos a cada seleção de movimento    
-
+        for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i)
+        {
             quitSelection = false;
 
             while (!quitSelection) {
