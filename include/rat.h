@@ -13,6 +13,7 @@ namespace game {
     public:
         Rat(int xv, int yv, const std::string& textureFilename);
         void update(unsigned ticks);
+        void reverseUpdate(unsigned ticks);
         void setMovements(const std::vector<std::pair<int, int>>& movements);
         void draw(int xpos, int ypos) const;
         std::pair<int, int> getPos() const { return { x, y };}

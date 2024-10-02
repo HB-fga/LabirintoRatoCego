@@ -41,6 +41,12 @@ void RatInstance::update(unsigned ticks)
     rat.update(ticks);
 }
 
+void RatInstance::reverseUpdate(unsigned ticks)
+{
+    rat.setMovements(movements);
+    rat.reverseUpdate(ticks);
+}
+
 void RatInstance::draw() const
 {
     auto p = rat.getPos();

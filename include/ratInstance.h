@@ -11,6 +11,7 @@ class RatInstance {
 public:
     RatInstance(int xv, int yv, const std::string& imageRat, const std::string& movementFile, const std::string& mapFile);
     void update(unsigned ticks);
+    void reverseUpdate(unsigned ticks);
     void draw() const;
     int getIndex() const;
 

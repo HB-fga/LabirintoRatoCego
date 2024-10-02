@@ -7,7 +7,8 @@ class GameDesign {
         GameDesign(int screenWidth, int screenHeight);
         void draw() const;
         void drawSelection() const;
-        void drawButtonSpeedy() const;
+        void drawButtonSpeedy(int speed) const;
+        void drawButtonReverse(bool reverse) const;
         
     private:
         int SCREEN_WIDTH;

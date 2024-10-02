@@ -276,6 +276,8 @@ int main(int, char* [])
     int totalMovements = maxMovements;
 
     int speed = 1;
+    int oldSpeed;
+    bool reverse = false;
 
     if (maxMovements == -1){
         quit = true;
@@ -296,10 +298,15 @@ int main(int, char* [])
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
 
-                if (mouseX >= 750 && mouseX <= 950 && mouseY >= 1000 && mouseY <= 1030) {
+                // TODO: Qual comportamento esperado para aumentar a velocidade no pause
+                if (mouseX >= 800 && mouseX <= 840 && mouseY >= 1000 && mouseY <= 1030) {
                     speed = std::max(1, speed - 1);
-                } else if (mouseX >= 970 && mouseX <= 1170 && mouseY >= 1000 && mouseY <= 1030) {
+                } else if (mouseX >= 1085 && mouseX <= 1125 && mouseY >= 1000 && mouseY <= 1030) {
                     speed = std::min(50, speed + 1);
+                } else if (mouseX >= 940 && mouseX <= 980 && mouseY >= 1040 && mouseY <= 1070) {
+                    speed ? oldSpeed = speed, speed = 0 : speed = oldSpeed;
+                } else if (mouseX >= 890 && mouseX <= 930 && mouseY >= 1040 && mouseY <= 1070) {
+                    reverse = !reverse;
                 }
             }
         }
@@ -309,7 +316,10 @@ int main(int, char* [])
 
         maze.drawCentered();
         for (RatInstance& ratInstance : rats) {
-            ratInstance.update(SDL_GetTicks()*speed);
+            if(!reverse)
+                ratInstance.update(SDL_GetTicks()*speed);
+            else
+                ratInstance.reverseUpdate(SDL_GetTicks()*speed);
             ratInstance.draw();
             if (ratInstance.getIndex() == maxMovements) {
                 if (totalMovements != maxMovements + 100)
@@ -321,7 +331,8 @@ int main(int, char* [])
             quit = true;
         }
 
-        button.drawButtonSpeedy();
+        button.drawButtonSpeedy(speed);
+        button.drawButtonReverse(reverse);
         engine::screen::show();
 
     }
