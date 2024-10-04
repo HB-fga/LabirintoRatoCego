@@ -36,6 +36,8 @@ int main(int, char* [])
     
     bool quitSelection = false;
     bool started = false;
+    bool changed = true;
+    bool hasMoves = false;
 
     std::vector<std::string> movementFiles;
 
@@ -52,10 +54,12 @@ int main(int, char* [])
                     if (e.key.keysym.sym == SDLK_UP)
                     {
                         mapSelection.navigateUp();
+                        changed = true;
                     }
                     else if (e.key.keysym.sym == SDLK_DOWN)
                     {
                         mapSelection.navigateDown();
+                        changed = true;
                     }
                     else if (e.key.keysym.sym == SDLK_RETURN)
                     {
@@ -83,7 +87,13 @@ int main(int, char* [])
                 mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
                 mazePreview.drawCentered(true); // Desenhe o preview do labirinto
                 mapSelection.writeTextSelection(mapSelection.getSelectedMap());
-                if(!mazePreview.hasMovementFiles())
+                if(changed)
+                {
+                    changed = false;
+                    hasMoves = mazePreview.hasMovementFiles();
+                }
+
+                if(!hasMoves)
                     mapSelection.writeErrorMsg("Esse mapa não possui arquivos de movimento");
             }
             catch(const std::exception& e)
