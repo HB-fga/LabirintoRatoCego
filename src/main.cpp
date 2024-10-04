@@ -35,139 +35,129 @@ int main(int, char* [])
 
     
     bool quitSelection = false;
-    bool started = false;
     bool changed = true;
     bool hasMoves = false;
 
     std::vector<std::string> movementFiles;
 
-    while(!started)
+    // Seleção do mapa
+    while (!quitSelection)
     {
-        // Seleção do mapa
-        while (!quitSelection)
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0)
         {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) != 0)
+            if (e.type == SDL_KEYDOWN)
             {
-                if (e.type == SDL_KEYDOWN)
+                if (e.key.keysym.sym == SDLK_UP)
                 {
-                    if (e.key.keysym.sym == SDLK_UP)
-                    {
-                        mapSelection.navigateUp();
-                        changed = true;
-                    }
-                    else if (e.key.keysym.sym == SDLK_DOWN)
-                    {
-                        mapSelection.navigateDown();
-                        changed = true;
-                    }
-                    else if (e.key.keysym.sym == SDLK_RETURN)
-                    {
-                        quitSelection = true;  // Finaliza a seleção ao pressionar Enter
-                        break;
-                    }
-                    else if (e.key.keysym.sym == SDLK_ESCAPE)
-                    {
-                        engine::close();  //  Permite fechar o jogo ao pressionar 'esc'
-                        return 0;
-                    }
+                    mapSelection.navigateUp();
+                    changed = true;
                 }
-                else if (e.type == SDL_QUIT)
+                else if (e.key.keysym.sym == SDLK_DOWN)
                 {
-                    engine::close();
+                    mapSelection.navigateDown();
+                    changed = true;
+                }
+                else if (e.key.keysym.sym == SDLK_RETURN and hasMoves)
+                {
+                    quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                    break;
+                }
+                else if (e.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    engine::close();  //  Permite fechar o jogo ao pressionar 'esc'
                     return 0;
                 }
             }
-            engine::screen::clear();
-
-            // Selecao do labirinto
-            game::Maze mazePreview;
-            try
+            else if (e.type == SDL_QUIT)
             {
-                mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
-                mazePreview.drawCentered(true); // Desenhe o preview do labirinto
-                mapSelection.writeTextSelection(mapSelection.getSelectedMap());
-                if(changed)
-                {
-                    changed = false;
-                    hasMoves = mazePreview.hasMovementFiles();
+                engine::close();
+                return 0;
+            }
+        }
+        engine::screen::clear();
+
+        // Selecao do labirinto
+        game::Maze mazePreview;
+        try
+        {
+            mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
+            mazePreview.drawCentered(true); // Desenhe o preview do labirinto
+            mapSelection.writeTextSelection(mapSelection.getSelectedMap());
+            if(changed)
+            {
+                changed = false;
+                hasMoves = mazePreview.hasMovementFiles();
+            }
+
+            if(!hasMoves)
+                mapSelection.writeErrorMsg("Esse mapa não possui arquivos de movimento");
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+            return -1;
+        }
+
+        engine::screen::show();
+
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN)
+        {
+            break;
+        }
+    }
+
+    // Abertura do mapa
+    std::ifstream selectedMapFile(mapSelection.getSelectedMap());
+
+    if (!selectedMapFile.is_open())
+    {
+        throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
+    }
+
+    std::string rcmapHash;
+    getline(selectedMapFile, rcmapHash);
+
+    selectedMapFile.close();    
+    game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
+
+    // Seleção da quantidade de ratos
+    game::RatSelection ratSelection;
+    quitSelection = false;
+
+    GameDesign movementScreen(1920,1080);
+
+    while (!quitSelection) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_RIGHT) {
+                    ratSelection.navigateRight();
+                } else if (e.key.keysym.sym == SDLK_LEFT) {
+                    ratSelection.navigateLeft();
+                } else if (e.key.keysym.sym == SDLK_RETURN) {
+                    quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                    break;
+                } else if (e.key.keysym.sym == SDLK_ESCAPE) {
+                    engine::close();  // Permite fechar o jogo ao pressionar 'esc'
+                    return 0;
                 }
-
-                if(!hasMoves)
-                    mapSelection.writeErrorMsg("Esse mapa não possui arquivos de movimento");
-            }
-            catch(const std::exception& e)
-            {
-                std::cerr << e.what() << '\n';
-                return -1;
-            }
-
-            engine::screen::show();
-
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN)
-            {
-                break;
+            } else if (e.type == SDL_QUIT) {
+                engine::close();
+                return 0;
             }
         }
 
-        // Abertura do mapa
-        std::ifstream selectedMapFile(mapSelection.getSelectedMap());
+        engine::screen::clear();		
+        movementScreen.draw();
+        ratSelection.writeQuantitySelection();
+        engine::screen::show();
 
-        if (!selectedMapFile.is_open())
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
         {
-            throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
+            break;
         }
-
-        std::string rcmapHash;
-        getline(selectedMapFile, rcmapHash);
-
-        selectedMapFile.close();    
-
-        game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
-        // Nenhum arquivo de movimento encontrado
-        // TODO: Lógica da mensagem de erro
-        if(movementSelection.getNumberOfFiles() == 0)
-        {
-            quitSelection = false;
-            continue;
-        }
-        // Seleção da quantidade de ratos
-        game::RatSelection ratSelection;
-        quitSelection = false;
-
-        GameDesign movementScreen(1920,1080);
     
-        while (!quitSelection) {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) != 0) {
-                if (e.type == SDL_KEYDOWN) {
-                    if (e.key.keysym.sym == SDLK_RIGHT) {
-                        ratSelection.navigateRight();
-                    } else if (e.key.keysym.sym == SDLK_LEFT) {
-                        ratSelection.navigateLeft();
-                    } else if (e.key.keysym.sym == SDLK_RETURN) {
-                        quitSelection = true;  // Finaliza a seleção ao pressionar Enter
-                        break;
-                    } else if (e.key.keysym.sym == SDLK_ESCAPE) {
-                        engine::close();  // Permite fechar o jogo ao pressionar 'esc'
-                        return 0;
-                    }
-                } else if (e.type == SDL_QUIT) {
-                    engine::close();
-                    return 0;
-                }
-            }
-
-            engine::screen::clear();		
-            movementScreen.draw();
-            ratSelection.writeQuantitySelection();
-            engine::screen::show();
-
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
-            {
-                break;
-            }
-        }
 
         // Seleção dos arquivos de movimento
         for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i)
@@ -211,7 +201,6 @@ int main(int, char* [])
                 }
             }
             movementFiles.push_back(movementSelection.getSelectedMap());
-            started = true;
         }
     }
 
