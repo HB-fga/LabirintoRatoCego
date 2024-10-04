@@ -54,7 +54,8 @@ void GameDesign::drawButtonSpeedy(int speed) const {
     engine::renderText("||", pausePos+2, 1046, font18p, whiteColor);
 
     // Medidor de velocidade + " célula" + (speed>1? "s" : "") + "/s"
-    engine::renderText((speed ? "Velocidade: " + std::to_string(speed) : "   Pausado   "), 845, 1005+1, font18p, blackColor);
+    std::string msg = (speed>9 ? "Velocidade:": "Velocidade: ");
+    engine::renderText((speed ? msg + std::to_string(speed) : "   Pausado   "), 845, 1005+1, font18p, blackColor);
     TTF_CloseFont(font18p);
 }
 

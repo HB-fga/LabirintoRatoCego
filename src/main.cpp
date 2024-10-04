@@ -298,11 +298,16 @@ int main(int, char* [])
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
 
-                // TODO: Qual comportamento esperado para aumentar a velocidade no pause
                 if (mouseX >= 800 && mouseX <= 840 && mouseY >= 1000 && mouseY <= 1030) {
-                    speed = std::max(1, speed - 1);
+                    if(speed != 0)
+                        speed = std::max(1, speed - 1);
+                    else
+                        oldSpeed = std::max(1, oldSpeed - 1);
                 } else if (mouseX >= 1085 && mouseX <= 1125 && mouseY >= 1000 && mouseY <= 1030) {
-                    speed = std::min(50, speed + 1);
+                    if(speed != 0)
+                        speed = std::min(50, speed + 1);
+                    else
+                        oldSpeed = std::min(50, oldSpeed + 1);
                 } else if (mouseX >= 940 && mouseX <= 980 && mouseY >= 1040 && mouseY <= 1070) {
                     speed ? oldSpeed = speed, speed = 0 : speed = oldSpeed;
                 } else if (mouseX >= 890 && mouseX <= 930 && mouseY >= 1040 && mouseY <= 1070) {
