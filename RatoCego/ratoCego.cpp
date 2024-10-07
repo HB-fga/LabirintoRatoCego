@@ -39,14 +39,24 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::string rcmapHash;
-    getline(inputFile, rcmapHash);
-
-    std::string rcmapJson = "";
+    // TODO: Tratar caso de arquvios estranhos (Por exemplo, se não existir mapHash)
+    // Extraindo o Json sem a linha "mapHash"
+    std::string jsonText = "";
+    std::string foundHash = "";
     for(std::string line; getline(inputFile, line);)
-        rcmapJson = rcmapJson + line + "\n";
+    {
+        if (line.find("mapHash") == std::string::npos) 
+        {
+            jsonText = jsonText + line + "\n";
+        }
+        else
+        {
+            int last = line.find_last_of("\"");
+            foundHash = line.substr(last-32,32);
+        }
+    }
 
-    if (rcmapHash != md5(rcmapJson)) {
+    if (foundHash != md5(jsonText)) {
         cerr << "Nao foi possivel abrir o arquivo do mapa: " << mapFilePath << "\nO arquivo está corrompido ou não é suportado" << endl;
         return 1;
     }
@@ -55,7 +65,7 @@ int main(int argc, char* argv[]) {
     cerr << "=           LABIRINTO DO RATO CEGO           =" << endl;
     cerr << "==============================================\n" << endl;
 
-    pJSON jsonFile = pJSON::parse(rcmapJson);
+    pJSON jsonFile = pJSON::parse(jsonText);
 
     int width = jsonFile["width"], height = jsonFile["height"];
     auto maze = jsonFile["map"];
@@ -202,7 +212,7 @@ int main(int argc, char* argv[]) {
     // Arquivo de saída para o movimento do rato
     pJSON jsonOutput;
 
-    jsonOutput["mapHash"] = rcmapHash;
+    jsonOutput["mapHash"] = foundHash;
     jsonOutput["ratName"] = ratName;
     jsonOutput["movements"] = movements;
     jsonOutput["path"] = pJSON::array();
@@ -210,8 +220,12 @@ int main(int argc, char* argv[]) {
     for(const auto& [row, col] : pathRat)
         jsonOutput["path"].push_back({{"row", row}, {"col", col}});
 
+    string movHash = md5(jsonOutput.dump(4));
+    jsonOutput["movHash"] = movHash;
+
     ofstream outputFile("../assets/movements/" + fileName + ".json");
-    outputFile << jsonOutput.dump(4) << endl;
+
+    outputFile << jsonOutput.dump(4);
     inputFile.close(); // Fecha o arquivo após a leitura.
     outputFile.close(); // Fecha o arquivo após a escrita.
 
