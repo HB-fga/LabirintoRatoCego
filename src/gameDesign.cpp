@@ -25,28 +25,56 @@ void GameDesign::draw() const{
     TTF_CloseFont(font30p);    
 }
 
-void GameDesign::drawButtonSpeedy() const {
+void GameDesign::drawButtonSpeedy(int speed) const {
     SDL_Color whiteColor{ 255, 255, 255, 255 };
     SDL_Color blackColor{ 0, 0, 0, 0 };
     SDL_Color grayDarkColor{ 64, 64, 64, 255 };
-
-
-    engine::draw::rect(745, 995, 210, 40, grayDarkColor);
-    engine::draw::rect(750, 1000, 200, 30, blackColor);
-
-
-    engine::draw::rect(965, 995, 210, 40, grayDarkColor);
-    engine::draw::rect(970, 1000, 200, 30, blackColor);
-
-
-
 
     TTF_Font* font18p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 18);
     if (font18p == nullptr) {
         return;
     }
-    engine::renderText("-Velocidade", 750, 1005, font18p, whiteColor);
-    engine::renderText("+Velocidade", 970, 1005, font18p, whiteColor);
+
+    // - Velocidade
+    int minusPos = 800; 
+    engine::draw::rect(minusPos, 995, 40, 40, grayDarkColor);
+    engine::draw::rect(minusPos+5, 1000, 30, 30, blackColor);
+    engine::renderText("-", minusPos+11, 1005+2, font18p, whiteColor);
+
+    // + Velocidade
+    int plusPos = 1085;
+    engine::draw::rect(plusPos, 995, 40, 40, grayDarkColor);
+    engine::draw::rect(plusPos+5, 1000, 30, 30, blackColor);
+    engine::renderText("+", plusPos+11, 1005+2, font18p, whiteColor);
+
+    // Pause Temp
+    int pausePos = 940;
+    engine::draw::rect(pausePos, 1035, 40, 40, grayDarkColor);
+    engine::draw::rect(pausePos+5, 1040, 30, 30, blackColor);
+    engine::renderText("||", pausePos+2, 1046, font18p, whiteColor);
+
+    // Medidor de velocidade + " célula" + (speed>1? "s" : "") + "/s"
+    std::string msg = (speed>9 ? "Velocidade:": "Velocidade: ");
+    engine::renderText((speed ? msg + std::to_string(speed) : "   Pausado   "), 845, 1005+1, font18p, blackColor);
+    TTF_CloseFont(font18p);
+}
+
+void GameDesign::drawButtonReverse(bool reverse) const {
+    SDL_Color blackColor{ 0, 0, 0, 0 };
+    SDL_Color redColor{255, 0, 0, 0};
+    SDL_Color whiteColor{ 255, 255, 255, 255 };
+    SDL_Color grayDarkColor{ 64, 64, 64, 255 };
+
+    TTF_Font* font18p = TTF_OpenFont("./assets/fonts/PressStart2P-Regular.ttf", 18);
+    if (font18p == nullptr) {
+        return;
+    }
+
+    int reversePos = 890;
+    engine::draw::rect(reversePos, 1035, 40, 40, grayDarkColor);
+    engine::draw::rect(reversePos+5, 1040, 30, 30, blackColor);
+    engine::renderText("R", reversePos+12, 1046, font18p, (reverse ? redColor : whiteColor));
+
     TTF_CloseFont(font18p);
 }
 

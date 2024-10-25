@@ -40,6 +40,38 @@ namespace game {
         }
     }
 
+    void Rat::reverseUpdate(unsigned ticks)
+    {
+        if (current_movement_index >= 0) {
+            if (!last_ticks) {
+                last_ticks = ticks;
+            } else if (ticks - last_ticks > 1000) {
+                int new_x = movements[current_movement_index].first;
+                int new_y = movements[current_movement_index].second;
+                is_flip = (is_flip) ? false : true;
+
+                // Calcular a direção com base nas coordenadas
+                int delta_x = new_x - x;
+                int delta_y = new_y - y;
+                if (delta_x < 0) {
+                    direction = 270; // Direita
+                } else if (delta_x > 0) {
+                    direction = 90; // Esquerda
+                } else if (delta_y < 0) {
+                    direction = 0; // Baixo
+                } else if (delta_y > 0) {
+                    direction = 180; // Cima
+                }
+
+                x = new_x;
+                y = new_y;
+
+                last_ticks = ticks;
+                current_movement_index = std::max(0, current_movement_index - 1);
+            }
+        }
+    }
+
     void Rat::setMovements(const std::vector<std::pair<int, int>>& movements) {
         this->movements = movements;
     }

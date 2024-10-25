@@ -25,6 +25,8 @@ namespace game
         void navigateUp();
         void navigateDown();
         void writeTextSelection(const std::string &mapsDirectory, int height = 63);
+        int getNumberOfFiles();
+        void writeErrorMsg(const std::string &msg);
     };
 }
 

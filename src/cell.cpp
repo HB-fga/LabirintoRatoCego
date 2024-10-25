@@ -15,19 +15,22 @@ namespace game {
         SDL_Color grayDarkColor{ 64, 64, 64, 255 };
         SDL_Color grayLightColor{ 192, 192, 192, 255 };
         SDL_Color blueColor{ 0, 0, 255, 255 };
-        int wt = Cell::wall_thickness - 3;
 
-        if (not_valid){
-            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, grayDarkColor);
+        if (not_valid)
+        {
+            renderTexture(xpos, ypos, "./assets/tiles/wall.png");
         } 
-        else if (is_valid) {
+        else if (is_valid) 
+        {
             engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, grayLightColor);
         }
-        else if (maze_exit) {
-            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, greenColor);
+        else if (maze_exit) 
+        {
+            renderTexture(xpos, ypos,"./assets/tiles/end.png");
         } 
-        else if (maze_start) {
-            engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, blueColor);
+        else if (maze_start) 
+        {
+            renderTexture(xpos, ypos,"./assets/tiles/start.png");
         }
         else {
             engine::draw::rect(xpos, ypos, m_cell_size, m_cell_size, grayLightColor);
@@ -54,4 +57,17 @@ namespace game {
     void Cell::update(unsigned) {
 
     };
+
+    void Cell::renderTexture(int xpos, int ypos, const std::string &filename) const
+    {
+        int wt = Cell::wall_thickness-1;
+        auto cellTexture = engine::loadTexture(filename);
+        if (!cellTexture) {
+            return;
+        }
+
+        SDL_Rect destRect{xpos+wt, ypos+wt, (m_cell_size-2*wt), (m_cell_size-2*wt)};
+        SDL_Point center{(m_cell_size-2*wt) / 2, (m_cell_size-2*wt) / 2};
+        SDL_RenderCopyEx(engine::getRenderer(), cellTexture.get(), nullptr, &destRect, 0, &center, SDL_FLIP_NONE);
+    }
 }
