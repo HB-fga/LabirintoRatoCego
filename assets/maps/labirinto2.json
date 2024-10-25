@@ -1,4 +1,3 @@
-ff295db8b32b0a4831cc0be189825493
 {
     "cellSize": 60,
     "decisionCount": 8,
@@ -86,5 +85,6 @@ ff295db8b32b0a4831cc0be189825493
             3
         ]
     ],
+    "mapHash": "ff295db8b32b0a4831cc0be189825493",
     "width": 5
 }

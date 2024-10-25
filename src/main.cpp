@@ -14,8 +14,6 @@ using pJSON = nlohmann::json;
 
 int main(int, char* [])
 {
-
-    
     // Inicializa o mecanismo
     if (not engine::init(1920, 1080))
     {
@@ -27,12 +25,10 @@ int main(int, char* [])
     // Nenhum mapa encontrado
     if(mapSelection.getNumberOfFiles() == 0)
     {
-        std::cout << "Erro: Nenhum arquivo de mapa (.rcmap) encontrado" << std::endl;
+        std::cout << "Erro: Nenhum arquivo de mapa encontrado" << std::endl;
         engine::close();
         return -1;
     }
-
-
     
     bool quitSelection = false;
     bool changed = true;
@@ -115,11 +111,10 @@ int main(int, char* [])
         throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
     }
 
-    std::string rcmapHash;
-    getline(selectedMapFile, rcmapHash);
-
+    pJSON jsonMapFile = pJSON::parse(selectedMapFile);
+    std::string mapHash = jsonMapFile["mapHash"];
     selectedMapFile.close();    
-    game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
+    game::ConfigSelection movementSelection("./assets/movements", mapHash);
 
     // Seleção da quantidade de ratos
     game::RatSelection ratSelection;

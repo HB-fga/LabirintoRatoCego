@@ -16,14 +16,7 @@ RatInstance::RatInstance(int xv, int yv, const std::string& imageRat, const std:
         throw std::invalid_argument("Failed to open file: " + mapFile);
     }
 
-    std::string rcmapHash;
-    getline(mapF, rcmapHash);
-
-    std::string rcmapJson = "";
-    for(std::string line; getline(mapF, line);)
-        rcmapJson = rcmapJson + line + "\n";
-
-    pJSON jsonFile = pJSON::parse(rcmapJson);
+    pJSON jsonFile = pJSON::parse(mapF);
     int rows = jsonFile["height"], cols = jsonFile["width"];
 
     int mazeWidth = cols * 60;

@@ -1,26 +1,25 @@
-4e41bea6b370bf44de1eb2674017a23f
 {
     "cellSize": 60,
     "decisionCount": 8,
     "decisions": [
         {
             "col": 0,
-            "moves": "S",
+            "moves": "E",
             "row": 0
         },
         {
             "col": 2,
-            "moves": "S",
+            "moves": "SEW",
             "row": 0
         },
         {
             "col": 4,
-            "moves": "S",
+            "moves": "SW",
             "row": 0
         },
         {
             "col": 0,
-            "moves": "NSE",
+            "moves": "E",
             "row": 2
         },
         {
@@ -34,31 +33,31 @@
             "row": 2
         },
         {
-            "col": 0,
-            "moves": "N",
+            "col": 2,
+            "moves": "NEW",
             "row": 4
         },
         {
-            "col": 2,
-            "moves": "N",
+            "col": 4,
+            "moves": "NW",
             "row": 4
         }
     ],
     "exit": {
-        "col": 4,
+        "col": 0,
         "row": 4
     },
     "height": 5,
     "map": [
         [
             4,
-            0,
+            1,
             2,
-            0,
+            1,
             2
         ],
         [
-            1,
+            0,
             0,
             1,
             0,
@@ -72,19 +71,20 @@
             2
         ],
         [
-            1,
+            0,
             0,
             1,
             0,
             1
         ],
         [
+            3,
+            1,
             2,
-            0,
-            2,
-            0,
-            3
+            1,
+            2
         ]
     ],
+    "mapHash": "6abf18e861789ed6a75fada06116830d",
     "width": 5
 }

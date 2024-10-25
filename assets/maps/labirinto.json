@@ -1,4 +1,3 @@
-e688a6bbba57ac67450bd33ba4fbfd80
 {
     "cellSize": 60,
     "decisionCount": 15,
@@ -149,5 +148,6 @@ e688a6bbba57ac67450bd33ba4fbfd80
             2
         ]
     ],
+    "mapHash": "e688a6bbba57ac67450bd33ba4fbfd80",
     "width": 7
 }

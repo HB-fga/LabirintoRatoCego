@@ -90,8 +90,6 @@ namespace game
         std::string mapFileName = mapsDirectory.substr(lastSlashPos + 1);
 
         size_t extensionPos;
-        extensionPos = mapFileName.find(".rcmap");
-        mapFileName = mapFileName.substr(0, extensionPos);
         extensionPos = mapFileName.find(".json");
         mapFileName = mapFileName.substr(0, extensionPos);
 

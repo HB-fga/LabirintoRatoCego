@@ -406,3 +406,7 @@ FodyWeavers.xsd
 
 # MapGenerator build
 MapGenerator/build/
+
+# Rato Cego Build
+libRatoCegoBin.a
+RatoCegoBin

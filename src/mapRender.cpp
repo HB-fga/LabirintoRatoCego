@@ -331,15 +331,8 @@ void MapRenderer::loadMapfromFile(const std::string& filePath){
 
     std::ifstream mapFile(filePath);
     if (!mapFile.good()) return;
-
-    std::string rcmapHash;
-    getline(mapFile, rcmapHash);
-
-    std::string rcmapJson = "";
-    for(std::string line; getline(mapFile, line);)
-        rcmapJson = rcmapJson + line + "\n";
     
-    pJSON jsonMap = pJSON::parse(rcmapJson);
+    pJSON jsonMap = pJSON::parse(mapFile);
     mapFile.close();
 
     auto map = jsonMap["map"];
