@@ -147,56 +147,47 @@ int main(int, char* [])
         movementScreen.draw();
         ratSelection.writeQuantitySelection();
         engine::screen::show();
-
-        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
-        {
-            break;
-        }
+    }
     
 
-        // Seleção dos arquivos de movimento
-        for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i)
-        {
-            quitSelection = false;
+    // Seleção dos arquivos de movimento
+    for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i)
+    {
+        quitSelection = false;
 
-            while (!quitSelection) {
-                SDL_Event e;
-                while (SDL_PollEvent(&e) != 0) {
-                    if (e.type == SDL_KEYDOWN) {
-                        if (e.key.keysym.sym == SDLK_UP) {
-                            movementSelection.navigateUp();
-                        } else if (e.key.keysym.sym == SDLK_DOWN) {
-                            movementSelection.navigateDown();
-                        } else if (e.key.keysym.sym == SDLK_RETURN) {
-                            quitSelection = true;  // Finaliza a seleção ao pressionar Enter
-                            break;
-                        } else if (e.key.keysym.sym == SDLK_ESCAPE) {
-                            engine::close();  // Permite fechar o jogo ao pressionar 'esc'
-                            return 0;
-                        }
-                    } else if (e.type == SDL_QUIT) {
-                        engine::close();
+        while (!quitSelection) {
+            SDL_Event e;
+            while (SDL_PollEvent(&e) != 0) {
+                if (e.type == SDL_KEYDOWN) {
+                    if (e.key.keysym.sym == SDLK_UP) {
+                        movementSelection.navigateUp();
+                    } else if (e.key.keysym.sym == SDLK_DOWN) {
+                        movementSelection.navigateDown();
+                    } else if (e.key.keysym.sym == SDLK_RETURN) {
+                        quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                        break;
+                    } else if (e.key.keysym.sym == SDLK_ESCAPE) {
+                        engine::close();  // Permite fechar o jogo ao pressionar 'esc'
                         return 0;
                     }
-                }
-
-                engine::screen::clear();
-                movementScreen.draw();
-                ratSelection.writeQuantitySelection();
-                for (int j = 0; j < i; ++j) {
-                    if (i > 0){
-                        movementSelection.writeTextSelection(movementFiles[j], 63*(j+4));
-                    }
-                }
-                movementSelection.writeTextSelection(movementSelection.getSelectedMap(), 63*(i+4));
-                engine::screen::show();
-
-                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) {
-                    break;
+                } else if (e.type == SDL_QUIT) {
+                    engine::close();
+                    return 0;
                 }
             }
-            movementFiles.push_back(movementSelection.getSelectedMap());
+
+            engine::screen::clear();
+            movementScreen.draw();
+            ratSelection.writeQuantitySelection();
+            for (int j = 0; j < i; ++j) {
+                if (i > 0){
+                    movementSelection.writeTextSelection(movementFiles[j], 63*(j+4));
+                }
+            }
+            movementSelection.writeTextSelection(movementSelection.getSelectedMap(), 63*(i+4));
+            engine::screen::show();
         }
+        movementFiles.push_back(movementSelection.getSelectedMap());
     }
 
     // Inicia o jogo com o mapa selecionado
