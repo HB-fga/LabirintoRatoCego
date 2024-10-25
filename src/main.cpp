@@ -35,129 +35,129 @@ int main(int, char* [])
 
     
     bool quitSelection = false;
-    bool started = false;
+    bool changed = true;
+    bool hasMoves = false;
 
     std::vector<std::string> movementFiles;
 
-    while(!started)
+    // Seleção do mapa
+    while (!quitSelection)
     {
-        // Seleção do mapa
-        while (!quitSelection)
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0)
         {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) != 0)
+            if (e.type == SDL_KEYDOWN)
             {
-                if (e.type == SDL_KEYDOWN)
+                if (e.key.keysym.sym == SDLK_UP)
                 {
-                    if (e.key.keysym.sym == SDLK_UP)
-                    {
-                        mapSelection.navigateUp();
-                    }
-                    else if (e.key.keysym.sym == SDLK_DOWN)
-                    {
-                        mapSelection.navigateDown();
-                    }
-                    else if (e.key.keysym.sym == SDLK_RETURN)
-                    {
-                        quitSelection = true;  // Finaliza a seleção ao pressionar Enter
-                        break;
-                    }
-                    else if (e.key.keysym.sym == SDLK_ESCAPE)
-                    {
-                        engine::close();  //  Permite fechar o jogo ao pressionar 'esc'
-                        return 0;
-                    }
+                    mapSelection.navigateUp();
+                    changed = true;
                 }
-                else if (e.type == SDL_QUIT)
+                else if (e.key.keysym.sym == SDLK_DOWN)
                 {
-                    engine::close();
+                    mapSelection.navigateDown();
+                    changed = true;
+                }
+                else if (e.key.keysym.sym == SDLK_RETURN and hasMoves)
+                {
+                    quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                    break;
+                }
+                else if (e.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    engine::close();  //  Permite fechar o jogo ao pressionar 'esc'
                     return 0;
                 }
             }
-            engine::screen::clear();
-
-            // Selecao do labirinto
-            game::Maze mazePreview;
-            try
+            else if (e.type == SDL_QUIT)
             {
-                mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
-                mazePreview.drawCentered(true); // Desenhe o preview do labirinto
-                mapSelection.writeTextSelection(mapSelection.getSelectedMap());
-                if(!mazePreview.hasMovementFiles())
-                    mapSelection.writeErrorMsg("Esse mapa não possui arquivos de movimento");
-            }
-            catch(const std::exception& e)
-            {
-                std::cerr << e.what() << '\n';
-                return -1;
-            }
-
-            engine::screen::show();
-
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN)
-            {
-                break;
+                engine::close();
+                return 0;
             }
         }
+        engine::screen::clear();
 
-        // Abertura do mapa
-        std::ifstream selectedMapFile(mapSelection.getSelectedMap());
-
-        if (!selectedMapFile.is_open())
+        // Selecao do labirinto
+        game::Maze mazePreview;
+        try
         {
-            throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
+            mazePreview = game::Maze::loadMapfromFile(mapSelection.getSelectedMap());
+            mazePreview.drawCentered(true); // Desenhe o preview do labirinto
+            mapSelection.writeTextSelection(mapSelection.getSelectedMap());
+            if(changed)
+            {
+                changed = false;
+                hasMoves = mazePreview.hasMovementFiles();
+            }
+
+            if(!hasMoves)
+                mapSelection.writeErrorMsg("Esse mapa não possui arquivos de movimento");
         }
-
-        std::string rcmapHash;
-        getline(selectedMapFile, rcmapHash);
-
-        selectedMapFile.close();    
-
-        game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
-        // Nenhum arquivo de movimento encontrado
-        // TODO: Lógica da mensagem de erro
-        if(movementSelection.getNumberOfFiles() == 0)
+        catch(const std::exception& e)
         {
-            quitSelection = false;
-            continue;
+            std::cerr << e.what() << '\n';
+            return -1;
         }
-        // Seleção da quantidade de ratos
-        game::RatSelection ratSelection;
-        quitSelection = false;
 
-        GameDesign movementScreen(1920,1080);
+        engine::screen::show();
+
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN)
+        {
+            break;
+        }
+    }
+
+    // Abertura do mapa
+    std::ifstream selectedMapFile(mapSelection.getSelectedMap());
+
+    if (!selectedMapFile.is_open())
+    {
+        throw std::invalid_argument("Failed to open file: " + mapSelection.getSelectedMap());
+    }
+
+    std::string rcmapHash;
+    getline(selectedMapFile, rcmapHash);
+
+    selectedMapFile.close();    
+    game::ConfigSelection movementSelection("./assets/movements", rcmapHash);
+
+    // Seleção da quantidade de ratos
+    game::RatSelection ratSelection;
+    quitSelection = false;
+
+    GameDesign movementScreen(1920,1080);
+
+    while (!quitSelection) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_RIGHT) {
+                    ratSelection.navigateRight();
+                } else if (e.key.keysym.sym == SDLK_LEFT) {
+                    ratSelection.navigateLeft();
+                } else if (e.key.keysym.sym == SDLK_RETURN) {
+                    quitSelection = true;  // Finaliza a seleção ao pressionar Enter
+                    break;
+                } else if (e.key.keysym.sym == SDLK_ESCAPE) {
+                    engine::close();  // Permite fechar o jogo ao pressionar 'esc'
+                    return 0;
+                }
+            } else if (e.type == SDL_QUIT) {
+                engine::close();
+                return 0;
+            }
+        }
+
+        engine::screen::clear();		
+        movementScreen.draw();
+        ratSelection.writeQuantitySelection();
+        engine::screen::show();
+
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
+        {
+            break;
+        }
     
-        while (!quitSelection) {
-            SDL_Event e;
-            while (SDL_PollEvent(&e) != 0) {
-                if (e.type == SDL_KEYDOWN) {
-                    if (e.key.keysym.sym == SDLK_RIGHT) {
-                        ratSelection.navigateRight();
-                    } else if (e.key.keysym.sym == SDLK_LEFT) {
-                        ratSelection.navigateLeft();
-                    } else if (e.key.keysym.sym == SDLK_RETURN) {
-                        quitSelection = true;  // Finaliza a seleção ao pressionar Enter
-                        break;
-                    } else if (e.key.keysym.sym == SDLK_ESCAPE) {
-                        engine::close();  // Permite fechar o jogo ao pressionar 'esc'
-                        return 0;
-                    }
-                } else if (e.type == SDL_QUIT) {
-                    engine::close();
-                    return 0;
-                }
-            }
-
-            engine::screen::clear();		
-            movementScreen.draw();
-            ratSelection.writeQuantitySelection();
-            engine::screen::show();
-
-            if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN) 
-            {
-                break;
-            }
-        }
 
         // Seleção dos arquivos de movimento
         for (int i = 0; i < ratSelection.getSelectedQuantity(); ++i)
@@ -201,7 +201,6 @@ int main(int, char* [])
                 }
             }
             movementFiles.push_back(movementSelection.getSelectedMap());
-            started = true;
         }
     }
 
@@ -276,6 +275,8 @@ int main(int, char* [])
     int totalMovements = maxMovements;
 
     int speed = 1;
+    int oldSpeed;
+    bool reverse = false;
 
     if (maxMovements == -1){
         quit = true;
@@ -296,10 +297,20 @@ int main(int, char* [])
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
 
-                if (mouseX >= 750 && mouseX <= 950 && mouseY >= 1000 && mouseY <= 1030) {
-                    speed = std::max(1, speed - 1);
-                } else if (mouseX >= 970 && mouseX <= 1170 && mouseY >= 1000 && mouseY <= 1030) {
-                    speed = std::min(50, speed + 1);
+                if (mouseX >= 800 && mouseX <= 840 && mouseY >= 1000 && mouseY <= 1030) {
+                    if(speed != 0)
+                        speed = std::max(1, speed - 1);
+                    else
+                        oldSpeed = std::max(1, oldSpeed - 1);
+                } else if (mouseX >= 1085 && mouseX <= 1125 && mouseY >= 1000 && mouseY <= 1030) {
+                    if(speed != 0)
+                        speed = std::min(50, speed + 1);
+                    else
+                        oldSpeed = std::min(50, oldSpeed + 1);
+                } else if (mouseX >= 940 && mouseX <= 980 && mouseY >= 1040 && mouseY <= 1070) {
+                    speed ? oldSpeed = speed, speed = 0 : speed = oldSpeed;
+                } else if (mouseX >= 890 && mouseX <= 930 && mouseY >= 1040 && mouseY <= 1070) {
+                    reverse = !reverse;
                 }
             }
         }
@@ -309,7 +320,10 @@ int main(int, char* [])
 
         maze.drawCentered();
         for (RatInstance& ratInstance : rats) {
-            ratInstance.update(SDL_GetTicks()*speed);
+            if(!reverse)
+                ratInstance.update(SDL_GetTicks()*speed);
+            else
+                ratInstance.reverseUpdate(SDL_GetTicks()*speed);
             ratInstance.draw();
             if (ratInstance.getIndex() == maxMovements) {
                 if (totalMovements != maxMovements + 100)
@@ -321,7 +335,8 @@ int main(int, char* [])
             quit = true;
         }
 
-        button.drawButtonSpeedy();
+        button.drawButtonSpeedy(speed);
+        button.drawButtonReverse(reverse);
         engine::screen::show();
 
     }
