@@ -1,7 +1,7 @@
 {
     "mapHash": "e688a6bbba57ac67450bd33ba4fbfd80",
-    "movHash": "6c53add81087853f930fc68775670ff4",
-    "movements": 46,
+    "movHash": "2584ca41e9e6601fc4876dad392187ef",
+    "movements": 24,
     "path": [
         {
             "col": 3,
@@ -12,16 +12,16 @@
             "row": 6
         },
         {
-            "col": 1,
+            "col": 3,
             "row": 6
         },
         {
-            "col": 0,
+            "col": 2,
             "row": 6
         },
         {
-            "col": 1,
-            "row": 6
+            "col": 2,
+            "row": 5
         },
         {
             "col": 2,
@@ -44,120 +44,32 @@
             "row": 6
         },
         {
-            "col": 5,
-            "row": 6
-        },
-        {
-            "col": 6,
-            "row": 6
-        },
-        {
-            "col": 6,
-            "row": 5
-        },
-        {
-            "col": 6,
-            "row": 4
-        },
-        {
-            "col": 6,
-            "row": 3
-        },
-        {
-            "col": 6,
-            "row": 4
-        },
-        {
-            "col": 6,
-            "row": 5
-        },
-        {
-            "col": 6,
-            "row": 6
-        },
-        {
-            "col": 6,
-            "row": 5
-        },
-        {
-            "col": 6,
-            "row": 4
-        },
-        {
-            "col": 6,
-            "row": 3
-        },
-        {
-            "col": 6,
-            "row": 2
-        },
-        {
-            "col": 6,
-            "row": 1
-        },
-        {
-            "col": 6,
-            "row": 0
-        },
-        {
-            "col": 5,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
             "col": 3,
-            "row": 0
+            "row": 6
         },
         {
             "col": 2,
-            "row": 0
-        },
-        {
-            "col": 3,
-            "row": 0
-        },
-        {
-            "col": 4,
-            "row": 0
-        },
-        {
-            "col": 3,
-            "row": 0
+            "row": 6
         },
         {
             "col": 2,
-            "row": 0
+            "row": 5
+        },
+        {
+            "col": 2,
+            "row": 6
+        },
+        {
+            "col": 2,
+            "row": 5
+        },
+        {
+            "col": 2,
+            "row": 6
         },
         {
             "col": 1,
-            "row": 0
-        },
-        {
-            "col": 0,
-            "row": 0
-        },
-        {
-            "col": 0,
-            "row": 1
-        },
-        {
-            "col": 0,
-            "row": 2
-        },
-        {
-            "col": 0,
-            "row": 3
-        },
-        {
-            "col": 0,
-            "row": 4
-        },
-        {
-            "col": 0,
-            "row": 5
+            "row": 6
         },
         {
             "col": 0,
