@@ -39,19 +39,19 @@ void GameDesign::drawButtonSpeedy(int speed) const {
     int minusPos = 800; 
     engine::draw::rect(minusPos, 995, 40, 40, grayDarkColor);
     engine::draw::rect(minusPos+5, 1000, 30, 30, blackColor);
-    engine::renderText("-", minusPos+11, 1005+2, font18p, whiteColor);
+    engine::renderText("<", minusPos+11, 1005+2, font18p, whiteColor);
 
     // + Velocidade
     int plusPos = 1085;
     engine::draw::rect(plusPos, 995, 40, 40, grayDarkColor);
     engine::draw::rect(plusPos+5, 1000, 30, 30, blackColor);
-    engine::renderText("+", plusPos+11, 1005+2, font18p, whiteColor);
+    engine::renderText(">", plusPos+11, 1005+2, font18p, whiteColor);
 
     // Pause Temp
     int pausePos = 940;
     engine::draw::rect(pausePos, 1035, 40, 40, grayDarkColor);
     engine::draw::rect(pausePos+5, 1040, 30, 30, blackColor);
-    engine::renderText("||", pausePos+2, 1046, font18p, whiteColor);
+    engine::renderText("P", pausePos+12, 1046, font18p, whiteColor);
 
     // Medidor de velocidade + " célula" + (speed>1? "s" : "") + "/s"
     std::string msg = (speed>9 ? "Velocidade:": "Velocidade: ");

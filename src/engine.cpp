@@ -6,7 +6,7 @@ namespace engine {
     static SDL_Renderer* gRenderer = nullptr;
     static std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> gTextureCache;
 
-    bool init(int w, int h)
+    bool init()
     {
         // Initialize SDL
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -14,6 +14,11 @@ namespace engine {
             std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << '\n';
             return false;
         }
+
+        SDL_DisplayMode DM;
+        SDL_GetCurrentDisplayMode(0, &DM);
+        auto w = DM.w;
+        auto h = DM.h;
 
         // Set texture filtering to linear
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
@@ -56,6 +61,8 @@ namespace engine {
             printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
             return false;
         }
+
+        SDL_RenderSetLogicalSize(gRenderer, 1920, 1080);
 
         return true;
     }

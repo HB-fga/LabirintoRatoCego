@@ -12,10 +12,36 @@
 
 using pJSON = nlohmann::json;
 
+void decreaseSpeed(int* speed, int* oldSpeed)
+{
+    if(*speed != 0)
+        *speed = std::max(1, *speed - 1);
+    else
+        *oldSpeed = std::max(1, *oldSpeed - 1);
+}
+
+void increaseSpeed(int* speed, int* oldSpeed)
+{
+    if(*speed != 0)
+        *speed = std::min(50, *speed + 1);
+    else
+        *oldSpeed = std::min(50, *oldSpeed + 1);
+}
+
+void pause(int* speed, int* oldSpeed)
+{
+    *speed ? *oldSpeed = *speed, *speed = 0 : *speed = *oldSpeed;
+}
+
+void rewind(bool* reverse)
+{
+    *reverse = !*reverse;
+}
+
 int main(int, char* [])
 {
     // Inicializa o mecanismo
-    if (not engine::init(1920, 1080))
+    if (not engine::init())
     {
         engine::close();
         return -1;
@@ -275,28 +301,40 @@ int main(int, char* [])
             if (e.type == SDL_QUIT) {
                 quit = true;
                 break;
-            } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+            } else if (e.type == SDL_KEYDOWN and e.key.keysym.sym == SDLK_ESCAPE) {
                 quit = true;
                 quitRanking = true;
                 break;
+            } else if(e.type == SDL_KEYDOWN){
+                switch (e.key.keysym.sym)
+                {
+                    case SDLK_LEFT:
+                        decreaseSpeed(&speed, &oldSpeed);
+                        break;
+
+                    case SDLK_RIGHT:
+                        increaseSpeed(&speed, &oldSpeed);
+                        break; 
+
+                    case SDLK_p:
+                        pause(&speed, &oldSpeed);
+                        break;
+
+                    case SDLK_r:
+                        rewind(&reverse);
+                        break;
+                } 
             } else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
-
                 if (mouseX >= 800 && mouseX <= 840 && mouseY >= 1000 && mouseY <= 1030) {
-                    if(speed != 0)
-                        speed = std::max(1, speed - 1);
-                    else
-                        oldSpeed = std::max(1, oldSpeed - 1);
+                    decreaseSpeed(&speed, &oldSpeed);
                 } else if (mouseX >= 1085 && mouseX <= 1125 && mouseY >= 1000 && mouseY <= 1030) {
-                    if(speed != 0)
-                        speed = std::min(50, speed + 1);
-                    else
-                        oldSpeed = std::min(50, oldSpeed + 1);
+                    increaseSpeed(&speed, &oldSpeed);
                 } else if (mouseX >= 940 && mouseX <= 980 && mouseY >= 1040 && mouseY <= 1070) {
-                    speed ? oldSpeed = speed, speed = 0 : speed = oldSpeed;
+                    pause(&speed, &oldSpeed);
                 } else if (mouseX >= 890 && mouseX <= 930 && mouseY >= 1040 && mouseY <= 1070) {
-                    reverse = !reverse;
+                    rewind(&reverse);
                 }
             }
         }

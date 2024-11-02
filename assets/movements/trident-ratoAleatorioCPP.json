@@ -1,0 +1,72 @@
+{
+    "mapHash": "e688a6bbba57ac67450bd33ba4fbfd80",
+    "movHash": "8340a685cfd3ec176f8dc0cb3cc51238",
+    "movements": 16,
+    "path": [
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 4,
+            "row": 6
+        },
+        {
+            "col": 5,
+            "row": 6
+        },
+        {
+            "col": 6,
+            "row": 6
+        },
+        {
+            "col": 6,
+            "row": 5
+        },
+        {
+            "col": 6,
+            "row": 4
+        },
+        {
+            "col": 6,
+            "row": 3
+        },
+        {
+            "col": 6,
+            "row": 4
+        },
+        {
+            "col": 6,
+            "row": 5
+        },
+        {
+            "col": 6,
+            "row": 6
+        },
+        {
+            "col": 6,
+            "row": 5
+        },
+        {
+            "col": 6,
+            "row": 4
+        },
+        {
+            "col": 6,
+            "row": 3
+        },
+        {
+            "col": 5,
+            "row": 3
+        },
+        {
+            "col": 4,
+            "row": 3
+        },
+        {
+            "col": 3,
+            "row": 3
+        }
+    ],
+    "ratName": "ratoAleatorioCPP"
+}

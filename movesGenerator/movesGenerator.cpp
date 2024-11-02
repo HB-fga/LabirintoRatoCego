@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            // cerr << "O rato nao chegou ao ponto final em menos de 999 passos" << endl;
+            cerr << "O rato nao chegou ao ponto final em menos de 999 passos" << endl;
             break;
         }
 
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            // cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl;
+            cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl;
             break;
         }
 
@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
 
             // directionsCurrent na posição pos
             directionsCurrent = possibleDirections[pos];
-            // cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
+            cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
             cerr << "Possiveis direcoes: " << directionsCurrent << endl;
             cout << directionsCurrent << endl;
 
@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
             currentDirection = directionChosen;
 
             if (directionsCurrent.find(currentDirection) != string::npos) {
-                // cerr << "OK - Movendo para o proximo ponto" << endl;
+                cerr << "OK - Movendo para o proximo ponto" << endl;
                 movements++;
                 // Atualiza as coordenadas atuais
                 if (currentDirection == "N") {
@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // cerr << "\nEscolha o nome do rato (o nome nao deve conter espacos ou caracteres especiais)" << endl;
+    cerr << "\nEscolha o nome do rato (o nome nao deve conter espacos ou caracteres especiais)" << endl;
     string ratName;
     cin >> ratName;
     cerr << "Nome do rato: " << ratName << endl;

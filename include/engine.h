@@ -10,7 +10,7 @@
 
 namespace engine {
 
-    bool init(int w, int h);
+    bool init();
     void close();
     SDL_Renderer* getRenderer();
     std::shared_ptr<SDL_Texture> loadTexture(const std::string&filename);
