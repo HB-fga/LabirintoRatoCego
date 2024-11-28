@@ -10,8 +10,10 @@
 using namespace std;
 using pJSON = nlohmann::json;
 
-const int P = 999; // Número máximo de movements permitidos
+const int MAX = 999; // Número máximo de movements permitidos
+const bool DEBUG = false; // Controle de exibição de informação de Debug
 
+// Função de cálculo de Hash MD5
 std::string md5(const std::string &str){
   unsigned char hash[MD5_DIGEST_LENGTH];
 
@@ -39,40 +41,38 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // TODO: Tratar caso de arquvios estranhos (Por exemplo, se não existir mapHash)
     // Extraindo o Json sem a linha "mapHash"
-    std::string jsonText = "";
-    std::string foundHash = "";
+    string jsonMapContent = "";
+    string jsonFoundHash = "";
     for(std::string line; getline(inputFile, line);)
     {
         if (line.find("mapHash") == std::string::npos) 
         {
-            jsonText = jsonText + line + "\n";
+            jsonMapContent = jsonMapContent + line + "\n";
         }
         else
         {
             int last = line.find_last_of("\"");
-            foundHash = line.substr(last-32,32);
+            jsonFoundHash = line.substr(last-32,32);
         }
     }
 
-    if (foundHash != md5(jsonText)) {
+    if (jsonFoundHash != md5(jsonMapContent)) {
         cerr << "Nao foi possivel abrir o arquivo do mapa: " << mapFilePath << "\nO arquivo está corrompido ou não é suportado" << endl;
         return 1;
     }
 
     cerr << "==============================================" << endl;
     cerr << "=           LABIRINTO DO RATO CEGO           =" << endl;
-    cerr << "==============================================\n" << endl;
+    cerr << "==============================================" << endl;
 
-    pJSON jsonFile = pJSON::parse(jsonText);
+    pJSON jsonFile = pJSON::parse(jsonMapContent);
 
     int width = jsonFile["width"], height = jsonFile["height"];
-    auto maze = jsonFile["map"];
-    cerr << "Largura: " << width << " - Altura: " << height << endl;
-
+    if(DEBUG) cerr << "Largura: " << width << " - Altura: " << height << endl;
     int numDecisionPoints = jsonFile["decisionCount"];
-    cerr << "Numero de pontos de decisao: " << numDecisionPoints << endl;
+    if(DEBUG) cerr << "Numero de pontos de decisao: " << numDecisionPoints << endl;
+    auto maze = jsonFile["map"];
 
     vector<pair<int, int>> decisionPoints;
     vector<string> possibleDirections;
@@ -92,9 +92,8 @@ int main(int argc, char* argv[]) {
 
     // coordenadas finais
     int xFinal = jsonFile["exit"]["row"], yFinal = jsonFile["exit"]["col"];
-    cerr << "Ponto Final: " << xFinal << " " << yFinal << endl;
-    cerr << "==============================================\n" << endl;
-
+    if(DEBUG) cerr << "Ponto Final: " << xFinal << " " << yFinal << endl;
+    if(DEBUG) cerr << "==============================================\n" << endl;
 
     int xCurrent = xInitial, yCurrent = yInitial;
     string currentDirection;
@@ -106,12 +105,12 @@ int main(int argc, char* argv[]) {
 
     while(true){
         // Verifica se o rato ultrapassou o número máximo de movements
-        if (movements == P){
+        if (movements == MAX){
             cout << "LOSE" << endl;
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            cerr << "O rato nao chegou ao ponto final em menos de 999 passos" << endl;
+            if(DEBUG) cerr << "O rato nao chegou ao ponto final em menos de 999 passos" << endl << endl;
             break;
         }
 
@@ -121,7 +120,7 @@ int main(int argc, char* argv[]) {
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl;
+            if(DEBUG) cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl << endl;
             break;
         }
 
@@ -138,18 +137,18 @@ int main(int argc, char* argv[]) {
 
             // directionsCurrent na posição pos
             directionsCurrent = possibleDirections[pos];
-            cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
-            cerr << "Possiveis direcoes: " << directionsCurrent << endl;
+            if(DEBUG) cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
+            if(DEBUG) cerr << "Possiveis direcoes: " << directionsCurrent << endl;
             cout << directionsCurrent << endl;
 
             string directionChosen;
             cin >> directionChosen;
-            cerr << "Direcao escolhida: " << directionChosen << endl;
+            if(DEBUG) cerr << "Direcao escolhida: " << directionChosen << endl;
 
             currentDirection = directionChosen;
 
             if (directionsCurrent.find(currentDirection) != string::npos) {
-                cerr << "OK - Movendo para o proximo ponto" << endl;
+                if(DEBUG) cerr << "========== OK - Movendo para o proximo ponto" << endl;
                 movements++;
                 // Atualiza as coordenadas atuais
                 if (currentDirection == "N") {
@@ -169,7 +168,7 @@ int main(int argc, char* argv[]) {
                 pathRat.push_back({xCurrent, yCurrent});
             }
             else {
-                cerr << "FALHA - Direcao invalida. Tente novamente." << endl;
+                if(DEBUG) cerr << "========== FALHA - Direcao invalida. Tente novamente." << endl;
             }
         } 
         else {
@@ -193,7 +192,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    cerr << "\nEscolha o nome do rato (o nome nao deve conter espacos ou caracteres especiais)" << endl;
+    // TODO: Melhorar tratamento da string de nome do rato
+    cerr << "Escolha o nome do rato (o nome nao deve conter espacos ou caracteres especiais)" << endl;
     string ratName;
     cin >> ratName;
     cerr << "Nome do rato: " << ratName << endl;
@@ -212,7 +212,7 @@ int main(int argc, char* argv[]) {
     // Arquivo de saída para o movimento do rato
     pJSON jsonOutput;
 
-    jsonOutput["mapHash"] = foundHash;
+    jsonOutput["mapHash"] = jsonFoundHash;
     jsonOutput["ratName"] = ratName;
     jsonOutput["movements"] = movements;
     jsonOutput["path"] = pJSON::array();
