@@ -6,12 +6,13 @@
 #include <nlohmann/json.hpp>
 #include <openssl/md5.h>
 #include <openssl/evp.h>
+#include <set>
 
 using namespace std;
 using pJSON = nlohmann::json;
 
 const int MAX = 999; // Número máximo de movements permitidos
-const bool DEBUG = false; // Controle de exibição de informação de Debug
+const bool DEBUG = true; // Controle de exibição de informação de Debug
 
 // Função de cálculo de Hash MD5
 std::string md5(const std::string &str){
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]) {
 
     vector<pair<int, int>> decisionPoints;
     vector<string> possibleDirections;
+    set<pair<int, int>> markedCells;
     string directionsCurrent;
     int xInitial, yInitial;
 
@@ -96,7 +98,7 @@ int main(int argc, char* argv[]) {
     if(DEBUG) cerr << "==============================================\n" << endl;
 
     int xCurrent = xInitial, yCurrent = yInitial;
-    string currentDirection;
+    string currentAction;
     int movements = 1;
 
     // Vetor para armazenar o caminho percorrido
@@ -139,30 +141,48 @@ int main(int argc, char* argv[]) {
             directionsCurrent = possibleDirections[pos];
             if(DEBUG) cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
             if(DEBUG) cerr << "Possiveis direcoes: " << directionsCurrent << endl;
+            if(DEBUG) cerr << "Celulas marcadas: ";
+            for (auto cell : markedCells) {
+                cerr << "(" << cell.first << ", " << cell.second <<") ";
+            }
+            cerr << endl;
+
+            // Envia as direções possíveis para o código do jogador
             cout << directionsCurrent << endl;
 
-            string directionChosen;
-            cin >> directionChosen;
-            if(DEBUG) cerr << "Direcao escolhida: " << directionChosen << endl;
+            string actionChosen;
+            cin >> actionChosen;
+            if(DEBUG) cerr << "Movimento escolhido: " << actionChosen << endl;
 
-            currentDirection = directionChosen;
+            currentAction = actionChosen;
 
-            if (directionsCurrent.find(currentDirection) != string::npos) {
-                if(DEBUG) cerr << "========== OK - Movendo para o proximo ponto" << endl;
-                movements++;
+            // Ajustando opções de ação disponíveis
+            directionsCurrent = directionsCurrent + "+?";
+
+            if (directionsCurrent.find(currentAction) != string::npos) {
                 // Atualiza as coordenadas atuais
-                if (currentDirection == "N") {
+                if (currentAction == "N") {
                     xCurrent--;
                 }
-                else if (currentDirection == "S") {
+                else if (currentAction == "S") {
                     xCurrent++;
                 }
-                else if (currentDirection == "W") {
+                else if (currentAction == "W") {
                     yCurrent--;
                 }
-                else if (currentDirection == "E") {
+                else if (currentAction == "E") {
                     yCurrent++;
                 }
+                else if (currentAction == "+") {
+                    markedCells.emplace(xCurrent, yCurrent);
+                }
+                else if (currentAction == "?") {
+                    if(DEBUG) cerr << (markedCells.count(make_pair(xCurrent, yCurrent)) ? "Marcada!\n" : "Não marcada!\n");
+                    cout << (markedCells.count(make_pair(xCurrent, yCurrent)) ? "YES\n" : "NO\n");
+                }
+
+                if(DEBUG) cerr << "========== OK - Movendo para o proximo ponto" << endl;
+                movements++;
 
                 // Adiciona as coordenadas atuais ao pathRat
                 pathRat.push_back({xCurrent, yCurrent});
@@ -174,16 +194,16 @@ int main(int argc, char* argv[]) {
         else {
             movements++;
             // Atualiza as coordenadas atuais
-            if (currentDirection == "N") {
+            if (currentAction == "N") {
                 xCurrent--;
             }
-            else if (currentDirection == "S") {
+            else if (currentAction == "S") {
                 xCurrent++;
             }
-            else if (currentDirection == "W") {
+            else if (currentAction == "W") {
                 yCurrent--;
             }
-            else if (currentDirection == "E") {
+            else if (currentAction == "E") {
                 yCurrent++;
             }
 

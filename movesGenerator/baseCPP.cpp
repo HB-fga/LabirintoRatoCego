@@ -13,7 +13,16 @@ int main() {
             break;
         }
 
-        cout << options[rand()%options.size()] << endl;
+        options = options + "+?";
+        char chosenOption = options[rand()%options.size()];
+
+        cout << chosenOption << endl;
+
+        if(chosenOption == '?')
+        {
+            string markAnswer;
+            cin >> markAnswer;
+        }
 
     }
 
