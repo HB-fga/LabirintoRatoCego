@@ -13,6 +13,9 @@ using pJSON = nlohmann::json;
 
 const int MAX = 999; // Número máximo de movements permitidos
 const bool DEBUG = true; // Controle de exibição de informação de Debug
+// 2 = DECISION
+// 3 = EXIT
+// 4 = START
 
 // Função de cálculo de Hash MD5
 std::string md5(const std::string &str){
@@ -100,6 +103,7 @@ int main(int argc, char* argv[]) {
     int xCurrent = xInitial, yCurrent = yInitial;
     string currentAction;
     int movements = 1;
+    int playerActions = 0;
 
     // Vetor para armazenar o caminho percorrido
     vector<pair<int, int>> pathRat;
@@ -122,7 +126,7 @@ int main(int argc, char* argv[]) {
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;
             cerr << "==============================================\n" << endl;
-            if(DEBUG) cerr << "O rato chegou ao ponto final em " << movements << " passos." << endl << endl;
+            if(DEBUG) cerr << "O rato chegou ao ponto final em " << playerActions << " acoes e " << movements << " movimentos." << endl << endl;
             break;
         }
 
@@ -160,7 +164,10 @@ int main(int argc, char* argv[]) {
             directionsCurrent = directionsCurrent + "+?";
 
             if (directionsCurrent.find(currentAction) != string::npos) {
-                // Atualiza as coordenadas atuais
+                playerActions++;
+                movements++;
+
+                // Executa a ação
                 if (currentAction == "N") {
                     xCurrent--;
                 }
@@ -181,11 +188,10 @@ int main(int argc, char* argv[]) {
                     cout << (markedCells.count(make_pair(xCurrent, yCurrent)) ? "YES\n" : "NO\n");
                 }
 
-                if(DEBUG) cerr << "========== OK - Movendo para o proximo ponto" << endl;
-                movements++;
-
                 // Adiciona as coordenadas atuais ao pathRat
-                pathRat.push_back({xCurrent, yCurrent});
+                pathRat.emplace_back(xCurrent, yCurrent);
+
+                if(DEBUG) cerr << "========== OK - Ação realizada" << endl;
             }
             else {
                 if(DEBUG) cerr << "========== FALHA - Direcao invalida. Tente novamente." << endl;
@@ -208,7 +214,7 @@ int main(int argc, char* argv[]) {
             }
 
             // Adiciona as coordenadas atuais ao pathRat
-            pathRat.push_back({xCurrent, yCurrent});
+            pathRat.emplace_back(xCurrent, yCurrent);
         }
     }
 
@@ -235,6 +241,7 @@ int main(int argc, char* argv[]) {
     jsonOutput["mapHash"] = jsonFoundHash;
     jsonOutput["ratName"] = ratName;
     jsonOutput["movements"] = movements;
+    jsonOutput["actions"] = playerActions;
     jsonOutput["path"] = pJSON::array();
 
     for(const auto& [row, col] : pathRat)

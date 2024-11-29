@@ -33,7 +33,7 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
 
 
     engine::renderText("Nome", 60, 100, font30p, whiteColor);
-    engine::renderText("Qtd Movimentos", SCREEN_WIDTH / 5 + 400, 100, font30p, whiteColor);
+    engine::renderText("Ações", (SCREEN_WIDTH / 2) - 80, 100, font30p, whiteColor);
     engine::renderText("Rato", 1740, 100, font30p, whiteColor);
 
     int minMoves = std::stoi(std::get<1>(mouseData[0]));
@@ -43,15 +43,15 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
 
         if (std::stoi(std::get<1>(mouse)) == 1000) {
             engine::renderText(std::get<0>(mouse), 60, y, font30p, redColor);
-            engine::renderText("INVALIDO", SCREEN_WIDTH / 5 + 490, y, font30p, redColor);
+            engine::renderText("INVALIDO", (SCREEN_WIDTH / 2) + 40, y, font30p, redColor);
         }
         else if (std::stoi(std::get<1>(mouse)) == minMoves and minMoves < 999 ) {
             engine::renderText(std::get<0>(mouse), 60, y, font30p, greenColor);
-            engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, greenColor);
+            engine::renderText(std::get<1>(mouse), (SCREEN_WIDTH / 2) - 20, y, font30p, greenColor);
         }
         else {
             engine::renderText(std::get<0>(mouse), 60, y, font30p, blackColor);
-            engine::renderText(std::get<1>(mouse), SCREEN_WIDTH / 5 + 550, y, font30p, blackColor);
+            engine::renderText(std::get<1>(mouse), (SCREEN_WIDTH / 2) - 20, y, font30p, blackColor);
         }
 
         y += 70;

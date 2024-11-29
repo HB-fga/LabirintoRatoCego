@@ -251,6 +251,7 @@ int main(int, char* [])
         pJSON jsonFile = pJSON::parse(movementsFile);
         std::string ratName = jsonFile["ratName"];
         int n = jsonFile["movements"];
+        int ratActions = jsonFile["actions"];
         int col = jsonFile["path"][0]["col"], row = jsonFile["path"][0]["row"];
 
         int validator = maze.validatorMovement(movementFiles[i], mapSelection.getSelectedMap());
@@ -267,7 +268,7 @@ int main(int, char* [])
         if (validator == 1) {
             mouseData.push_back(std::make_tuple(ratName, std::to_string(999), ratImages[i]));
         } else {
-            mouseData.push_back(std::make_tuple(ratName, std::to_string(n), ratImages[i]));
+            mouseData.push_back(std::make_tuple(ratName, std::to_string(ratActions), ratImages[i]));
         }
 
 
@@ -295,7 +296,6 @@ int main(int, char* [])
     }
     while (!quit)
     {
-
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
