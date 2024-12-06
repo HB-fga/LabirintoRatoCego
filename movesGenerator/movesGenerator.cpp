@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include <vector>
 #include <utility>
 #include <fstream>
@@ -13,31 +14,106 @@ using pJSON = nlohmann::json;
 
 const int MAX = 999; // Número máximo de movements permitidos
 const bool DEBUG = true; // Controle de exibição de informação de Debug
-// 2 = DECISION
-// 3 = EXIT
-// 4 = START
+
+enum CELL {
+    Wall,
+    Path,
+    Decision,
+    Exit,
+    Start
+};
+
+enum CARDINAL {
+    North,
+    South,
+    West,
+    East
+};
+
+const string directionsEN = "NSWE";
+const string directionsPT = "NSOL";
+const string directionsES = "NSOE";
 
 // Função de cálculo de Hash MD5
-std::string md5(const std::string &str){
+string md5(const std::string &str) {
+
   unsigned char hash[MD5_DIGEST_LENGTH];
 
   EVP_Q_digest(NULL, "MD5", NULL, str.c_str(), str.size(), hash, NULL);
 
-  std::stringstream ss;
+  stringstream ss;
 
   for(int i = 0; i < MD5_DIGEST_LENGTH; i++)
-    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>( hash[i] );
+    ss << hex << setw(2) << setfill('0') << static_cast<int>( hash[i] );
 
   return ss.str();
 }
 
+string translateDirections(string directions, string chosenLang) {
+
+    string translated = "";
+    
+    for(char& c : directions)
+    {
+        switch (c)
+        {
+        case 'N':
+            translated += chosenLang[North];
+            break;
+        case 'S':
+            translated += chosenLang[South];
+            break;
+        case 'W':
+            translated += chosenLang[West];
+            break;
+        case 'E':
+            translated += chosenLang[East];
+            break;
+        }
+    }
+
+    return translated;
+}
+
+void displayUsage(int argc, char* argv[]) {
+
+    cerr << "Uso: " << argv[0] << " <caminho para o arquivo do mapa> [opcao de idioma]" << endl;
+    cerr << "   -l pt:  (default) Retorna as direções em português" << endl;
+    cerr << "   -l en:  Retorna as direções em inglês" << endl;
+    cerr << "   -l es:  Retorna as direções em espanhol" << endl;
+}
+
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        cerr << "Uso: " << argv[0] << " <caminho para o arquivo do mapa>" << endl;
+
+    if (argc < 2) {
+        displayUsage(argc, argv);
         return 1;
     }
 
-    string mapFilePath = argv[1];
+    int opt;
+    string langOpt;
+    while ((opt = getopt(argc, argv, "l:")) != -1) {
+        switch (opt) {
+            case 'l':
+                langOpt = optarg;
+                break;
+            default:
+                displayUsage(argc, argv);
+                return 1;
+        }
+    }
+
+    string chosenLang;
+    if(langOpt == "en") chosenLang = directionsEN;
+    else if(langOpt == "es") chosenLang = directionsES;
+    else chosenLang = directionsPT;
+
+    string dirN(1, chosenLang[0]);
+    string dirS(1, chosenLang[1]);
+    string dirW(1, chosenLang[2]);
+    string dirE(1, chosenLang[3]);
+
+    string mapFilePath = argv[optind];
     ifstream inputFile(mapFilePath);
 
     if (!inputFile) {
@@ -81,7 +157,7 @@ int main(int argc, char* argv[]) {
     vector<pair<int, int>> decisionPoints;
     vector<string> possibleDirections;
     set<pair<int, int>> markedCells;
-    string directionsCurrent;
+    string currentDirections;
     int xInitial, yInitial;
 
     for(const auto& decision: jsonFile["decisions"]){
@@ -91,11 +167,11 @@ int main(int argc, char* argv[]) {
         possibleDirections.push_back(directions);
         if (maze[x][y] == 4) {
             xInitial = x, yInitial = y;
-            directionsCurrent = directions;
+            currentDirections = directions;
         }
     }
 
-    // coordenadas finais
+    // Coordenadas finais
     int xFinal = jsonFile["exit"]["row"], yFinal = jsonFile["exit"]["col"];
     if(DEBUG) cerr << "Ponto Final: " << xFinal << " " << yFinal << endl;
     if(DEBUG) cerr << "==============================================\n" << endl;
@@ -109,7 +185,8 @@ int main(int argc, char* argv[]) {
     vector<pair<int, int>> pathRat;
     pathRat.emplace_back(xCurrent, yCurrent);
 
-    while(true){
+    while(true)
+    {
         // Verifica se o rato ultrapassou o número máximo de movements
         if (movements == MAX){
             cout << "LOSE" << endl;
@@ -130,54 +207,54 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        if (maze[xCurrent][yCurrent] == 4 || maze[xCurrent][yCurrent] == 2) {
-
-            // posição do vetor do decisionPoints atual
-            int pos = 0;
-            for (int i = 0; i < decisionPoints.size(); i++) {
-                if (decisionPoints[i].first == xCurrent && decisionPoints[i].second == yCurrent) {
-                    pos = i;
-                    break;
-                }
+        // TODO: Refatorar de forma que acesso aos pontos de decisão se dê em O(1) 
+        // posição do vetor do decisionPoints atual
+        int pos = 0;
+        for (int i = 0; i < decisionPoints.size(); i++) {
+            if (decisionPoints[i].first == xCurrent && decisionPoints[i].second == yCurrent) {
+                pos = i;
+                break;
             }
+        }
 
-            // directionsCurrent na posição pos
-            directionsCurrent = possibleDirections[pos];
-            if(DEBUG) cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
-            if(DEBUG) cerr << "Possiveis direcoes: " << directionsCurrent << endl;
-            if(DEBUG) cerr << "Celulas marcadas: ";
-            for (auto cell : markedCells) {
-                cerr << "(" << cell.first << ", " << cell.second <<") ";
-            }
-            cerr << endl;
+        currentDirections = translateDirections(possibleDirections[pos], chosenLang);
+        if(DEBUG) cerr << "Posicao atual: " << xCurrent << " " << yCurrent << endl;
+        if(DEBUG) cerr << "Possiveis direcoes: " << currentDirections << endl;
+        if(DEBUG) cerr << "Celulas marcadas: ";
+        for (auto cell : markedCells) {
+            cerr << "(" << cell.first << ", " << cell.second <<") ";
+        }
+        cerr << endl;
 
-            // Envia as direções possíveis para o código do jogador
-            cout << directionsCurrent << endl;
+        // Envia as direções possíveis para o código do jogador
+        cout << currentDirections << endl;
 
-            string actionChosen;
-            cin >> actionChosen;
-            if(DEBUG) cerr << "Movimento escolhido: " << actionChosen << endl;
+        string actionChosen;
+        cin >> actionChosen;
+        if(DEBUG) cerr << "Movimento escolhido: " << actionChosen << endl;
 
-            currentAction = actionChosen;
+        currentAction = actionChosen;
 
-            // Ajustando opções de ação disponíveis
-            directionsCurrent = directionsCurrent + "+?";
+        // Ajustando opções de ação disponíveis
+        currentDirections = currentDirections + "+?";
 
-            if (directionsCurrent.find(currentAction) != string::npos) {
-                playerActions++;
+        if (currentDirections.find(currentAction) != string::npos)
+        {
+            do
+            {
                 movements++;
 
                 // Executa a ação
-                if (currentAction == "N") {
+                if (currentAction == string(1, chosenLang[North])) {
                     xCurrent--;
                 }
-                else if (currentAction == "S") {
+                else if (currentAction == string(1, chosenLang[South])) {
                     xCurrent++;
                 }
-                else if (currentAction == "W") {
+                else if (currentAction == string(1, chosenLang[West])) {
                     yCurrent--;
                 }
-                else if (currentAction == "E") {
+                else if (currentAction == string(1, chosenLang[East])) {
                     yCurrent++;
                 }
                 else if (currentAction == "+") {
@@ -190,31 +267,15 @@ int main(int argc, char* argv[]) {
 
                 // Adiciona as coordenadas atuais ao pathRat
                 pathRat.emplace_back(xCurrent, yCurrent);
+            } 
+            while(maze[xCurrent][yCurrent] == Path);
 
-                if(DEBUG) cerr << "========== OK - Ação realizada" << endl;
-            }
-            else {
-                if(DEBUG) cerr << "========== FALHA - Direcao invalida. Tente novamente." << endl;
-            }
-        } 
-        else {
-            movements++;
-            // Atualiza as coordenadas atuais
-            if (currentAction == "N") {
-                xCurrent--;
-            }
-            else if (currentAction == "S") {
-                xCurrent++;
-            }
-            else if (currentAction == "W") {
-                yCurrent--;
-            }
-            else if (currentAction == "E") {
-                yCurrent++;
-            }
-
-            // Adiciona as coordenadas atuais ao pathRat
-            pathRat.emplace_back(xCurrent, yCurrent);
+            if(DEBUG) cerr << "========== OK - Ação realizada" << endl;
+            playerActions++;
+        }
+        else
+        {
+            if(DEBUG) cerr << "========== FALHA - Direcao invalida. Tente novamente." << endl;
         }
     }
 
