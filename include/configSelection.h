@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <nlohmann/json.hpp>
+#include "../libs/json.hpp"
 #include "engine.h"
 
 namespace game

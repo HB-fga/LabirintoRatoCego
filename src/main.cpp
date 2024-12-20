@@ -6,7 +6,7 @@
 #include "configSelection.h"
 #include "ratSelection.h"
 #include "drawRanking.h"
-#include <nlohmann/json.hpp>
+#include "../libs/json.hpp"
 
 #include <iostream>
 

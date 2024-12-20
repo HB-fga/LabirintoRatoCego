@@ -1,6 +1,6 @@
 #include "ratInstance.h"
 #include "engine.h"
-#include <nlohmann/json.hpp>
+#include "../libs/json.hpp"
 
 using pJSON = nlohmann::json;
 
