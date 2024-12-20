@@ -17,7 +17,7 @@ if [ ! -p $FIFO ]; then
 fi
 
 # Run the command with timeout
-timeout 3s $CODE < $FIFO | ./mg ../assets/maps/$MAP > $FIFO -l $LANG
+timeout 3s $CODE < $FIFO | ./mg $MAP > $FIFO -l $LANG
 
 # Erase FIFO
 rm $FIFO
