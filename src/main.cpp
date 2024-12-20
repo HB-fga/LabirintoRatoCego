@@ -229,14 +229,13 @@ int main(int, char* [])
     }
 
     std::vector<RatInstance> rats;
-
-    std::vector<std::string> ratImages = {
-        "./assets/rat/whiteRat.png",
-        "./assets/rat/brownRat.png",
-        "./assets/rat/blackRat.png",
-        "./assets/rat/redRat.png",
-        "./assets/rat/greyRat.png",
-        "./assets/rat/beigeRat.png",
+        std::vector<std::string> ratImages = {
+        "./assets/spritesheets/whiteRat-Sheet.png",
+        "./assets/spritesheets/brownRat-Sheet.png",
+        "./assets/spritesheets/blackRat-Sheet.png",
+        "./assets/spritesheets/redRat-Sheet.png",
+        "./assets/spritesheets/greyRat-Sheet.png",
+        "./assets/spritesheets/beigeRat-Sheet.png",
     };
 
     std::vector<std::tuple<std::string, std::string, std::string>> mouseData;

@@ -1,0 +1,85 @@
+{
+    "actions": 6,
+    "mapHash": "e26312dd165cf62452511d95717f92d5",
+    "movHash": "78e5407cfd16eab584af443a4f6e2cef",
+    "movements": 19,
+    "path": [
+        {
+            "col": 0,
+            "row": 0
+        },
+        {
+            "col": 1,
+            "row": 0
+        },
+        {
+            "col": 2,
+            "row": 0
+        },
+        {
+            "col": 3,
+            "row": 0
+        },
+        {
+            "col": 2,
+            "row": 0
+        },
+        {
+            "col": 1,
+            "row": 0
+        },
+        {
+            "col": 0,
+            "row": 0
+        },
+        {
+            "col": 0,
+            "row": 1
+        },
+        {
+            "col": 0,
+            "row": 2
+        },
+        {
+            "col": 0,
+            "row": 3
+        },
+        {
+            "col": 1,
+            "row": 3
+        },
+        {
+            "col": 2,
+            "row": 3
+        },
+        {
+            "col": 3,
+            "row": 3
+        },
+        {
+            "col": 3,
+            "row": 4
+        },
+        {
+            "col": 3,
+            "row": 5
+        },
+        {
+            "col": 3,
+            "row": 6
+        },
+        {
+            "col": 4,
+            "row": 6
+        },
+        {
+            "col": 5,
+            "row": 6
+        },
+        {
+            "col": 6,
+            "row": 6
+        }
+    ],
+    "ratName": "ratoAleatorioPython"
+}

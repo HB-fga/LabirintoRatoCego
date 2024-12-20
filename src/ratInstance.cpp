@@ -42,8 +42,12 @@ void RatInstance::reverseUpdate(unsigned ticks)
 
 void RatInstance::draw() const
 {
-    auto p = rat.getPos();
-    rat.draw(xpos + p.first * 60 + 5, ypos + p.second * 60 + 5);
+    auto [from_x, from_y] = rat.from();
+    auto [to_x, to_y] = rat.to();
+    auto ux = to_x-from_x, uy = to_y-from_y;
+    auto p = std::min(rat.getProgress(), 1.0);
+
+    rat.draw(xpos + (from_x + p * ux) * 60, ypos + (from_y + p * uy) * 60);
 }
 
 int RatInstance::getIndex() const

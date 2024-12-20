@@ -17,6 +17,9 @@ namespace game {
         void setMovements(const std::vector<std::pair<int, int>>& movements);
         void draw(int xpos, int ypos) const;
         std::pair<int, int> getPos() const { return { x, y };}
+        std::pair<int, int> from() const { return { x, y };}
+        std::pair<int, int> to() const { return { dest_x, dest_y };}
+        double getProgress() const{ return progress; }
         int getIndex() const;
 
 
@@ -28,6 +31,10 @@ namespace game {
         bool is_flip;
         std::vector<std::pair<int, int>> movements;
         std::string textureFilename;
+        int dest_x, dest_y;
+        bool moving;
+        double progress;
+        int frame;
     };
 }
 
