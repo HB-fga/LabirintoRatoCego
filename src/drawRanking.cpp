@@ -61,18 +61,21 @@ void DrawRanking::drawRanking(std::vector<std::tuple<std::string, std::string, s
     for (const auto& mouse : mouseData) {
         const int ratWidth{ 40 }, ratHeight{ 48 };
 
+        int ratCrop = 48;
+
         auto ratTexture = engine::loadTexture(std::get<2>(mouse));
         if (!ratTexture) {
             return;
         }
         
         SDL_Rect destRect{ 1780, x, ratWidth, ratHeight };
-        SDL_RenderCopy(engine::getRenderer(), ratTexture.get(), nullptr, &destRect);
+        SDL_Rect cropRect{ 0, 0, ratCrop, ratCrop };
+        SDL_RenderCopy(engine::getRenderer(), ratTexture.get(), &cropRect, &destRect);
         x += 60;
     }
 
     engine::renderText("Pressione ESC para fechar o jogo", 60, 1000, font30p, whiteColor);
 
-    TTF_CloseFont(font30p);
+    TTF_CloseFont(font30p);     
 }
 
