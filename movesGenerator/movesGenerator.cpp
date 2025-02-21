@@ -188,7 +188,7 @@ int main(int argc, char* argv[]) {
     while(true)
     {
         // Verifica se o rato ultrapassou o número máximo de movements
-        if (movements == MAX){
+        if (movements >= MAX){
             cout << "LOSE" << endl;
             cerr << "==============================================" << endl;
             cerr << "=        FIM DO LABIRINTO DO RATO CEGO       =" << endl;

@@ -7,7 +7,7 @@ fi
 
 CODE=$1
 MAP=$2
-LANG=${3:-pt}
+LANG=${4:-pt}
 
 # Create FIFO
 FIFO=tmpfifo
